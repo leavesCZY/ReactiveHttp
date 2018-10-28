@@ -1,6 +1,6 @@
 package leavesc.hello.retrofit2_rxjava2.http.dataSource.base;
 
-import leavesc.hello.retrofit2_rxjava2.http.basis.RequestWithFailCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.RequestCallback;
 import leavesc.hello.retrofit2_rxjava2.model.IDCard;
 
 /**
@@ -10,6 +10,6 @@ import leavesc.hello.retrofit2_rxjava2.model.IDCard;
  */
 public interface IIDCardDataSource {
 
-    void queryIDCard(String cardNo, RequestWithFailCallback<IDCard> callback);
+    void queryIDCard(String cardNo, RequestCallback<IDCard> callback);
 
 }

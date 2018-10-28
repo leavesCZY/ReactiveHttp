@@ -1,7 +1,6 @@
 package leavesc.hello.retrofit2_rxjava2.http.dataSource;
 
 import leavesc.hello.retrofit2_rxjava2.http.basis.BaseRemoteDataSource;
-import leavesc.hello.retrofit2_rxjava2.http.basis.BaseSubscriber;
 import leavesc.hello.retrofit2_rxjava2.http.basis.RequestCallback;
 import leavesc.hello.retrofit2_rxjava2.http.dataSource.base.IWeatherDataSource;
 import leavesc.hello.retrofit2_rxjava2.http.service.WeatherService;
@@ -21,8 +20,7 @@ public class WeatherDataSource extends BaseRemoteDataSource implements IWeatherD
 
     @Override
     public void queryWeather(String cityName, RequestCallback<Weather> responseCallback) {
-        execute(getService(WeatherService.class).queryWeather(cityName),
-                new BaseSubscriber<>(baseViewModel, responseCallback));
+        execute(getService(WeatherService.class).queryWeather(cityName), responseCallback);
     }
 
 }

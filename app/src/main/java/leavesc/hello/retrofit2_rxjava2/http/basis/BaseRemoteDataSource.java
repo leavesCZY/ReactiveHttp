@@ -17,7 +17,7 @@ import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
  * 时间：2018/10/27 7:42
  * 描述：
  */
-public class BaseRemoteDataSource {
+public abstract class BaseRemoteDataSource {
 
     private CompositeDisposable compositeDisposable;
 
@@ -40,12 +40,16 @@ public class BaseRemoteDataSource {
         return RetrofitManagement.getInstance().applySchedulers();
     }
 
-    public String getToken() {
-        return "token";
-    }
-
     protected void execute(Observable observable, Observer observer) {
         execute(observable, observer, true);
+    }
+
+    protected <T> void execute(Observable observable, RequestCallback<T> callback) {
+        execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
+    }
+
+    protected <T> void execute(Observable observable, RequestWithFailCallback<T> callback) {
+        execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
     }
 
     public void executeWithoutDismiss(Observable observable, Observer observer) {

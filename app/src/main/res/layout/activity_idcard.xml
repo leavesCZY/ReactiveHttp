@@ -10,7 +10,8 @@
         android:id="@+id/et_cardNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="身份证号" />
+        android:hint="身份证号"
+        android:text="440587777777777777" />
 
     <Button
         android:layout_width="match_parent"

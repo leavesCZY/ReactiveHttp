@@ -10,7 +10,8 @@
         android:id="@+id/et_cityName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="城市名" />
+        android:hint="城市名"
+        android:text="广州" />
 
     <Button
         android:layout_width="match_parent"
