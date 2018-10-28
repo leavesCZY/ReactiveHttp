@@ -1,4 +1,4 @@
-package leavesc.hello.retrofit2_rxjava2.http.basis;
+package leavesc.hello.retrofit2_rxjava2.http.basis.callback;
 
 /**
  * 作者：叶应是叶

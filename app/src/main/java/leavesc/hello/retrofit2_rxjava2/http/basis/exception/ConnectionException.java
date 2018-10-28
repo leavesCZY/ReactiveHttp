@@ -1,6 +1,6 @@
 package leavesc.hello.retrofit2_rxjava2.http.basis.exception;
 
-import leavesc.hello.retrofit2_rxjava2.http.basis.HttpCode;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpCode;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.base.BaseException;
 
 /**

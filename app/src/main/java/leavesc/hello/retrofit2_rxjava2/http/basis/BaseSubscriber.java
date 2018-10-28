@@ -6,6 +6,9 @@ import android.widget.Toast;
 
 import io.reactivex.observers.DisposableObserver;
 import leavesc.hello.retrofit2_rxjava2.BaseApplication;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestWithFailCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpCode;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ConnectionException;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.base.BaseException;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;

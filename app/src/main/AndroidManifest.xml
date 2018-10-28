@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".QueryWeatherActivity" />
-        <activity android:name=".IDCardActivity"></activity>
+        <activity android:name=".IDCardActivity" />
+        <activity android:name=".QrCodeActivity"></activity>
     </application>
 
 </manifest>

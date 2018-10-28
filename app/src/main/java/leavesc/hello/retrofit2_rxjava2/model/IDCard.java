@@ -47,13 +47,4 @@ public class IDCard {
         this.verify = verify;
     }
 
-    @Override
-    public String toString() {
-        return "IDCard{" +
-                "area='" + area + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", verify='" + verify + '\'' +
-                '}';
-    }
 }

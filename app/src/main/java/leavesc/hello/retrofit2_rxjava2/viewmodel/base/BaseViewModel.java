@@ -59,7 +59,7 @@ public class BaseViewModel extends ViewModel implements IViewModelAction {
         return actionLiveData;
     }
 
-    public void setLifecycleOwner(android.arch.lifecycle.LifecycleOwner lifecycleOwner) {
+    void setLifecycleOwner(android.arch.lifecycle.LifecycleOwner lifecycleOwner) {
         this.lifecycleOwner = lifecycleOwner;
     }
 

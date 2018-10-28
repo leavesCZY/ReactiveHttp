@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
 
-import leavesc.hello.retrofit2_rxjava2.http.dataSource.WeatherDataSource;
+import leavesc.hello.retrofit2_rxjava2.http.datasource.WeatherDataSource;
 import leavesc.hello.retrofit2_rxjava2.http.repo.WeatherRepo;
 import leavesc.hello.retrofit2_rxjava2.model.Weather;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;

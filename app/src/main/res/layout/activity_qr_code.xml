@@ -4,24 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".QrCodeActivity">
 
-    <Button
+    <EditText
+        android:id="@+id/et_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="queryWeather"
-        android:text="查询天气" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="queryIDCard"
-        android:text="查询身份证" />
+        android:hint="二维码文本"
+        android:text="https://github.com/leavesC" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="createQrCode"
         android:text="创建二维码" />
+
+    <ImageView
+        android:id="@+id/iv_qrCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
 
 </LinearLayout>

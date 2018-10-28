@@ -2,7 +2,6 @@ package leavesc.hello.retrofit2_rxjava2;
 
 import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,8 +10,8 @@ import com.google.gson.Gson;
 
 import leavesc.hello.retrofit2_rxjava2.model.Weather;
 import leavesc.hello.retrofit2_rxjava2.view.BaseActivity;
-import leavesc.hello.retrofit2_rxjava2.viewmodel.base.LViewModelProviders;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.WeatherViewModel;
+import leavesc.hello.retrofit2_rxjava2.viewmodel.base.LViewModelProviders;
 
 public class QueryWeatherActivity extends BaseActivity {
 
@@ -42,9 +41,7 @@ public class QueryWeatherActivity extends BaseActivity {
     private void handlerWeather(Weather weather) {
         StringBuilder result = new StringBuilder();
         for (Weather.InnerWeather.NearestWeather nearestWeather : weather.getData().getWeather()) {
-            String json = new Gson().toJson(nearestWeather);
-            Log.e(TAG, "onResponse weather : " + json);
-            result.append("\n\n").append(json);
+            result.append("\n\n").append(new Gson().toJson(nearestWeather));
         }
         tv_weather.setText(result.toString());
     }

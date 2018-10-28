@@ -1,10 +1,10 @@
-package leavesc.hello.retrofit2_rxjava2.http.dataSource;
+package leavesc.hello.retrofit2_rxjava2.http.datasource;
 
 import leavesc.hello.retrofit2_rxjava2.http.basis.BaseRemoteDataSource;
-import leavesc.hello.retrofit2_rxjava2.http.basis.HttpConfig;
-import leavesc.hello.retrofit2_rxjava2.http.basis.RequestCallback;
-import leavesc.hello.retrofit2_rxjava2.http.dataSource.base.IIDCardDataSource;
-import leavesc.hello.retrofit2_rxjava2.http.service.IDCardService;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpConfig;
+import leavesc.hello.retrofit2_rxjava2.http.datasource.base.IIDCardDataSource;
+import leavesc.hello.retrofit2_rxjava2.http.service.ApiService;
 import leavesc.hello.retrofit2_rxjava2.model.IDCard;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 
@@ -21,7 +21,7 @@ public class IDCardDataSource extends BaseRemoteDataSource implements IIDCardDat
 
     @Override
     public void queryIDCard(String cardNo, RequestCallback<IDCard> callback) {
-        execute(getService(IDCardService.class, HttpConfig.BASE_URL_ID_CARD).queryIDCard(cardNo), callback);
+        execute(getService(ApiService.class, HttpConfig.BASE_URL_ID_CARD).queryIDCard(cardNo), callback);
     }
 
 }

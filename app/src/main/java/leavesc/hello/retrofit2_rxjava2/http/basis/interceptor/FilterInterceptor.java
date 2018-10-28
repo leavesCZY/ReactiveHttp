@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import java.io.IOException;
 
-import leavesc.hello.retrofit2_rxjava2.http.basis.HttpConfig;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpConfig;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -34,6 +34,10 @@ public class FilterInterceptor implements Interceptor {
                     }
                     case HttpConfig.HTTP_REQUEST_ID_CARD: {
                         httpBuilder.addQueryParameter("key", HttpConfig.KEY_ID_CARD);
+                        break;
+                    }
+                    case HttpConfig.HTTP_REQUEST_QR_CODE: {
+                        httpBuilder.addQueryParameter("key", HttpConfig.KEY_QR_CODE);
                         break;
                     }
                 }

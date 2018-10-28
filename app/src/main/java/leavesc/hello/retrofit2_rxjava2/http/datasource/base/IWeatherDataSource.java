@@ -1,6 +1,6 @@
-package leavesc.hello.retrofit2_rxjava2.http.dataSource.base;
+package leavesc.hello.retrofit2_rxjava2.http.datasource.base;
 
-import leavesc.hello.retrofit2_rxjava2.http.basis.RequestCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
 import leavesc.hello.retrofit2_rxjava2.model.Weather;
 
 /**

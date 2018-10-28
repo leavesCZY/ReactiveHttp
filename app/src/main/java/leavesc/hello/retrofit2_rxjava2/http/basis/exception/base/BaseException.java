@@ -1,6 +1,6 @@
 package leavesc.hello.retrofit2_rxjava2.http.basis.exception.base;
 
-import leavesc.hello.retrofit2_rxjava2.http.basis.HttpCode;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpCode;
 
 /**
  * 作者：叶应是叶

@@ -1,4 +1,4 @@
-package leavesc.hello.retrofit2_rxjava2.http.basis;
+package leavesc.hello.retrofit2_rxjava2.http.basis.callback;
 
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.base.BaseException;
 

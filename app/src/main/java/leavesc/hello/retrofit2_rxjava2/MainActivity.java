@@ -30,4 +30,7 @@ public class MainActivity extends BaseActivity {
         startActivity(IDCardActivity.class);
     }
 
+    public void createQrCode(View view) {
+        startActivity(QrCodeActivity.class);
+    }
 }

@@ -1,4 +1,4 @@
-package leavesc.hello.retrofit2_rxjava2.http.basis;
+package leavesc.hello.retrofit2_rxjava2.http.basis.config;
 
 /**
  * 作者：叶应是叶
@@ -25,5 +25,12 @@ public class HttpConfig {
     public static final String KEY_ID_CARD = "0b1a6413e51ee152045cd7fe7355b81b";
 
     public static final String HTTP_REQUEST_ID_CARD = "idCard";
+
+    //二维码
+    public static final String BASE_URL_QR_CODE = "http://apis.juhe.cn/";
+
+    public static final String KEY_QR_CODE = "527d0174f4269329f38003575b27a769";
+
+    public static final String HTTP_REQUEST_QR_CODE = "qrCode";
 
 }

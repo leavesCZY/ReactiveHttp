@@ -14,6 +14,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import leavesc.hello.retrofit2_rxjava2.BaseApplication;
 import leavesc.hello.retrofit2_rxjava2.BuildConfig;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpCode;
+import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpConfig;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.AccountInvalidException;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ServerResultException;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.TokenInvalidException;

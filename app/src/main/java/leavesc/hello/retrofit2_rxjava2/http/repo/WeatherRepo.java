@@ -3,8 +3,8 @@ package leavesc.hello.retrofit2_rxjava2.http.repo;
 import android.arch.lifecycle.MutableLiveData;
 
 import leavesc.hello.retrofit2_rxjava2.http.basis.BaseRepo;
-import leavesc.hello.retrofit2_rxjava2.http.basis.RequestCallback;
-import leavesc.hello.retrofit2_rxjava2.http.dataSource.base.IWeatherDataSource;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
+import leavesc.hello.retrofit2_rxjava2.http.datasource.base.IWeatherDataSource;
 import leavesc.hello.retrofit2_rxjava2.model.Weather;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 

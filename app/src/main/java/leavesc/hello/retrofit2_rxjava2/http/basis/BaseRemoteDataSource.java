@@ -9,6 +9,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestWithFailCallback;
 import leavesc.hello.retrofit2_rxjava2.http.basis.model.BaseResponseBody;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 
