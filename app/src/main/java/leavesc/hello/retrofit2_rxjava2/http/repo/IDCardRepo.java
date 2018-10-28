@@ -6,7 +6,6 @@ import leavesc.hello.retrofit2_rxjava2.http.basis.BaseRepo;
 import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
 import leavesc.hello.retrofit2_rxjava2.http.datasource.IDCardDataSource;
 import leavesc.hello.retrofit2_rxjava2.model.IDCard;
-import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 
 /**
  * 作者：叶应是叶
@@ -15,8 +14,8 @@ import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
  */
 public class IDCardRepo extends BaseRepo<IDCardDataSource> {
 
-    public IDCardRepo(IDCardDataSource remoteDataSource, BaseViewModel baseViewModel) {
-        super(remoteDataSource, baseViewModel);
+    public IDCardRepo(IDCardDataSource remoteDataSource) {
+        super(remoteDataSource);
     }
 
     public MutableLiveData<IDCard> queryIDCard(String cardNo) {

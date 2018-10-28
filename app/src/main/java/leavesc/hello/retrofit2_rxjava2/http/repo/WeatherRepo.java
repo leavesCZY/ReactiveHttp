@@ -6,7 +6,6 @@ import leavesc.hello.retrofit2_rxjava2.http.basis.BaseRepo;
 import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
 import leavesc.hello.retrofit2_rxjava2.http.datasource.base.IWeatherDataSource;
 import leavesc.hello.retrofit2_rxjava2.model.Weather;
-import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 
 /**
  * 作者：叶应是叶
@@ -15,8 +14,8 @@ import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
  */
 public class WeatherRepo extends BaseRepo<IWeatherDataSource> {
 
-    public WeatherRepo(IWeatherDataSource remoteDataSource, BaseViewModel baseViewModel) {
-        super(remoteDataSource, baseViewModel);
+    public WeatherRepo(IWeatherDataSource remoteDataSource) {
+        super(remoteDataSource);
     }
 
     public MutableLiveData<Weather> queryWeather(String cityName) {

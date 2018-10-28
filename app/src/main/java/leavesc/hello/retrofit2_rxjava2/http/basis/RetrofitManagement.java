@@ -117,11 +117,11 @@ public class RetrofitManagement {
         });
     }
 
-    public <T> T getService(Class<T> clz) {
+    <T> T getService(Class<T> clz) {
         return getService(clz, HttpConfig.BASE_URL_WEATHER);
     }
 
-    public <T> T getService(Class<T> clz, String host) {
+    <T> T getService(Class<T> clz, String host) {
         T value;
         if (serviceMap.containsKey(host)) {
             Object obj = serviceMap.get(host);

@@ -1,7 +1,5 @@
 package leavesc.hello.retrofit2_rxjava2.http.basis;
 
-import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
-
 /**
  * 作者：叶应是叶
  * 时间：2018/10/27 21:10
@@ -11,11 +9,8 @@ public class BaseRepo<T> {
 
     protected T remoteDataSource;
 
-    protected BaseViewModel baseViewModel;
-
-    public BaseRepo(T remoteDataSource, BaseViewModel baseViewModel) {
+    public BaseRepo(T remoteDataSource) {
         this.remoteDataSource = remoteDataSource;
-        this.baseViewModel = baseViewModel;
     }
 
 }

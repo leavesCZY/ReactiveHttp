@@ -1,7 +1,6 @@
 package leavesc.hello.retrofit2_rxjava2.http.basis;
 
 import android.accounts.AccountsException;
-import android.util.Log;
 import android.widget.Toast;
 
 import io.reactivex.observers.DisposableObserver;
@@ -42,7 +41,6 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
 
     @Override
     public void onNext(T t) {
-        Log.e("HHH", t.toString());
         if (requestCallback != null) {
             requestCallback.onSuccess(t);
         } else if (requestWithFailCallback != null) {

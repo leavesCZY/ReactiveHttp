@@ -29,15 +29,15 @@ public class FilterInterceptor implements Interceptor {
             if (!TextUtils.isEmpty(requestType)) {
                 switch (requestType) {
                     case HttpConfig.HTTP_REQUEST_WEATHER: {
-                        httpBuilder.addQueryParameter("key", HttpConfig.KEY_WEATHER);
+                        httpBuilder.addQueryParameter(HttpConfig.KEY, HttpConfig.KEY_WEATHER);
                         break;
                     }
                     case HttpConfig.HTTP_REQUEST_ID_CARD: {
-                        httpBuilder.addQueryParameter("key", HttpConfig.KEY_ID_CARD);
+                        httpBuilder.addQueryParameter(HttpConfig.KEY, HttpConfig.KEY_ID_CARD);
                         break;
                     }
                     case HttpConfig.HTTP_REQUEST_QR_CODE: {
-                        httpBuilder.addQueryParameter("key", HttpConfig.KEY_QR_CODE);
+                        httpBuilder.addQueryParameter(HttpConfig.KEY, HttpConfig.KEY_QR_CODE);
                         break;
                     }
                 }

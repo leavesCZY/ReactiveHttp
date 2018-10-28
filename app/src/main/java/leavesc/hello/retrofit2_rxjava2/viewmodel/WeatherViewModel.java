@@ -22,7 +22,7 @@ public class WeatherViewModel extends BaseViewModel {
 
     public WeatherViewModel() {
         weatherLiveData = new MutableLiveData<>();
-        weatherRepo = new WeatherRepo(new WeatherDataSource(this), this);
+        weatherRepo = new WeatherRepo(new WeatherDataSource(this));
     }
 
     public void queryWeather(String cityName) {

@@ -11,6 +11,8 @@ public class HttpConfig {
 
     public static final String HTTP_REQUEST_TYPE_KEY = "requestType";
 
+    public static final String KEY = "key";
+
     //--------天气
 
     public static final String BASE_URL_WEATHER = "http://op.juhe.cn/";

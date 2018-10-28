@@ -23,7 +23,7 @@ public abstract class BaseRemoteDataSource {
 
     private CompositeDisposable compositeDisposable;
 
-    protected BaseViewModel baseViewModel;
+    private BaseViewModel baseViewModel;
 
     public BaseRemoteDataSource(BaseViewModel baseViewModel) {
         this.compositeDisposable = new CompositeDisposable();

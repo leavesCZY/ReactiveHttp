@@ -22,7 +22,7 @@ public class IDCardViewModel extends BaseViewModel {
 
     public IDCardViewModel() {
         idCardLiveData = new MutableLiveData<>();
-        idCardRepo = new IDCardRepo(new IDCardDataSource(this), this);
+        idCardRepo = new IDCardRepo(new IDCardDataSource(this));
     }
 
     public void queryIDCard(String cardNo) {

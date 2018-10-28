@@ -22,11 +22,11 @@ public class QrCodeViewModel extends BaseViewModel {
 
     public QrCodeViewModel() {
         qrCodeLiveData = new MutableLiveData<>();
-        qrCodeRepo = new QrCodeRepo(new QrCodeDataSource(this), this);
+        qrCodeRepo = new QrCodeRepo(new QrCodeDataSource(this));
     }
 
-    public void createQrCode(String text,int width) {
-        qrCodeRepo.createQrCode(text,width).observe(lifecycleOwner, new Observer<QrCode>() {
+    public void createQrCode(String text, int width) {
+        qrCodeRepo.createQrCode(text, width).observe(lifecycleOwner, new Observer<QrCode>() {
             @Override
             public void onChanged(@Nullable QrCode qrCode) {
                 qrCodeLiveData.setValue(qrCode);
