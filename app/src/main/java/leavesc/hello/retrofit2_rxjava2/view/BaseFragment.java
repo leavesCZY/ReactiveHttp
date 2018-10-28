@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import leavesc.hello.retrofit2_rxjava2.event.BaseActionEvent;
-import leavesc.hello.retrofit2_rxjava2.viewmodel.IViewModelAction;
+import leavesc.hello.retrofit2_rxjava2.viewmodel.base.IViewModelAction;
 
 /**
  * 作者：叶应是叶

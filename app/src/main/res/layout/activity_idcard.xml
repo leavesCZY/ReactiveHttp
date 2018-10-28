@@ -4,18 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".IDCardActivity">
 
-    <Button
+    <EditText
+        android:id="@+id/et_cardNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="queryWeather"
-        android:text="查询天气" />
+        android:hint="身份证号" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="queryIDCard"
         android:text="查询身份证" />
+
+    <TextView
+        android:id="@+id/tv_idCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
 
 </LinearLayout>

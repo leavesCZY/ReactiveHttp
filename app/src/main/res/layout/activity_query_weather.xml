@@ -4,7 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".QueryWeatherActivity">
+
+    <EditText
+        android:id="@+id/et_cityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="城市名" />
 
     <Button
         android:layout_width="match_parent"
@@ -12,10 +18,10 @@
         android:onClick="queryWeather"
         android:text="查询天气" />
 
-    <Button
+    <TextView
+        android:id="@+id/tv_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="queryIDCard"
-        android:text="查询身份证" />
+        android:layout_margin="10dp" />
 
 </LinearLayout>

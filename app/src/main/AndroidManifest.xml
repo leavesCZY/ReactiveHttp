@@ -24,6 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".QueryWeatherActivity" />
+        <activity android:name=".IDCardActivity"></activity>
     </application>
 
 </manifest>
