@@ -10,9 +10,9 @@ import leavesc.hello.retrofit2_rxjava2.http.basis.exception.base.BaseException;
  * GitHub：https://github.com/leavesC
  * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
-public class ForbiddenExcetion extends BaseException {
+public class ForbiddenException extends BaseException {
 
-    public ForbiddenExcetion() {
+    public ForbiddenException() {
         super(HttpCode.CODE_PARAMETER_INVALID, "404错误");
     }
 

@@ -6,7 +6,7 @@ import android.widget.Toast;
 import io.reactivex.observers.DisposableObserver;
 import leavesc.hello.retrofit2_rxjava2.BaseApplication;
 import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
-import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestWithFailCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestMultiplyCallback;
 import leavesc.hello.retrofit2_rxjava2.http.basis.config.HttpCode;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ConnectionException;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.base.BaseException;
@@ -25,7 +25,7 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
 
     private RequestCallback<T> requestCallback;
 
-    private RequestWithFailCallback<T> requestWithFailCallback;
+    private RequestMultiplyCallback<T> requestMultiplyCallback;
 
     public BaseSubscriber(BaseViewModel baseViewModel) {
         this.baseViewModel = baseViewModel;
@@ -36,28 +36,28 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
         this.requestCallback = requestCallback;
     }
 
-    public BaseSubscriber(BaseViewModel baseViewModel, RequestWithFailCallback<T> requestWithFailCallback) {
+    public BaseSubscriber(BaseViewModel baseViewModel, RequestMultiplyCallback<T> requestMultiplyCallback) {
         this.baseViewModel = baseViewModel;
-        this.requestWithFailCallback = requestWithFailCallback;
+        this.requestMultiplyCallback = requestMultiplyCallback;
     }
 
     @Override
     public void onNext(T t) {
         if (requestCallback != null) {
             requestCallback.onSuccess(t);
-        } else if (requestWithFailCallback != null) {
-            requestWithFailCallback.onSuccess(t);
+        } else if (requestMultiplyCallback != null) {
+            requestMultiplyCallback.onSuccess(t);
         }
     }
 
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
-        if (requestWithFailCallback != null) {
+        if (requestMultiplyCallback != null) {
             if (e instanceof BaseException) {
-                requestWithFailCallback.onFail((BaseException) e);
+                requestMultiplyCallback.onFail((BaseException) e);
             } else {
-                requestWithFailCallback.onFail(new BaseException(HttpCode.CODE_UNKNOWN, e.getMessage()));
+                requestMultiplyCallback.onFail(new BaseException(HttpCode.CODE_UNKNOWN, e.getMessage()));
             }
         } else {
             if (e instanceof AccountsException) {

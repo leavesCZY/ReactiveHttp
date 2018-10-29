@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import java.io.IOException;
 
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ConnectionException;
-import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ForbiddenExcetion;
+import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ForbiddenException;
 import leavesc.hello.retrofit2_rxjava2.http.basis.exception.ResultInvalidException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -36,7 +36,7 @@ public class HttpInterceptor implements Interceptor {
         }
         if (originalResponse.code() != 200) {
             if (originalResponse.code() == 404) {
-                throw new ForbiddenExcetion();
+                throw new ForbiddenException();
             }
             throw new ResultInvalidException();
         }

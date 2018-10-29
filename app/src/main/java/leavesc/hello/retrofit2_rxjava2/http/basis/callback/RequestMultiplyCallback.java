@@ -9,7 +9,7 @@ import leavesc.hello.retrofit2_rxjava2.http.basis.exception.base.BaseException;
  * GitHub：https://github.com/leavesC
  * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
-public interface RequestWithFailCallback<T> extends RequestCallback<T> {
+public interface RequestMultiplyCallback<T> extends RequestCallback<T> {
 
     void onFail(BaseException e);
 

@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestCallback;
-import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestWithFailCallback;
+import leavesc.hello.retrofit2_rxjava2.http.basis.callback.RequestMultiplyCallback;
 import leavesc.hello.retrofit2_rxjava2.http.basis.model.BaseResponseBody;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 
@@ -52,7 +52,7 @@ public abstract class BaseRemoteDataSource {
         execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
     }
 
-    protected <T> void execute(Observable observable, RequestWithFailCallback<T> callback) {
+    protected <T> void execute(Observable observable, RequestMultiplyCallback<T> callback) {
         execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
     }
 
