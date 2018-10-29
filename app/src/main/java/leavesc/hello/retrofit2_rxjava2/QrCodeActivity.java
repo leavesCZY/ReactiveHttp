@@ -22,6 +22,13 @@ import leavesc.hello.retrofit2_rxjava2.view.BaseActivity;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.QrCodeViewModel;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.LViewModelProviders;
 
+/**
+ * 作者：leavesC
+ * 时间：2018/10/29 21:24
+ * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
+ */
 public class QrCodeActivity extends BaseActivity {
 
     private EditText et_text;

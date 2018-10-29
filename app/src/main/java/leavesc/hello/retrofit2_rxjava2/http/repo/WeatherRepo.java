@@ -8,9 +8,11 @@ import leavesc.hello.retrofit2_rxjava2.http.datasource.base.IWeatherDataSource;
 import leavesc.hello.retrofit2_rxjava2.model.Weather;
 
 /**
- * 作者：叶应是叶
+ * 作者：leavesC
  * 时间：2018/10/27 21:12
  * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
 public class WeatherRepo extends BaseRepo<IWeatherDataSource> {
 

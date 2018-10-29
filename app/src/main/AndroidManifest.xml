@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".QueryWeatherActivity" />
         <activity android:name=".IDCardActivity" />
-        <activity android:name=".QrCodeActivity"></activity>
+        <activity android:name=".QrCodeActivity" />
     </application>
 
 </manifest>

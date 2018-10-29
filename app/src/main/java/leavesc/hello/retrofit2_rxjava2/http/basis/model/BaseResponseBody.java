@@ -3,9 +3,11 @@ package leavesc.hello.retrofit2_rxjava2.http.basis.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * 作者：叶应是叶
+ * 作者：leavesC
  * 时间：2018/10/25 22:18
  * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
 public class BaseResponseBody<T> {
 

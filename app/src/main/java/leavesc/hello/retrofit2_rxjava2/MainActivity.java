@@ -6,7 +6,13 @@ import android.view.View;
 
 import leavesc.hello.retrofit2_rxjava2.view.BaseActivity;
 
-
+/**
+ * 作者：leavesC
+ * 时间：2018/10/29 21:24
+ * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
+ */
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";

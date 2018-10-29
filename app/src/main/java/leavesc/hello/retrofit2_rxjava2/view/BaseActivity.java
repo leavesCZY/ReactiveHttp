@@ -18,9 +18,11 @@ import leavesc.hello.retrofit2_rxjava2.event.BaseActionEvent;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.IViewModelAction;
 
 /**
- * 作者：叶应是叶
+ * 作者：leavesC
  * 时间：2017/11/29 21:04
- * 说明：基类Activity
+ * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
 @SuppressLint("Registered")
 public abstract class BaseActivity extends AppCompatActivity {

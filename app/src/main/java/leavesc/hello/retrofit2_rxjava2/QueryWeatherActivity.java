@@ -13,9 +13,16 @@ import leavesc.hello.retrofit2_rxjava2.view.BaseActivity;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.WeatherViewModel;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.LViewModelProviders;
 
+/**
+ * 作者：leavesC
+ * 时间：2018/10/29 21:24
+ * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
+ */
 public class QueryWeatherActivity extends BaseActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "QueryWeatherActivity";
 
     private WeatherViewModel weatherViewModel;
 

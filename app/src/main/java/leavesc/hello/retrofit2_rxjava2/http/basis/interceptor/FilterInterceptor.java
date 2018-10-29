@@ -13,9 +13,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * 作者：叶应是叶
+ * 作者：leavesC
  * 时间：2018/10/28 9:31
  * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
 public class FilterInterceptor implements Interceptor {
 

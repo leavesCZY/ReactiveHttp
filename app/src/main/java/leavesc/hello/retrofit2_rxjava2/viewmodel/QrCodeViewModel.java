@@ -10,9 +10,11 @@ import leavesc.hello.retrofit2_rxjava2.model.QrCode;
 import leavesc.hello.retrofit2_rxjava2.viewmodel.base.BaseViewModel;
 
 /**
- * 作者：叶应是叶
+ * 作者：leavesC
  * 时间：2018/10/27 21:14
  * 描述：
+ * GitHub：https://github.com/leavesC
+ * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
 public class QrCodeViewModel extends BaseViewModel {
 
