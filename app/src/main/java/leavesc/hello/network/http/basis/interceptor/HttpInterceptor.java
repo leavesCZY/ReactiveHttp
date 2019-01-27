@@ -25,6 +25,7 @@ public class HttpInterceptor implements Interceptor {
     public HttpInterceptor() {
     }
 
+    @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();

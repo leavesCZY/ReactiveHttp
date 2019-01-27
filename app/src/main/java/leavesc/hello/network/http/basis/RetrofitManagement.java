@@ -12,8 +12,8 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import leavesc.hello.network.BaseApplication;
 import leavesc.hello.network.BuildConfig;
+import leavesc.hello.network.holder.ContextHolder;
 import leavesc.hello.network.http.basis.config.HttpCode;
 import leavesc.hello.network.http.basis.config.HttpConfig;
 import leavesc.hello.network.http.basis.exception.AccountInvalidException;
@@ -71,7 +71,7 @@ public class RetrofitManagement {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor);
-            builder.addInterceptor(new ChuckInterceptor(BaseApplication.getAppContext()));
+            builder.addInterceptor(new ChuckInterceptor(ContextHolder.getContext()));
         }
         OkHttpClient client = builder.build();
         return new Retrofit.Builder()

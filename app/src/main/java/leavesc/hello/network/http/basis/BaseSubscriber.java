@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import io.reactivex.observers.DisposableObserver;
 import leavesc.hello.network.BaseApplication;
+import leavesc.hello.network.holder.ContextHolder;
 import leavesc.hello.network.http.basis.callback.RequestCallback;
 import leavesc.hello.network.http.basis.callback.RequestMultiplyCallback;
 import leavesc.hello.network.http.basis.config.HttpCode;
@@ -64,13 +65,13 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
 
             } else if (e instanceof ConnectionException) {
                 if (baseViewModel == null) {
-                    Toast.makeText(BaseApplication.getAppContext(), "网络连接失败，请稍候再试", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ContextHolder.getContext(), "网络连接失败，请稍候再试", Toast.LENGTH_SHORT).show();
                 } else {
                     baseViewModel.showToast("网络连接失败，请稍候再试");
                 }
             } else {
                 if (baseViewModel == null) {
-                    Toast.makeText(BaseApplication.getAppContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ContextHolder.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     baseViewModel.showToast(e.getMessage());
                 }

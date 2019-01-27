@@ -39,4 +39,5 @@ public class MainActivity extends BaseActivity {
     public void createQrCode(View view) {
         startActivity(QrCodeActivity.class);
     }
+
 }
