@@ -39,10 +39,10 @@ public class QrCodeRepo extends BaseRepo<IQrCodeDataSource> {
             public void onSuccess(QrCode qrCode) {
                 Observable.create(new ObservableOnSubscribe<Bitmap>() {
                     @Override
-                    public void subscribe(@NonNull ObservableEmitter<Bitmap> e) throws Exception {
+                    public void subscribe(@NonNull ObservableEmitter<Bitmap> emitter) throws Exception {
                         Bitmap bitmap = base64ToBitmap(qrCode.getBase64_image());
-                        e.onNext(bitmap);
-                        e.onComplete();
+                        emitter.onNext(bitmap);
+                        emitter.onComplete();
                     }
                 }).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

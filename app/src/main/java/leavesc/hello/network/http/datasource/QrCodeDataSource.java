@@ -25,4 +25,5 @@ public class QrCodeDataSource extends BaseRemoteDataSource implements IQrCodeDat
     public void createQrCode(String text, int width, RequestCallback<QrCode> callback) {
         execute(getService(ApiService.class, HttpConfig.BASE_URL_QR_CODE).createQrCode(text, width), callback);
     }
+
 }

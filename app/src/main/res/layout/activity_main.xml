@@ -15,6 +15,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="queryNews"
+        android:text="查询新闻" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="createQrCode"
         android:text="创建二维码" />
 

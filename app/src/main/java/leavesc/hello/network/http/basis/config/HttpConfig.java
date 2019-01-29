@@ -28,4 +28,11 @@ public class HttpConfig {
 
     public static final String HTTP_REQUEST_QR_CODE = "qrCode";
 
+    //新闻
+    public static final String BASE_URL_NEWS = "http://v.juhe.cn/";
+
+    public static final String KEY_NEWS = "c3f9d6c4c70559205cab02fb9f8d4a66";
+
+    public static final String HTTP_REQUEST_NEWS = "news";
+
 }

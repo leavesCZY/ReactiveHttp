@@ -4,27 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".QueryWeatherActivity">
-
-    <EditText
-        android:id="@+id/et_cityName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="城市名"
-        android:text="广州" />
+    tools:context=".QueryNewsActivity">
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="queryWeather"
-        android:text="查询天气" />
+        android:onClick="queryNews"
+        android:text="查询新闻" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_weather"
+            android:id="@+id/tv_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />

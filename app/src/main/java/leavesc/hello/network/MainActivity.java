@@ -36,4 +36,8 @@ public class MainActivity extends BaseActivity {
         startActivity(QrCodeActivity.class);
     }
 
+    public void queryNews(View view) {
+        startActivity(QueryNewsActivity.class);
+    }
+
 }
