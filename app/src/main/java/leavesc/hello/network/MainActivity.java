@@ -32,10 +32,6 @@ public class MainActivity extends BaseActivity {
         startActivity(QueryWeatherActivity.class);
     }
 
-    public void queryIDCard(View view) {
-        startActivity(IDCardActivity.class);
-    }
-
     public void createQrCode(View view) {
         startActivity(QrCodeActivity.class);
     }

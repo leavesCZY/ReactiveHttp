@@ -44,10 +44,6 @@ public abstract class BaseRemoteDataSource {
         return RetrofitManagement.getInstance().applySchedulers();
     }
 
-    protected void execute(Observable observable, Observer observer) {
-        execute(observable, observer, true);
-    }
-
     protected <T> void execute(Observable observable, RequestCallback<T> callback) {
         execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
     }

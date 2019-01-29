@@ -3,7 +3,6 @@ package leavesc.hello.network.http.service;
 import io.reactivex.Observable;
 import leavesc.hello.network.http.basis.config.HttpConfig;
 import leavesc.hello.network.http.basis.model.BaseResponseBody;
-import leavesc.hello.network.model.IDCard;
 import leavesc.hello.network.model.QrCode;
 import leavesc.hello.network.model.Weather;
 import retrofit2.http.GET;
@@ -18,10 +17,6 @@ import retrofit2.http.Query;
  * Blog：https://www.jianshu.com/u/9df45b87cfdf
  */
 public interface ApiService {
-
-    @Headers({HttpConfig.HTTP_REQUEST_TYPE_KEY + ":" + HttpConfig.HTTP_REQUEST_ID_CARD})
-    @GET("idcard/index")
-    Observable<BaseResponseBody<IDCard>> queryIDCard(@Query("cardno") String cardNo);
 
     @Headers({HttpConfig.HTTP_REQUEST_TYPE_KEY + ":" + HttpConfig.HTTP_REQUEST_WEATHER})
     @GET("onebox/weather/query")

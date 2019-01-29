@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import java.io.IOException;
 
 import leavesc.hello.network.http.basis.exception.ConnectionException;
-import leavesc.hello.network.http.basis.exception.ForbiddenException;
 import leavesc.hello.network.http.basis.exception.ResultInvalidException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -36,9 +35,6 @@ public class HttpInterceptor implements Interceptor {
             throw new ConnectionException();
         }
         if (originalResponse.code() != 200) {
-            if (originalResponse.code() == 404) {
-                throw new ForbiddenException();
-            }
             throw new ResultInvalidException();
         }
         BufferedSource source = originalResponse.body().source();

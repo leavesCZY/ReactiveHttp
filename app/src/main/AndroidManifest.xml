@@ -25,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name="leavesc.hello.network.QueryWeatherActivity" />
-        <activity android:name="leavesc.hello.network.IDCardActivity" />
         <activity android:name="leavesc.hello.network.QrCodeActivity" />
     </application>
 

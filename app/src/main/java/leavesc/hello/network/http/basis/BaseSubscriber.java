@@ -1,15 +1,12 @@
 package leavesc.hello.network.http.basis;
 
-import android.accounts.AccountsException;
 import android.widget.Toast;
 
 import io.reactivex.observers.DisposableObserver;
-import leavesc.hello.network.BaseApplication;
 import leavesc.hello.network.holder.ContextHolder;
 import leavesc.hello.network.http.basis.callback.RequestCallback;
 import leavesc.hello.network.http.basis.callback.RequestMultiplyCallback;
 import leavesc.hello.network.http.basis.config.HttpCode;
-import leavesc.hello.network.http.basis.exception.ConnectionException;
 import leavesc.hello.network.http.basis.exception.base.BaseException;
 import leavesc.hello.network.viewmodel.base.BaseViewModel;
 
@@ -32,12 +29,12 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
         this.baseViewModel = baseViewModel;
     }
 
-    public BaseSubscriber(BaseViewModel baseViewModel, RequestCallback<T> requestCallback) {
+    BaseSubscriber(BaseViewModel baseViewModel, RequestCallback<T> requestCallback) {
         this.baseViewModel = baseViewModel;
         this.requestCallback = requestCallback;
     }
 
-    public BaseSubscriber(BaseViewModel baseViewModel, RequestMultiplyCallback<T> requestMultiplyCallback) {
+    BaseSubscriber(BaseViewModel baseViewModel, RequestMultiplyCallback<T> requestMultiplyCallback) {
         this.baseViewModel = baseViewModel;
         this.requestMultiplyCallback = requestMultiplyCallback;
     }
@@ -61,20 +58,10 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
                 requestMultiplyCallback.onFail(new BaseException(HttpCode.CODE_UNKNOWN, e.getMessage()));
             }
         } else {
-            if (e instanceof AccountsException) {
-
-            } else if (e instanceof ConnectionException) {
-                if (baseViewModel == null) {
-                    Toast.makeText(ContextHolder.getContext(), "网络连接失败，请稍候再试", Toast.LENGTH_SHORT).show();
-                } else {
-                    baseViewModel.showToast("网络连接失败，请稍候再试");
-                }
+            if (baseViewModel == null) {
+                Toast.makeText(ContextHolder.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
-                if (baseViewModel == null) {
-                    Toast.makeText(ContextHolder.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } else {
-                    baseViewModel.showToast(e.getMessage());
-                }
+                baseViewModel.showToast(e.getMessage());
             }
         }
     }
