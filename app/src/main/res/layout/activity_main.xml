@@ -24,4 +24,10 @@
         android:onClick="createQrCode"
         android:text="创建二维码" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="failExample"
+        android:text="请求失败示例" />
+
 </LinearLayout>

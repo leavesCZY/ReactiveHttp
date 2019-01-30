@@ -23,8 +23,6 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
 
     private RequestCallback<T> requestCallback;
 
-    private RequestMultiplyCallback<T> requestMultiplyCallback;
-
     public BaseSubscriber(BaseViewModel baseViewModel) {
         this.baseViewModel = baseViewModel;
     }
@@ -34,28 +32,22 @@ public class BaseSubscriber<T> extends DisposableObserver<T> {
         this.requestCallback = requestCallback;
     }
 
-    BaseSubscriber(BaseViewModel baseViewModel, RequestMultiplyCallback<T> requestMultiplyCallback) {
-        this.baseViewModel = baseViewModel;
-        this.requestMultiplyCallback = requestMultiplyCallback;
-    }
-
     @Override
     public void onNext(T t) {
         if (requestCallback != null) {
             requestCallback.onSuccess(t);
-        } else if (requestMultiplyCallback != null) {
-            requestMultiplyCallback.onSuccess(t);
         }
     }
 
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
-        if (requestMultiplyCallback != null) {
+        if (requestCallback instanceof RequestMultiplyCallback) {
+            RequestMultiplyCallback callback = (RequestMultiplyCallback) requestCallback;
             if (e instanceof BaseException) {
-                requestMultiplyCallback.onFail((BaseException) e);
+                callback.onFail((BaseException) e);
             } else {
-                requestMultiplyCallback.onFail(new BaseException(HttpCode.CODE_UNKNOWN, e.getMessage()));
+                callback.onFail(new BaseException(HttpCode.CODE_UNKNOWN, e.getMessage()));
             }
         } else {
             if (baseViewModel == null) {

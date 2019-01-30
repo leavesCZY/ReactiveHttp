@@ -31,4 +31,10 @@ public interface ApiService {
     @GET("toutiao/index")
     Observable<BaseResponseBody<NewsPack>> getNews();
 
+    @GET("leavesC/test1")
+    Observable<BaseResponseBody<String>> test1();
+
+    @GET("leavesC/test2")
+    Observable<BaseResponseBody<String>> test2();
+
 }

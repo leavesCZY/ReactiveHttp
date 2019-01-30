@@ -40,4 +40,8 @@ public class MainActivity extends BaseActivity {
         startActivity(QueryNewsActivity.class);
     }
 
+    public void failExample(View view) {
+        startActivity(FailExampleActivity.class);
+    }
+
 }
