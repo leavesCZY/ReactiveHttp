@@ -30,6 +30,12 @@ public class FailExampleViewModel extends BaseViewModel {
                 test1LiveData.setValue(s);
             }
         });
+//        failExampleRepo.test1().observeForever(new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                test1LiveData.setValue(s);
+//            }
+//        });
     }
 
     public void test2() {

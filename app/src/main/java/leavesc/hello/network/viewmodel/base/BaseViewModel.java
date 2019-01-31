@@ -1,5 +1,6 @@
 package leavesc.hello.network.viewmodel.base;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
@@ -16,7 +17,7 @@ public class BaseViewModel extends ViewModel implements IViewModelAction {
 
     private MutableLiveData<BaseActionEvent> actionLiveData;
 
-    protected android.arch.lifecycle.LifecycleOwner lifecycleOwner;
+    protected LifecycleOwner lifecycleOwner;
 
     public BaseViewModel() {
         actionLiveData = new MutableLiveData<>();
@@ -61,7 +62,7 @@ public class BaseViewModel extends ViewModel implements IViewModelAction {
         return actionLiveData;
     }
 
-    void setLifecycleOwner(android.arch.lifecycle.LifecycleOwner lifecycleOwner) {
+    void setLifecycleOwner(LifecycleOwner lifecycleOwner) {
         this.lifecycleOwner = lifecycleOwner;
     }
 
