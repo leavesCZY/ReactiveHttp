@@ -11,6 +11,8 @@ import leavesc.hello.network.event.base.BaseEvent;
  */
 public class BaseActionEvent extends BaseEvent {
 
+    public static final int DEFAULT = -100;
+
     public static final int SHOW_LOADING_DIALOG = 1;
 
     public static final int DISMISS_LOADING_DIALOG = 2;
@@ -22,6 +24,10 @@ public class BaseActionEvent extends BaseEvent {
     public static final int FINISH_WITH_RESULT_OK = 5;
 
     private String message;
+
+    public BaseActionEvent() {
+        super(DEFAULT);
+    }
 
     public BaseActionEvent(int action) {
         super(action);

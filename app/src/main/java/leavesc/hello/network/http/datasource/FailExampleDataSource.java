@@ -2,6 +2,8 @@ package leavesc.hello.network.http.datasource;
 
 import leavesc.hello.network.http.basis.BaseRemoteDataSource;
 import leavesc.hello.network.http.basis.callback.RequestCallback;
+import leavesc.hello.network.http.basis.callback.RequestMultiplyCallback;
+import leavesc.hello.network.http.basis.exception.base.BaseException;
 import leavesc.hello.network.http.datasource.base.IFailExampleDataSource;
 import leavesc.hello.network.http.service.ApiService;
 import leavesc.hello.network.viewmodel.base.BaseViewModel;

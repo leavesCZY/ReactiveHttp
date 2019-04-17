@@ -27,7 +27,7 @@
         <activity android:name=".QueryWeatherActivity" />
         <activity android:name=".QrCodeActivity" />
         <activity android:name=".QueryNewsActivity" />
-        <activity android:name=".FailExampleActivity"></activity>
+        <activity android:name=".FailExampleActivity" />
     </application>
 
 </manifest>

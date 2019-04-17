@@ -8,9 +8,9 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 import leavesc.hello.network.http.basis.callback.RequestCallback;
-import leavesc.hello.network.http.basis.callback.RequestMultiplyCallback;
 import leavesc.hello.network.http.basis.model.BaseResponseBody;
 import leavesc.hello.network.viewmodel.base.BaseViewModel;
 
@@ -45,15 +45,15 @@ public abstract class BaseRemoteDataSource {
     }
 
     protected <T> void execute(Observable observable, RequestCallback<T> callback) {
-        execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
+        execute(observable, new BaseSubscriber<>(callback), true);
     }
 
-    protected <T> void execute(Observable observable, RequestMultiplyCallback<T> callback) {
-        execute(observable, new BaseSubscriber<>(baseViewModel, callback), true);
+    public <T> void executeWithoutDismiss(Observable observable, RequestCallback<T> callback) {
+        execute(observable, new BaseSubscriber<>(callback), false);
     }
 
-    public void executeWithoutDismiss(Observable observable, Observer observer) {
-        execute(observable, observer, false);
+    protected <T> void executeQuietly(Observable observable, RequestCallback<T> callback) {
+        executeQuietly(observable, new BaseSubscriber<>(callback));
     }
 
     private void execute(Observable observable, Observer observer, boolean isDismiss) {
@@ -63,7 +63,18 @@ public abstract class BaseRemoteDataSource {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(applySchedulers())
-                .compose(isDismiss ? loadingTransformer() : loadingTransformerWithoutDismiss())
+                .compose(loadingTransformer(isDismiss))
+                .subscribeWith(observer);
+        addDisposable(disposable);
+    }
+
+    private void executeQuietly(Observable observable, Observer observer) {
+        Disposable disposable = (Disposable) observable
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(applySchedulers())
                 .subscribeWith(observer);
         addDisposable(disposable);
     }
@@ -90,21 +101,17 @@ public abstract class BaseRemoteDataSource {
         }
     }
 
-    private <T> ObservableTransformer<T, T> loadingTransformer() {
+    private <T> ObservableTransformer<T, T> loadingTransformer(boolean isDismiss) {
         return observable -> observable
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> startLoading())
-                .doFinally(this::dismissLoading);
-    }
-
-    private <T> ObservableTransformer<T, T> loadingTransformerWithoutDismiss() {
-        return observable -> observable
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> startLoading());
+                .doFinally((Action) () -> {
+                    if (isDismiss) {
+                        dismissLoading();
+                    }
+                });
     }
 
 }

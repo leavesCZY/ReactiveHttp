@@ -19,4 +19,8 @@ public class BaseEvent {
         return action;
     }
 
+    public void setAction(int action) {
+        this.action = action;
+    }
+
 }

@@ -28,6 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="failExample"
-        android:text="请求失败示例" />
+        android:text="请求失示例" />
 
 </LinearLayout>

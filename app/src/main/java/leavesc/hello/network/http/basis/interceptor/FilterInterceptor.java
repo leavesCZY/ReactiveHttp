@@ -1,7 +1,6 @@
 package leavesc.hello.network.http.basis.interceptor;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import java.io.IOException;
 
@@ -27,9 +26,9 @@ public class FilterInterceptor implements Interceptor {
         Request originalRequest = chain.request();
         HttpUrl.Builder httpBuilder = originalRequest.url().newBuilder();
         Headers headers = originalRequest.headers();
-        if (headers != null && headers.size() > 0) {
+        if (headers.size() > 0) {
             String requestType = headers.get(HttpConfig.HTTP_REQUEST_TYPE_KEY);
-            if (!TextUtils.isEmpty(requestType)) {
+            if (requestType != null && requestType.length() > 0) {
                 switch (requestType) {
                     case HttpConfig.HTTP_REQUEST_WEATHER: {
                         httpBuilder.addQueryParameter(HttpConfig.KEY, HttpConfig.KEY_WEATHER);
