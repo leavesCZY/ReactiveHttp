@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ViewModel_Retrofit_RxJava</string>
+    <string name="tip">以下是几个请求示例，在请求接口时自动 showLoading ，请求结束时自动 dismissLoading，并在请求异常时默认Toast异常消息，也可以选择主动消费掉失败时的回调事件。且所有的回调事件不会在非生命周期活跃期间被回调，从而避免各种NPE及内存泄漏问题</string>
+</resources>
