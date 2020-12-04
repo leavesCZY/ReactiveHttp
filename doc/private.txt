@@ -1,0 +1,4 @@
+key.keyStorePath=..\\doc\\key.jks
+key.keyAlias=leavesC
+key.keyPassword=987654321
+key.storePassword=123456789
