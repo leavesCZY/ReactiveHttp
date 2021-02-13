@@ -1,101 +1,63 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-
-private static def getProperties(filePath, key) {
-    Properties properties = new Properties()
-    DataInputStream inputStream = null
-    try {
-        inputStream = new File(filePath).newDataInputStream()
-        properties.load(inputStream)
-        return properties.getProperty(key)
-    } catch (Exception e) {
-        throw e
-    } finally {
-        if (inputStream != null) {
-            inputStream.close()
-        }
-    }
-}
-
-private static def getPrivateProperties(key) {
-    return getProperties(".\\doc\\private.txt", key)
-}
-
-def keyStorePath_ = getPrivateProperties("key.keyStorePath")
-def storePassword_ = getPrivateProperties("key.storePassword")
-def keyAlias_ = getPrivateProperties("key.keyAlias")
-def keyPassword_ = getPrivateProperties("key.keyPassword")
-def storeFile_ = file(keyStorePath_)
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
-        applicationId "leavesc.hello.weather"
-        minSdkVersion 22
-        targetSdkVersion 29
-        versionCode 2
-        versionName "1.2"
+        applicationId "github.leavesc.reactivehttpsamples"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 3
+        versionName "1.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-        release {
-            storeFile storeFile_
-            storePassword storePassword_
-            keyAlias keyAlias_
-            keyPassword keyPassword_
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-        debug {
-            storeFile storeFile_
-            storePassword storePassword_
-            keyAlias keyAlias_
-            keyPassword keyPassword_
+        releaseConfig {
+            storeFile file("..\\key.jks")
+            storePassword "123456"
+            keyAlias "key0"
+            keyPassword "123456"
             v1SigningEnabled true
             v2SigningEnabled true
         }
     }
     buildTypes {
         debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
-            versionNameSuffix "-debug"
+            signingConfig signingConfigs.releaseConfig
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            signingConfig signingConfigs.releaseConfig
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            versionNameSuffix "-release"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.room:room-runtime:2.2.4'
-    kapt 'androidx.room:room-compiler:2.2.4'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.13'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.github.leavesC:Monitor:1.0.10'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
+
+    debugImplementation 'com.github.leavesC.Monitor:monitor:1.1.3'
+    releaseImplementation 'com.github.leavesC.Monitor:monitor-no-op:1.1.3'
+
+    implementation project(path: ':reactivehttp')
 }

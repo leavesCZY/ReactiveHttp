@@ -8,24 +8,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bg_weather"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="#009688">
 
         <TextView
             android:id="@+id/tv_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
-            android:textColor="@android:color/white"
+            android:textColor="#FF5722"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@id/rv_dailyForecast"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +29,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/icon_place"
+            android:src="@android:drawable/ic_menu_camera"
             app:layout_constraintBottom_toBottomOf="@id/tv_city"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_city" />
