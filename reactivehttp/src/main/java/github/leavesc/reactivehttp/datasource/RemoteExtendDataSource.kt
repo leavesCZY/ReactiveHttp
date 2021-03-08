@@ -4,7 +4,7 @@ import github.leavesc.reactivehttp.bean.IHttpWrapBean
 import github.leavesc.reactivehttp.callback.RequestPairCallback
 import github.leavesc.reactivehttp.callback.RequestTripleCallback
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
-import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
+import github.leavesc.reactivehttp.viewmodel.IViewModelActionEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -18,7 +18,7 @@ import kotlinx.coroutines.awaitAll
  * 当包含的某个接口请求失败时，则会直接回调 onFail 方法
  * @GitHub：https://github.com/leavesC
  */
-abstract class RemoteExtendDataSource<Api : Any>(iActionEvent: IUIActionEvent?, apiServiceClass: Class<Api>) : RemoteDataSource<Api>(iActionEvent, apiServiceClass) {
+abstract class RemoteExtendDataSource<Api : Any>(iViewModelActionEvent: IViewModelActionEvent?, apiServiceClass: Class<Api>) : RemoteDataSource<Api>(iViewModelActionEvent, apiServiceClass) {
 
     fun <DataA, DataB> enqueueLoading(apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
                                       apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
@@ -42,8 +42,8 @@ abstract class RemoteExtendDataSource<Api : Any>(iActionEvent: IUIActionEvent?, 
                 val responseList: List<IHttpWrapBean<out Any?>>
                 try {
                     responseList = listOf(
-                            async { apiFunA.invoke(getApiService()) },
-                            async { apiFunB.invoke(getApiService()) }
+                        async { apiFunA.invoke(getApiService()) },
+                        async { apiFunB.invoke(getApiService()) }
                     ).awaitAll()
                     val failed = responseList.find { it.httpIsFailed }
                     if (failed != null) {
@@ -109,9 +109,9 @@ abstract class RemoteExtendDataSource<Api : Any>(iActionEvent: IUIActionEvent?, 
                 val responseList: List<IHttpWrapBean<out Any?>>
                 try {
                     responseList = listOf(
-                            async { apiFunA.invoke(getApiService(baseUrl)) },
-                            async { apiFunB.invoke(getApiService(baseUrl)) },
-                            async { apiFunC.invoke(getApiService(baseUrl)) }
+                        async { apiFunA.invoke(getApiService(baseUrl)) },
+                        async { apiFunB.invoke(getApiService(baseUrl)) },
+                        async { apiFunC.invoke(getApiService(baseUrl)) }
                     ).awaitAll()
                     val failed = responseList.find { it.httpIsFailed }
                     if (failed != null) {

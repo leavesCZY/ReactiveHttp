@@ -3,7 +3,7 @@ package github.leavesc.reactivehttpsamples.core.http
 import android.widget.Toast
 import github.leavesc.monitor.MonitorInterceptor
 import github.leavesc.reactivehttp.datasource.RemoteExtendDataSource
-import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
+import github.leavesc.reactivehttp.viewmodel.IViewModelActionEvent
 import github.leavesc.reactivehttpsamples.MainApplication
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSource<ApiService>(iActionEvent, ApiService::class.java) {
+class SelfRemoteDataSource(iViewModelActionEvent: IViewModelActionEvent?) : RemoteExtendDataSource<ApiService>(iViewModelActionEvent, ApiService::class.java) {
 
     companion object {
 

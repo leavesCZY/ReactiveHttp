@@ -5,7 +5,9 @@ import github.leavesc.reactivehttp.callback.BaseRequestCallback
 import github.leavesc.reactivehttp.coroutine.ICoroutineEvent
 import github.leavesc.reactivehttp.exception.BaseHttpException
 import github.leavesc.reactivehttp.exception.LocalBadException
-import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
+import github.leavesc.reactivehttp.viewmodel.DismissLoadingEvent
+import github.leavesc.reactivehttp.viewmodel.IViewModelActionEvent
+import github.leavesc.reactivehttp.viewmodel.ShowLoadingEvent
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -23,7 +25,7 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-abstract class BaseRemoteDataSource<Api : Any>(protected val iUiActionEvent: IUIActionEvent?, protected val apiServiceClass: Class<Api>) : ICoroutineEvent {
+abstract class BaseRemoteDataSource<Api : Any>(protected val iViewModelActionEvent: IViewModelActionEvent?, protected val apiServiceClass: Class<Api>) : ICoroutineEvent {
 
     companion object {
 
@@ -64,7 +66,7 @@ abstract class BaseRemoteDataSource<Api : Any>(protected val iUiActionEvent: IUI
     /**
      * 和生命周期绑定的协程作用域
      */
-    override val lifecycleSupportedScope = iUiActionEvent?.lifecycleSupportedScope ?: GlobalScope
+    override val lifecycleSupportedScope = iViewModelActionEvent?.lifecycleSupportedScope ?: GlobalScope
 
     /**
      * 由子类实现此字段以便获取 baseUrl
@@ -183,11 +185,15 @@ abstract class BaseRemoteDataSource<Api : Any>(protected val iUiActionEvent: IUI
     }
 
     protected fun showLoading(job: Job?) {
-        iUiActionEvent?.showLoading(job)
+        iViewModelActionEvent?.let {
+           it.showLoadingEventLD.value = ShowLoadingEvent(job)
+        }
     }
 
     protected fun dismissLoading() {
-        iUiActionEvent?.dismissLoading()
+        iViewModelActionEvent?.let {
+            it.dismissLoadingEventLD.value = DismissLoadingEvent
+        }
     }
 
     abstract fun showToast(msg: String)

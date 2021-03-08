@@ -23,7 +23,7 @@ interface IUIActionEvent : ICoroutineEvent {
 
 }
 
-interface IViewModelActionEvent : IUIActionEvent {
+interface IViewModelActionEvent : ICoroutineEvent {
 
     val showLoadingEventLD: MutableLiveData<ShowLoadingEvent>
 
@@ -32,22 +32,6 @@ interface IViewModelActionEvent : IUIActionEvent {
     val showToastEventLD: MutableLiveData<ShowToastEvent>
 
     val finishViewEventLD: MutableLiveData<FinishViewEvent>
-
-    override fun showLoading(job: Job?) {
-        showLoadingEventLD.value = ShowLoadingEvent(job)
-    }
-
-    override fun dismissLoading() {
-        dismissLoadingEventLD.value = DismissLoadingEvent
-    }
-
-    override fun showToast(msg: String) {
-        showToastEventLD.value = ShowToastEvent(msg)
-    }
-
-    override fun finishView() {
-        finishViewEventLD.value = FinishViewEvent
-    }
 
 }
 

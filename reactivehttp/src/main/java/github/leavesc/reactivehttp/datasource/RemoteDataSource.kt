@@ -4,7 +4,7 @@ import github.leavesc.reactivehttp.bean.IHttpWrapBean
 import github.leavesc.reactivehttp.callback.RequestCallback
 import github.leavesc.reactivehttp.exception.BaseHttpException
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
-import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
+import github.leavesc.reactivehttp.viewmodel.IViewModelActionEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import kotlin.jvm.Throws
@@ -15,7 +15,7 @@ import kotlin.jvm.Throws
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-abstract class RemoteDataSource<Api : Any>(iUiActionEvent: IUIActionEvent?, apiServiceClass: Class<Api>) : BaseRemoteDataSource<Api>(iUiActionEvent, apiServiceClass) {
+abstract class RemoteDataSource<Api : Any>(iViewModelActionEvent: IViewModelActionEvent?, apiServiceClass: Class<Api>) : BaseRemoteDataSource<Api>(iViewModelActionEvent, apiServiceClass) {
 
     fun <Data> enqueueLoading(apiFun: suspend Api.() -> IHttpWrapBean<Data>,
                               baseUrl: String = "",
