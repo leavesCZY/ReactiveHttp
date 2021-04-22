@@ -6,8 +6,10 @@ package github.leavesc.reactivehttp.callback
  * @Desc: Callback
  * @GitHub：https://github.com/leavesC
  */
-class RequestCallback<Data>(internal var onSuccess: ((Data) -> Unit)? = null,
-                            internal var onSuccessIO: (suspend (Data) -> Unit)? = null) : BaseRequestCallback() {
+class RequestCallback<Data>(
+    internal var onSuccess: ((Data) -> Unit)? = null,
+    internal var onSuccessIO: (suspend (Data) -> Unit)? = null
+) : BaseRequestCallback() {
 
     /**
      * 当网络请求成功时会调用此方法，随后会先后调用 onSuccessIO、onFinally 方法
@@ -27,8 +29,10 @@ class RequestCallback<Data>(internal var onSuccess: ((Data) -> Unit)? = null,
 
 }
 
-class RequestPairCallback<DataA, DataB>(internal var onSuccess: ((dataA: DataA, dataB: DataB) -> Unit)? = null,
-                                        internal var onSuccessIO: (suspend (dataA: DataA, dataB: DataB) -> Unit)? = null) : BaseRequestCallback() {
+class RequestPairCallback<DataA, DataB>(
+    internal var onSuccess: ((dataA: DataA, dataB: DataB) -> Unit)? = null,
+    internal var onSuccessIO: (suspend (dataA: DataA, dataB: DataB) -> Unit)? = null
+) : BaseRequestCallback() {
 
     /**
      * 当网络请求成功时会调用此方法，随后会先后调用 onSuccessIO、onFinally 方法
@@ -48,8 +52,10 @@ class RequestPairCallback<DataA, DataB>(internal var onSuccess: ((dataA: DataA, 
 
 }
 
-class RequestTripleCallback<DataA, DataB, DataC>(internal var onSuccess: ((dataA: DataA, dataB: DataB, dataC: DataC) -> Unit)? = null,
-                                                 internal var onSuccessIO: (suspend (dataA: DataA, dataB: DataB, dataC: DataC) -> Unit)? = null) : BaseRequestCallback() {
+class RequestTripleCallback<DataA, DataB, DataC>(
+    internal var onSuccess: ((dataA: DataA, dataB: DataB, dataC: DataC) -> Unit)? = null,
+    internal var onSuccessIO: (suspend (dataA: DataA, dataB: DataB, dataC: DataC) -> Unit)? = null
+) : BaseRequestCallback() {
 
     /**
      * 当网络请求成功时会调用此方法，随后会先后调用 onSuccessIO、onFinally 方法

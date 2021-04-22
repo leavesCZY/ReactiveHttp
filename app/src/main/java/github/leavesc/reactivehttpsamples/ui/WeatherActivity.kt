@@ -1,7 +1,6 @@
 package github.leavesc.reactivehttpsamples.ui
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesc.reactivehttpsamples.R
 import github.leavesc.reactivehttpsamples.adapter.WeatherAdapter
@@ -19,8 +18,8 @@ import kotlinx.android.synthetic.main.activity_weather.*
  */
 class WeatherActivity : BaseActivity() {
 
-    private val weatherViewModel by getViewModel(WeatherViewModel::class.java) {
-        forecastsBeanLiveData.observe(it, Observer {
+    private val weatherViewModel by getViewModel<WeatherViewModel> {
+        forecastsBeanLiveData.observe(this@WeatherActivity, {
             showWeather(it)
         })
     }
@@ -42,7 +41,7 @@ class WeatherActivity : BaseActivity() {
             weatherViewModel.getWeather(adCode)
         }
         iv_place.setOnClickListener {
-            startActivity(MapActivity::class.java)
+            startActivity<MapActivity>()
             finish()
         }
         weatherViewModel.getWeather(adCode)

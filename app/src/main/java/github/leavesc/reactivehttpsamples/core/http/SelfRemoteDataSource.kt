@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSource<ApiService>(iActionEvent, ApiService::class.java) {
+class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) :
+    RemoteExtendDataSource<ApiService>(iActionEvent, ApiService::class.java) {
 
     companion object {
 
@@ -26,12 +27,12 @@ class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSour
 
         private fun createHttpClient(): OkHttpClient {
             val builder = OkHttpClient.Builder()
-                    .readTimeout(1000L, TimeUnit.MILLISECONDS)
-                    .writeTimeout(1000L, TimeUnit.MILLISECONDS)
-                    .connectTimeout(1000L, TimeUnit.MILLISECONDS)
-                    .retryOnConnectionFailure(true)
-                    .addInterceptor(FilterInterceptor())
-                    .addInterceptor(MonitorInterceptor(MainApplication.context))
+                .readTimeout(1000L, TimeUnit.MILLISECONDS)
+                .writeTimeout(1000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(1000L, TimeUnit.MILLISECONDS)
+                .retryOnConnectionFailure(true)
+                .addInterceptor(FilterInterceptor())
+                .addInterceptor(MonitorInterceptor(MainApplication.context))
             return builder.build()
         }
 
@@ -51,10 +52,10 @@ class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSour
      */
     override fun createRetrofit(baseUrl: String): Retrofit {
         return Retrofit.Builder()
-                .client(httpClient)
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            .client(httpClient)
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     override fun showToast(msg: String) {

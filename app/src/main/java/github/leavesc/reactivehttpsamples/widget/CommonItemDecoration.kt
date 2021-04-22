@@ -39,11 +39,16 @@ open class CommonItemDecoration : RecyclerView.ItemDecoration {
     }
 
     constructor(context: Context, orientation: Int = LinearLayoutManager.VERTICAL) : this(
-            getDivider(context),
-            orientation
+        getDivider(context),
+        orientation
     )
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         val position = parent.getChildAdapterPosition(view)
         if (drawDecoration(position, parent.childCount)) {
             if (orientation == LinearLayoutManager.HORIZONTAL) {

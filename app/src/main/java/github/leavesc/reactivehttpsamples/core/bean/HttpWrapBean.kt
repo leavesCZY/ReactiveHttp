@@ -11,9 +11,10 @@ import github.leavesc.reactivehttpsamples.core.http.HttpConfig
  * @GitHub：https://github.com/leavesC
  */
 class HttpWrapBean<T>(
-        @SerializedName("status") var code: Int = 0,
-        @SerializedName("info") var message: String? = null,
-        @SerializedName("districts", alternate = ["forecasts"]) var data: T) : IHttpWrapBean<T> {
+    @SerializedName("status") var code: Int = 0,
+    @SerializedName("info") var message: String? = null,
+    @SerializedName("districts", alternate = ["forecasts"]) var data: T
+) : IHttpWrapBean<T> {
 
     companion object {
 

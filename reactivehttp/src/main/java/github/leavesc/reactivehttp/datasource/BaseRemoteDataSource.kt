@@ -23,7 +23,10 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-abstract class BaseRemoteDataSource<Api : Any>(protected val iUiActionEvent: IUIActionEvent?, protected val apiServiceClass: Class<Api>) : ICoroutineEvent {
+abstract class BaseRemoteDataSource<Api : Any>(
+    protected val iUiActionEvent: IUIActionEvent?,
+    protected val apiServiceClass: Class<Api>
+) : ICoroutineEvent {
 
     companion object {
 
@@ -42,10 +45,10 @@ abstract class BaseRemoteDataSource<Api : Any>(protected val iUiActionEvent: IUI
          */
         private val defaultOkHttpClient by lazy {
             OkHttpClient.Builder()
-                    .readTimeout(10000L, TimeUnit.MILLISECONDS)
-                    .writeTimeout(10000L, TimeUnit.MILLISECONDS)
-                    .connectTimeout(10000L, TimeUnit.MILLISECONDS)
-                    .retryOnConnectionFailure(true).build()
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .writeTimeout(10000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .retryOnConnectionFailure(true).build()
         }
 
         /**
@@ -53,10 +56,10 @@ abstract class BaseRemoteDataSource<Api : Any>(protected val iUiActionEvent: IUI
          */
         private fun createDefaultRetrofit(baseUrl: String): Retrofit {
             return Retrofit.Builder()
-                    .client(defaultOkHttpClient)
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+                .client(defaultOkHttpClient)
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
         }
 
     }

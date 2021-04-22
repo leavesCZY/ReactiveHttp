@@ -1,7 +1,6 @@
 package github.leavesc.reactivehttpsamples.ui
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import github.leavesc.reactivehttpsamples.R
 import github.leavesc.reactivehttpsamples.base.BaseActivity
 import github.leavesc.reactivehttpsamples.core.viewmodel.SingleRequestViewModel
@@ -15,8 +14,8 @@ import kotlinx.android.synthetic.main.activity_single_request.*
  */
 class SingleRequestActivity : BaseActivity() {
 
-    private val singleRequestViewModel by getViewModel(SingleRequestViewModel::class.java) {
-        logLiveData.observe(this@SingleRequestActivity, Observer {
+    private val singleRequestViewModel by getViewModel<SingleRequestViewModel> {
+        logLiveData.observe(this@SingleRequestActivity, {
             tv_log.text = it
         })
     }

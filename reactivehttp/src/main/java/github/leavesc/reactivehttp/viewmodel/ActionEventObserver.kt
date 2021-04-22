@@ -57,17 +57,21 @@ interface IUIActionEventObserver : IUIActionEvent {
 
     val lLifecycleOwner: LifecycleOwner
 
-    fun <VM> getViewModel(clazz: Class<VM>,
-                          factory: ViewModelProvider.Factory? = null,
-                          initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null): Lazy<VM> where VM : ViewModel, VM : IViewModelActionEvent {
+    fun <VM> getViewModel(
+        clazz: Class<VM>,
+        factory: ViewModelProvider.Factory? = null,
+        initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
+    ): Lazy<VM> where VM : ViewModel, VM : IViewModelActionEvent {
         return lazy {
             getViewModelFast(clazz, factory, initializer)
         }
     }
 
-    fun <VM> getViewModelFast(clazz: Class<VM>,
-                              factory: ViewModelProvider.Factory? = null,
-                              initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null): VM where VM : ViewModel, VM : IViewModelActionEvent {
+    fun <VM> getViewModelFast(
+        clazz: Class<VM>,
+        factory: ViewModelProvider.Factory? = null,
+        initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
+    ): VM where VM : ViewModel, VM : IViewModelActionEvent {
         return when (val localValue = lLifecycleOwner) {
             is ViewModelStoreOwner -> {
                 if (factory == null) {

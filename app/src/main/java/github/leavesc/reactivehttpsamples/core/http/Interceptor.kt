@@ -18,7 +18,7 @@ class FilterInterceptor : Interceptor {
         val httpBuilder = originalRequest.url.newBuilder()
         httpBuilder.addEncodedQueryParameter(HttpConfig.KEY, HttpConfig.KEY_MAP)
         val requestBuilder = originalRequest.newBuilder()
-                .url(httpBuilder.build())
+            .url(httpBuilder.build())
         return chain.proceed(requestBuilder.build())
     }
 

@@ -1,7 +1,6 @@
 package github.leavesc.reactivehttpsamples.ui
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import github.leavesc.reactivehttpsamples.R
 import github.leavesc.reactivehttpsamples.base.BaseActivity
 import github.leavesc.reactivehttpsamples.core.viewmodel.TogetherRequestViewModel
@@ -15,8 +14,8 @@ import kotlinx.android.synthetic.main.activity_together_request.*
  */
 class TogetherRequestActivity : BaseActivity() {
 
-    private val togetherRequestViewModel by getViewModel(TogetherRequestViewModel::class.java) {
-        logLiveData.observe(this@TogetherRequestActivity, Observer {
+    private val togetherRequestViewModel by getViewModel<TogetherRequestViewModel> {
+        logLiveData.observe(this@TogetherRequestActivity, {
             tv_log.text = it
         })
     }

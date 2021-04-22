@@ -7,7 +7,6 @@ import github.leavesc.reactivehttp.exception.ServerCodeBadException
 import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
-import kotlin.jvm.Throws
 
 /**
  * @Author: leavesC
@@ -15,18 +14,30 @@ import kotlin.jvm.Throws
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-abstract class RemoteDataSource<Api : Any>(iUiActionEvent: IUIActionEvent?, apiServiceClass: Class<Api>) : BaseRemoteDataSource<Api>(iUiActionEvent, apiServiceClass) {
+abstract class RemoteDataSource<Api : Any>(
+    iUiActionEvent: IUIActionEvent?,
+    apiServiceClass: Class<Api>
+) : BaseRemoteDataSource<Api>(iUiActionEvent, apiServiceClass) {
 
-    fun <Data> enqueueLoading(apiFun: suspend Api.() -> IHttpWrapBean<Data>,
-                              baseUrl: String = "",
-                              callbackFun: (RequestCallback<Data>.() -> Unit)? = null): Job {
-        return enqueue(apiFun = apiFun, showLoading = true, baseUrl = baseUrl, callbackFun = callbackFun)
+    fun <Data> enqueueLoading(
+        apiFun: suspend Api.() -> IHttpWrapBean<Data>,
+        baseUrl: String = "",
+        callbackFun: (RequestCallback<Data>.() -> Unit)? = null
+    ): Job {
+        return enqueue(
+            apiFun = apiFun,
+            showLoading = true,
+            baseUrl = baseUrl,
+            callbackFun = callbackFun
+        )
     }
 
-    fun <Data> enqueue(apiFun: suspend Api.() -> IHttpWrapBean<Data>,
-                       showLoading: Boolean = false,
-                       baseUrl: String = "",
-                       callbackFun: (RequestCallback<Data>.() -> Unit)? = null): Job {
+    fun <Data> enqueue(
+        apiFun: suspend Api.() -> IHttpWrapBean<Data>,
+        showLoading: Boolean = false,
+        baseUrl: String = "",
+        callbackFun: (RequestCallback<Data>.() -> Unit)? = null
+    ): Job {
         return launchMain {
             val callback = if (callbackFun == null) null else RequestCallback<Data>().apply {
                 callbackFun.invoke(this)
@@ -59,16 +70,25 @@ abstract class RemoteDataSource<Api : Any>(iUiActionEvent: IUIActionEvent?, apiS
         }
     }
 
-    fun <Data> enqueueOriginLoading(apiFun: suspend Api.() -> Data,
-                                    baseUrl: String = "",
-                                    callbackFun: (RequestCallback<Data>.() -> Unit)? = null): Job {
-        return enqueueOrigin(apiFun = apiFun, showLoading = true, baseUrl = baseUrl, callbackFun = callbackFun)
+    fun <Data> enqueueOriginLoading(
+        apiFun: suspend Api.() -> Data,
+        baseUrl: String = "",
+        callbackFun: (RequestCallback<Data>.() -> Unit)? = null
+    ): Job {
+        return enqueueOrigin(
+            apiFun = apiFun,
+            showLoading = true,
+            baseUrl = baseUrl,
+            callbackFun = callbackFun
+        )
     }
 
-    fun <Data> enqueueOrigin(apiFun: suspend Api.() -> Data,
-                             showLoading: Boolean = false,
-                             baseUrl: String = "",
-                             callbackFun: (RequestCallback<Data>.() -> Unit)? = null): Job {
+    fun <Data> enqueueOrigin(
+        apiFun: suspend Api.() -> Data,
+        showLoading: Boolean = false,
+        baseUrl: String = "",
+        callbackFun: (RequestCallback<Data>.() -> Unit)? = null
+    ): Job {
         return launchMain {
             val callback = if (callbackFun == null) null else RequestCallback<Data>().apply {
                 callbackFun.invoke(this)

@@ -12,9 +12,9 @@ import github.leavesc.reactivehttp.base.BaseReactiveActivity
  */
 open class BaseActivity : BaseReactiveActivity() {
 
-    protected fun <T : Activity> startActivity(clazz: Class<T>) {
+    protected inline fun <reified T : Activity> startActivity() {
         lContext?.apply {
-            startActivity(Intent(this, clazz))
+            startActivity(Intent(this, T::class.java))
         }
     }
 

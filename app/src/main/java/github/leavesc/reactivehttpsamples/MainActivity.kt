@@ -19,13 +19,13 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btn_weather.setOnClickListener {
-            startActivity(MapActivity::class.java)
+            startActivity<MapActivity>()
         }
         btn_single.setOnClickListener {
-            startActivity(SingleRequestActivity::class.java)
+            startActivity<SingleRequestActivity>()
         }
         btn_together.setOnClickListener {
-            startActivity(TogetherRequestActivity::class.java)
+            startActivity<TogetherRequestActivity>()
         }
     }
 

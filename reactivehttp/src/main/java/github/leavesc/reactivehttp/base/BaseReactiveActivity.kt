@@ -5,8 +5,11 @@ import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import github.leavesc.reactivehttp.viewmodel.IUIActionEventObserver
+import github.leavesc.reactivehttp.viewmodel.IViewModelActionEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
@@ -17,6 +20,17 @@ import kotlinx.coroutines.Job
  * @GitHub：https://github.com/leavesC
  */
 open class BaseReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
+
+    companion object {
+
+        inline fun <reified VM> IUIActionEventObserver.getViewModel(
+            factory: ViewModelProvider.Factory? = null,
+            noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
+        ): Lazy<VM> where VM : ViewModel, VM : IViewModelActionEvent {
+            return getViewModel(VM::class.java, factory, initializer)
+        }
+
+    }
 
     override val lifecycleSupportedScope: CoroutineScope
         get() = lifecycleScope
