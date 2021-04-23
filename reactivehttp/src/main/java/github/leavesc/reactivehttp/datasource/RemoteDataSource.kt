@@ -39,8 +39,12 @@ abstract class RemoteDataSource<Api : Any>(
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return launchMain {
-            val callback = if (callbackFun == null) null else RequestCallback<Data>().apply {
-                callbackFun.invoke(this)
+            val callback = if (callbackFun == null) {
+                null
+            } else {
+                RequestCallback<Data>().apply {
+                    callbackFun.invoke(this)
+                }
             }
             try {
                 if (showLoading) {
@@ -90,8 +94,12 @@ abstract class RemoteDataSource<Api : Any>(
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return launchMain {
-            val callback = if (callbackFun == null) null else RequestCallback<Data>().apply {
-                callbackFun.invoke(this)
+            val callback = if (callbackFun == null) {
+                null
+            } else {
+                RequestCallback<Data>().apply {
+                    callbackFun.invoke(this)
+                }
             }
             try {
                 if (showLoading) {

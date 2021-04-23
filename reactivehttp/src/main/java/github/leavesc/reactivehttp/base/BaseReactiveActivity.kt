@@ -21,15 +21,11 @@ import kotlinx.coroutines.Job
  */
 open class BaseReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
 
-    companion object {
-
-        inline fun <reified VM> IUIActionEventObserver.getViewModel(
-            factory: ViewModelProvider.Factory? = null,
-            noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
-        ): Lazy<VM> where VM : ViewModel, VM : IViewModelActionEvent {
-            return getViewModel(VM::class.java, factory, initializer)
-        }
-
+    protected inline fun <reified VM> getViewModel(
+        factory: ViewModelProvider.Factory? = null,
+        noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
+    ): Lazy<VM> where VM : ViewModel, VM : IViewModelActionEvent {
+        return getViewModel(VM::class.java, factory, initializer)
     }
 
     override val lifecycleSupportedScope: CoroutineScope
