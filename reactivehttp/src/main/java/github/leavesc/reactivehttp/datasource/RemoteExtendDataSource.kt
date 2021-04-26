@@ -58,8 +58,8 @@ abstract class RemoteExtendDataSource<Api : Any>(
                 val responseList: List<IHttpWrapBean<out Any?>>
                 try {
                     responseList = listOf(
-                        async { apiFunA.invoke(getApiService()) },
-                        async { apiFunB.invoke(getApiService()) }
+                        lifecycleSupportedScope.async { apiFunA.invoke(getApiService()) },
+                        lifecycleSupportedScope.async { apiFunB.invoke(getApiService()) }
                     ).awaitAll()
                     val failed = responseList.find { it.httpIsFailed }
                     if (failed != null) {
@@ -148,9 +148,9 @@ abstract class RemoteExtendDataSource<Api : Any>(
                 val responseList: List<IHttpWrapBean<out Any?>>
                 try {
                     responseList = listOf(
-                        async { apiFunA.invoke(getApiService(baseUrl)) },
-                        async { apiFunB.invoke(getApiService(baseUrl)) },
-                        async { apiFunC.invoke(getApiService(baseUrl)) }
+                        lifecycleSupportedScope.async { apiFunA.invoke(getApiService(baseUrl)) },
+                        lifecycleSupportedScope.async { apiFunB.invoke(getApiService(baseUrl)) },
+                        lifecycleSupportedScope.async { apiFunC.invoke(getApiService(baseUrl)) }
                     ).awaitAll()
                     val failed = responseList.find { it.httpIsFailed }
                     if (failed != null) {

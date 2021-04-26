@@ -41,7 +41,7 @@ class TogetherRequestViewModel : BaseViewModel() {
                 log("onCancelled")
             }
             onFailed {
-                log("onFailed")
+                log("onFailed：$it")
             }
             onFailToast {
                 true
@@ -69,7 +69,7 @@ class TogetherRequestViewModel : BaseViewModel() {
 
     private suspend fun togetherFailedJobFunA(): HttpWrapBean<String> {
         delay(2000)
-        return HttpWrapBean.success("how are you")
+        throw RuntimeException("404~")
     }
 
     private suspend fun togetherFailedJobFunB(): HttpWrapBean<Int> {
@@ -91,10 +91,11 @@ class TogetherRequestViewModel : BaseViewModel() {
                 log("onCancelled")
             }
             onFailed {
-                log("onFailed")
+                log("onFailed：$it")
+                showToast(it.errorMessage)
             }
             onFailToast {
-                true
+                false
             }
             onSuccess { dataA, dataB ->
                 log("onSuccess： $dataA   $dataB")
