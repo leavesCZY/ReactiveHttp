@@ -13,7 +13,7 @@
 	}
 
 	dependencies {
-		implementation 'com.github.leavesC:ReactiveHttp:1.0.0'
+		implementation 'com.github.leavesC:ReactiveHttp:1.0.1'
 	}
 ```
 
