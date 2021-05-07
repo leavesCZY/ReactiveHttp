@@ -1,4 +1,4 @@
-# ReactiveHttp
+# ReactiveHttp [![](https://jitpack.io/v/leavesC/ReactiveHttp.svg)](https://jitpack.io/#leavesC/ReactiveHttp)
 
 一个基于 Kotlin + Jetpack + Coroutines + Retrofit 封装的网络请求框架
 
