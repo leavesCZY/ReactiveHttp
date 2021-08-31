@@ -33,15 +33,15 @@ class PlaceAdapter(
     override fun getItemCount() = if (dataList.isNullOrEmpty()) 0 else dataList.size
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        holder.tv_placeName.text = dataList[position].name
-        holder.tv_placeName.setOnClickListener {
+        holder.tvPlaceName.text = dataList[position].name
+        holder.tvPlaceName.setOnClickListener {
             onClickListener.onClick(holder.adapterPosition)
         }
     }
 
     class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var tv_placeName: TextView = itemView.findViewById(R.id.tv_placeName)
+        var tvPlaceName: TextView = itemView.findViewById(R.id.tvPlaceName)
 
     }
 

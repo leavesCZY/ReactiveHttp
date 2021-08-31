@@ -2,10 +2,10 @@ package github.leavesc.reactivehttpsamples
 
 import android.os.Bundle
 import github.leavesc.reactivehttpsamples.base.BaseActivity
+import github.leavesc.reactivehttpsamples.databinding.ActivityMainBinding
 import github.leavesc.reactivehttpsamples.ui.MapActivity
 import github.leavesc.reactivehttpsamples.ui.SingleRequestActivity
 import github.leavesc.reactivehttpsamples.ui.TogetherRequestActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * @Author: leavesC
@@ -15,16 +15,17 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : BaseActivity() {
 
+    override val bind by getBind<ActivityMainBinding>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        btn_weather.setOnClickListener {
+        bind.btnWeather.setOnClickListener {
             startActivity<MapActivity>()
         }
-        btn_single.setOnClickListener {
+        bind.btnSingle.setOnClickListener {
             startActivity<SingleRequestActivity>()
         }
-        btn_together.setOnClickListener {
+        bind.btnTogether.setOnClickListener {
             startActivity<TogetherRequestActivity>()
         }
     }

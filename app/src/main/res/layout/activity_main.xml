@@ -3,26 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/normalBg"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_weather"
+        android:id="@+id/btnWeather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="天气预报" />
 
     <Button
-        android:id="@+id/btn_single"
+        android:id="@+id/btnSingle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="API 方法演示-单个网络请求" />
 
     <Button
-        android:id="@+id/btn_together"
+        android:id="@+id/btnTogether"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

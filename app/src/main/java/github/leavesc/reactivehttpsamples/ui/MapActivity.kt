@@ -2,16 +2,12 @@ package github.leavesc.reactivehttpsamples.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import github.leavesc.reactivehttpsamples.R
 import github.leavesc.reactivehttpsamples.adapter.PlaceAdapter
 import github.leavesc.reactivehttpsamples.base.BaseActivity
 import github.leavesc.reactivehttpsamples.core.bean.DistrictBean
 import github.leavesc.reactivehttpsamples.core.viewmodel.MapViewModel
-import github.leavesc.reactivehttpsamples.widget.CommonItemDecoration
-import kotlinx.android.synthetic.main.activity_map.*
-import kotlinx.android.synthetic.main.layout_top_bar.*
+import github.leavesc.reactivehttpsamples.databinding.ActivityMapBinding
 
 /**
  * @Author: leavesC
@@ -21,19 +17,21 @@ import kotlinx.android.synthetic.main.layout_top_bar.*
  */
 class MapActivity : BaseActivity() {
 
+    override val bind by getBind<ActivityMapBinding>()
+
     private val dataList = mutableListOf<DistrictBean>()
 
     private val mapViewModel by getViewModel<MapViewModel> {
         stateLiveData.observe(this@MapActivity, {
             when (it) {
                 MapViewModel.TYPE_PROVINCE -> {
-                    tv_topBarTitle.text = "省份"
+                    bind.tvTopBarTitle.text = "省份"
                 }
                 MapViewModel.TYPE_CITY -> {
-                    tv_topBarTitle.text = "城市"
+                    bind.tvTopBarTitle.text = "城市"
                 }
                 MapViewModel.TYPE_COUNTY -> {
-                    tv_topBarTitle.text = "区县"
+                    bind.tvTopBarTitle.text = "区县"
                 }
             }
         })
@@ -59,17 +57,8 @@ class MapActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
-        rv_placeList.layoutManager = LinearLayoutManager(this)
-        rv_placeList.addItemDecoration(
-            CommonItemDecoration(
-                ContextCompat.getDrawable(
-                    this,
-                    R.drawable.divider_plan_detail
-                ), LinearLayoutManager.VERTICAL
-            )
-        )
-        rv_placeList.adapter = placeAdapter
+        bind.rvPlaceList.layoutManager = LinearLayoutManager(this)
+        bind.rvPlaceList.adapter = placeAdapter
         mapViewModel.getProvince()
     }
 

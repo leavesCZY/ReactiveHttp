@@ -33,18 +33,18 @@ class WeatherAdapter(private val districtsBeanList: List<CastsBean>) :
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val bean = districtsBeanList[position]
-        holder.tv_date.text = bean.date
-        holder.tv_dayWeather.text = "白天天气：${bean.daytemp} ℃ ${bean.dayweather}"
-        holder.tv_nightWeather.text = "夜晚天气：${bean.nighttemp} ℃ ${bean.nightweather}"
+        holder.tvDate.text = bean.date
+        holder.tvDayWeather.text = "白天天气：${bean.daytemp} ℃ ${bean.dayweather}"
+        holder.tvNightWeather.text = "夜晚天气：${bean.nighttemp} ℃ ${bean.nightweather}"
     }
 
     class WeatherViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val tv_date: TextView = itemView.findViewById(R.id.tv_date)
+        val tvDate: TextView = itemView.findViewById(R.id.tvDate)
 
-        val tv_dayWeather: TextView = itemView.findViewById(R.id.tv_dayWeather)
+        val tvDayWeather: TextView = itemView.findViewById(R.id.tvDayWeather)
 
-        val tv_nightWeather: TextView = itemView.findViewById(R.id.tv_nightWeather)
+        val tvNightWeather: TextView = itemView.findViewById(R.id.tvNightWeather)
 
     }
 

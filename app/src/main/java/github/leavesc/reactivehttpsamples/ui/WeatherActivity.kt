@@ -2,13 +2,12 @@ package github.leavesc.reactivehttpsamples.ui
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import github.leavesc.reactivehttpsamples.R
 import github.leavesc.reactivehttpsamples.adapter.WeatherAdapter
 import github.leavesc.reactivehttpsamples.base.BaseActivity
 import github.leavesc.reactivehttpsamples.core.bean.CastsBean
 import github.leavesc.reactivehttpsamples.core.bean.ForecastsBean
 import github.leavesc.reactivehttpsamples.core.viewmodel.WeatherViewModel
-import kotlinx.android.synthetic.main.activity_weather.*
+import github.leavesc.reactivehttpsamples.databinding.ActivityWeatherBinding
 
 /**
  * @Author: leavesC
@@ -17,6 +16,8 @@ import kotlinx.android.synthetic.main.activity_weather.*
  * @GitHub：https://github.com/leavesC
  */
 class WeatherActivity : BaseActivity() {
+
+    override val bind by getBind<ActivityWeatherBinding>()
 
     private val weatherViewModel by getViewModel<WeatherViewModel> {
         forecastsBeanLiveData.observe(this@WeatherActivity, {
@@ -34,13 +35,12 @@ class WeatherActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_weather)
-        rv_dailyForecast.layoutManager = LinearLayoutManager(this)
-        rv_dailyForecast.adapter = weatherAdapter
-        swipeRefreshLayout.setOnRefreshListener {
+        bind.rvDailyForecast.layoutManager = LinearLayoutManager(this)
+        bind.rvDailyForecast.adapter = weatherAdapter
+        bind.swipeRefreshLayout.setOnRefreshListener {
             weatherViewModel.getWeather(adCode)
         }
-        iv_place.setOnClickListener {
+        bind.ivPlace.setOnClickListener {
             startActivity<MapActivity>()
             finish()
         }
@@ -48,11 +48,11 @@ class WeatherActivity : BaseActivity() {
     }
 
     private fun showWeather(forecastsBean: ForecastsBean) {
-        tv_city.text = forecastsBean.city
+        bind.tvCity.text = forecastsBean.city
         castsBeanList.clear()
         castsBeanList.addAll(forecastsBean.casts)
         weatherAdapter.notifyDataSetChanged()
-        swipeRefreshLayout.isRefreshing = false
+        bind.swipeRefreshLayout.isRefreshing = false
     }
 
 }

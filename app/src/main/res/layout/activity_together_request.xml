@@ -7,7 +7,7 @@
     tools:context=".ui.SingleRequestActivity">
 
     <Button
-        android:id="@+id/btn_togetherSuccess"
+        android:id="@+id/btnTogetherSuccess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -17,44 +17,44 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_cancelTogetherSuccessJob"
+        android:id="@+id/btnCancelTogetherSuccessJob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="取消上述网络请求"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_togetherSuccess" />
+        app:layout_constraintTop_toBottomOf="@id/btnTogetherSuccess" />
 
     <Button
-        android:id="@+id/btn_togetherFailed"
+        android:id="@+id/btnTogetherFailed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="并发网络请求-失败的示例"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_cancelTogetherSuccessJob" />
+        app:layout_constraintTop_toBottomOf="@id/btnCancelTogetherSuccessJob" />
 
     <Button
-        android:id="@+id/btn_cancelTogetherFailedJob"
+        android:id="@+id/btnCancelTogetherFailedJob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="取消上述网络请求"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_togetherFailed" />
+        app:layout_constraintTop_toBottomOf="@id/btnTogetherFailed" />
 
     <Button
-        android:id="@+id/btn_cleanLog"
+        android:id="@+id/btnCleanLog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="清除日志"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_cancelTogetherFailedJob" />
+        app:layout_constraintTop_toBottomOf="@id/btnCancelTogetherFailedJob" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -63,10 +63,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_cleanLog">
+        app:layout_constraintTop_toBottomOf="@id/btnCleanLog">
 
         <TextView
-            android:id="@+id/tv_log"
+            android:id="@+id/tvLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

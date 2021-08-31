@@ -8,39 +8,36 @@
     android:background="@drawable/bg_weather_item">
 
     <TextView
-        android:id="@+id/tv_date"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="2019/06/07"
-        tools:textColor="@android:color/black" />
+        tools:text="2019/06/07" />
 
     <TextView
-        android:id="@+id/tv_dayWeather"
+        android:id="@+id/tvDayWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@id/tv_date"
-        app:layout_constraintTop_toBottomOf="@id/tv_date"
-        tools:text="白天天气：31℃ 多云"
-        tools:textColor="@android:color/black" />
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvDate"
+        tools:text="白天天气：31℃ 多云" />
 
     <TextView
-        android:id="@+id/tv_nightWeather"
+        android:id="@+id/tvNightWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@id/tv_dayWeather"
-        app:layout_constraintTop_toBottomOf="@id/tv_dayWeather"
-        tools:text="晚上天气：31℃ 多云"
-        tools:textColor="@android:color/black" />
+        app:layout_constraintStart_toStartOf="@id/tvDayWeather"
+        app:layout_constraintTop_toBottomOf="@id/tvDayWeather"
+        tools:text="晚上天气：31℃ 多云" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

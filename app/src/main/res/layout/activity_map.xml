@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/normalBg">
+    android:background="@android:color/white">
 
-    <include
-        android:id="@+id/layout_top_bar"
-        layout="@layout/layout_top_bar" />
+    <TextView
+        android:id="@+id/tvTopBarTitle"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="这是标题" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_placeList"
+        android:id="@+id/rvPlaceList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_top_bar" />
+        app:layout_constraintTop_toBottomOf="@id/tvTopBarTitle"
+        tools:listitem="@layout/item_place" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

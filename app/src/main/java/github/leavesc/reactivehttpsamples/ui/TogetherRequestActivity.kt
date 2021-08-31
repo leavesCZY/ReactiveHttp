@@ -1,10 +1,9 @@
 package github.leavesc.reactivehttpsamples.ui
 
 import android.os.Bundle
-import github.leavesc.reactivehttpsamples.R
 import github.leavesc.reactivehttpsamples.base.BaseActivity
 import github.leavesc.reactivehttpsamples.core.viewmodel.TogetherRequestViewModel
-import kotlinx.android.synthetic.main.activity_together_request.*
+import github.leavesc.reactivehttpsamples.databinding.ActivityTogetherRequestBinding
 
 /**
  * @Author: leavesC
@@ -14,28 +13,29 @@ import kotlinx.android.synthetic.main.activity_together_request.*
  */
 class TogetherRequestActivity : BaseActivity() {
 
+    override val bind by getBind<ActivityTogetherRequestBinding>()
+
     private val togetherRequestViewModel by getViewModel<TogetherRequestViewModel> {
         logLiveData.observe(this@TogetherRequestActivity, {
-            tv_log.text = it
+            bind.tvLog.text = it
         })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_together_request)
-        btn_togetherSuccess.setOnClickListener {
+        bind.btnTogetherSuccess.setOnClickListener {
             togetherRequestViewModel.togetherSuccess()
         }
-        btn_cancelTogetherSuccessJob.setOnClickListener {
+        bind.btnCancelTogetherSuccessJob.setOnClickListener {
             togetherRequestViewModel.cancelTogetherSuccessJob()
         }
-        btn_togetherFailed.setOnClickListener {
+        bind.btnTogetherFailed.setOnClickListener {
             togetherRequestViewModel.togetherFailed()
         }
-        btn_cancelTogetherFailedJob.setOnClickListener {
+        bind.btnCancelTogetherFailedJob.setOnClickListener {
             togetherRequestViewModel.cancelTogetherFailedJob()
         }
-        btn_cleanLog.setOnClickListener {
+        bind.btnCleanLog.setOnClickListener {
             togetherRequestViewModel.clearLog()
         }
     }
