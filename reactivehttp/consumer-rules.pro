@@ -1,1 +1,0 @@
--keep class github.leavesc.reactivehttp.base.BaseReactiveActivity

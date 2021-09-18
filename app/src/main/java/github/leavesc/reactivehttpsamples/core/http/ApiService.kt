@@ -26,4 +26,7 @@ interface ApiService {
     @GET("weather/weatherInfo?extensions=all")
     suspend fun getWeather(@Query("city") city: String): HttpWrapBean<List<ForecastsBean>>
 
+    @GET("weather/mustFailed")
+    suspend fun mustFailed(): HttpWrapBean<List<ForecastsBean>>
+
 }

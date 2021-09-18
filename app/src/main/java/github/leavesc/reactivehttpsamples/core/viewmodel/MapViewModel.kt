@@ -41,7 +41,7 @@ class MapViewModel : BaseViewModel() {
     fun getProvince() {
         remoteDataSource.enqueueLoading({
             //主动延迟一段时间，避免弹窗太快消失
-            delay(2000)
+            delay(1200)
             getProvince()
         }) {
             onStart {

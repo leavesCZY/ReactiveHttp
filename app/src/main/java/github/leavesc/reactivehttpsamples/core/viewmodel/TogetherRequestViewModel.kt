@@ -3,7 +3,6 @@ package github.leavesc.reactivehttpsamples.core.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import github.leavesc.reactivehttpsamples.base.BaseViewModel
-import github.leavesc.reactivehttpsamples.core.bean.HttpWrapBean
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
@@ -17,22 +16,12 @@ class TogetherRequestViewModel : BaseViewModel() {
 
     val logLiveData = MutableLiveData<String>()
 
-    private suspend fun togetherSuccessJobFunA(): HttpWrapBean<String> {
-        delay(2000)
-        return HttpWrapBean.success("how are you")
-    }
-
-    private suspend fun togetherSuccessJobFunB(): HttpWrapBean<Int> {
-        delay(3000)
-        return HttpWrapBean.success(300)
-    }
-
     private var togetherSuccessJob: Job? = null
 
     fun togetherSuccess() {
         cancelTogetherSuccessJob()
-        togetherSuccessJob = remoteDataSource.enqueue({ togetherSuccessJobFunA() }, {
-            togetherSuccessJobFunB()
+        togetherSuccessJob = remoteDataSource.enqueue({ getProvince() }, {
+            getCity("广东")
         }) {
             onStart {
                 log("onStart")
@@ -47,12 +36,15 @@ class TogetherRequestViewModel : BaseViewModel() {
                 true
             }
             onSuccess { dataA, dataB ->
-                log("onSuccess： $dataA   $dataB")
+                log("onSuccess：")
+                log("dataA：$dataA")
+                log("dataB：$dataB")
             }
-            onSuccessIO { dataA, dataB ->
+            onSuccessIO { _, _ ->
+                log("onSuccessIO：")
                 repeat(5) { time ->
                     delay(300)
-                    log("onSuccessIO： $time $dataA $dataB")
+                    log("$time")
                 }
             }
             onFinally {
@@ -67,22 +59,12 @@ class TogetherRequestViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun togetherFailedJobFunA(): HttpWrapBean<String> {
-        delay(2000)
-        throw RuntimeException("404~")
-    }
-
-    private suspend fun togetherFailedJobFunB(): HttpWrapBean<Int> {
-        delay(3000)
-        return HttpWrapBean.failed(300)
-    }
-
     private var togetherFailedJob: Job? = null
 
     fun togetherFailed() {
         cancelTogetherFailedJob()
-        togetherFailedJob = remoteDataSource.enqueue({ togetherFailedJobFunA() }, {
-            togetherFailedJobFunB()
+        togetherFailedJob = remoteDataSource.enqueue({ getProvince() }, {
+            mustFailed()
         }) {
             onStart {
                 log("onStart")
@@ -100,10 +82,11 @@ class TogetherRequestViewModel : BaseViewModel() {
             onSuccess { dataA, dataB ->
                 log("onSuccess： $dataA   $dataB")
             }
-            onSuccessIO { dataA, dataB ->
+            onSuccessIO { _, _ ->
+                log("onSuccessIO：")
                 repeat(5) { time ->
                     delay(300)
-                    log("onSuccessIO： $time $dataA $dataB")
+                    log("$time")
                 }
             }
             onFinally {
@@ -121,13 +104,14 @@ class TogetherRequestViewModel : BaseViewModel() {
     private var log = ""
 
     @Synchronized
-    private fun log(msg: String) {
+    private fun log(msg: Any?) {
         val newLog = "[${Thread.currentThread().name}]-${msg}"
-        log = log + "\n" + newLog
+        log = "$log\n*************\n$newLog"
         logLiveData.postValue(log)
         Log.e("TAG", newLog)
     }
 
+    @Synchronized
     fun clearLog() {
         log = ""
         logLiveData.postValue("")
