@@ -41,7 +41,7 @@ class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) :
     /**
      * 由子类实现此字段以便获取 baseUrl
      */
-    override val baseUrl: String
+    override val httpBaseUrl: String
         get() = HttpConfig.BASE_URL_MAP
 
     /**

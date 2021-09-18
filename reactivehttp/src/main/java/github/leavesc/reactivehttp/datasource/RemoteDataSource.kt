@@ -51,17 +51,13 @@ abstract class RemoteDataSource<Api : Any>(
                     showLoading(coroutineContext[Job])
                 }
                 callback?.onStart?.invoke()
-                val response: IHttpWrapBean<Data>
-                try {
-                    response = apiFun.invoke(getApiService(baseUrl))
-                    if (!response.httpIsSuccess) {
-                        throw ServerCodeBadException(response)
-                    }
-                } catch (throwable: Throwable) {
-                    handleException(throwable, callback)
-                    return@launchMain
+                val response = apiFun.invoke(getApiService(baseUrl))
+                if (!response.httpIsSuccess) {
+                    throw ServerCodeBadException(response)
                 }
                 onGetResponse(callback, response.httpData)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
             } finally {
                 try {
                     callback?.onFinally?.invoke()
@@ -106,14 +102,10 @@ abstract class RemoteDataSource<Api : Any>(
                     showLoading(coroutineContext[Job])
                 }
                 callback?.onStart?.invoke()
-                val response: Data
-                try {
-                    response = apiFun.invoke(getApiService(baseUrl))
-                } catch (throwable: Throwable) {
-                    handleException(throwable, callback)
-                    return@launchMain
-                }
+                val response = apiFun.invoke(getApiService(baseUrl))
                 onGetResponse(callback, response)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
             } finally {
                 try {
                     callback?.onFinally?.invoke()
@@ -127,17 +119,16 @@ abstract class RemoteDataSource<Api : Any>(
     }
 
     private suspend fun <Data> onGetResponse(callback: RequestCallback<Data>?, httpData: Data) {
-        callback?.let {
-            withNonCancellable {
-                callback.onSuccess?.let {
-                    withMain {
-                        it.invoke(httpData)
-                    }
+        callback ?: return
+        withNonCancellable {
+            callback.onSuccess?.let {
+                withMain {
+                    it.invoke(httpData)
                 }
-                callback.onSuccessIO?.let {
-                    withIO {
-                        it.invoke(httpData)
-                    }
+            }
+            callback.onSuccessIO?.let {
+                withIO {
+                    it.invoke(httpData)
                 }
             }
         }
@@ -148,7 +139,10 @@ abstract class RemoteDataSource<Api : Any>(
      * @param apiFun
      */
     @Throws(BaseHttpException::class)
-    fun <Data> execute(apiFun: suspend Api.() -> IHttpWrapBean<Data>, baseUrl: String = ""): Data {
+    fun <Data> execute(
+        apiFun: suspend Api.() -> IHttpWrapBean<Data>,
+        baseUrl: String = ""
+    ): Data {
         return runBlocking {
             try {
                 val asyncIO = asyncIO {
@@ -160,7 +154,7 @@ abstract class RemoteDataSource<Api : Any>(
                 }
                 throw ServerCodeBadException(response)
             } catch (throwable: Throwable) {
-                throw generateBaseExceptionReal(throwable)
+                throw generateBaseException(throwable)
             }
         }
     }

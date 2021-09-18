@@ -72,7 +72,7 @@ abstract class BaseRemoteDataSource<Api : Any>(
     /**
      * 由子类实现此字段以便获取 baseUrl
      */
-    protected abstract val baseUrl: String
+    protected abstract val httpBaseUrl: String
 
     /**
      * 允许子类自己来实现创建 Retrofit 的逻辑
@@ -88,52 +88,43 @@ abstract class BaseRemoteDataSource<Api : Any>(
         if (baseUrl.isNotBlank()) {
             return baseUrl
         }
-        return this.baseUrl
+        return httpBaseUrl
     }
 
-    fun getApiService(baseUrl: String = ""): Api {
-        return getApiService(generateBaseUrl(baseUrl), apiServiceClass)
-    }
-
-    private fun getApiService(baseUrl: String, apiServiceClazz: Class<Api>): Api {
-        val key = baseUrl + apiServiceClazz.canonicalName
+    protected open fun getApiService(
+        baseUrl: String
+    ): Api {
+        val realBaseUrl = generateBaseUrl(baseUrl)
+        val key = realBaseUrl + apiServiceClass.canonicalName
         val get = apiServiceCache.get(key)?.let {
             it as? Api
         }
         if (get != null) {
             return get
         }
-        val retrofit = retrofitCache.get(baseUrl) ?: (createRetrofit(baseUrl).apply {
-            retrofitCache.put(baseUrl, this)
+        val retrofit = retrofitCache.get(realBaseUrl) ?: (createRetrofit(realBaseUrl).apply {
+            retrofitCache.put(realBaseUrl, this)
         })
-        val apiService = retrofit.create(apiServiceClazz)
+        val apiService = retrofit.create(apiServiceClass)
         apiServiceCache.put(key, apiService)
         return apiService
     }
 
     protected fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {
-        if (callback == null) {
-            return
-        }
+        callback ?: return
         if (throwable is CancellationException) {
             callback.onCancelled?.invoke()
-            return
-        }
-        val exception = generateBaseExceptionReal(throwable)
-        if (exceptionHandle(exception)) {
-            callback.onFailed?.invoke(exception)
-            if (callback.onFailToast()) {
-                val error = exceptionFormat(exception)
-                if (error.isNotBlank()) {
-                    showToast(error)
+        } else {
+            val exception = generateBaseException(throwable)
+            if (exceptionHandle(exception)) {
+                callback.onFailed?.invoke(exception)
+                if (callback.onFailToast()) {
+                    val error = exceptionFormat(exception)
+                    if (error.isNotBlank()) {
+                        showToast(error)
+                    }
                 }
             }
-        }
-    }
-
-    internal fun generateBaseExceptionReal(throwable: Throwable): BaseHttpException {
-        return generateBaseException(throwable).apply {
-            exceptionRecord(this)
         }
     }
 
@@ -153,18 +144,11 @@ abstract class BaseRemoteDataSource<Api : Any>(
 
     /**
      * 用于由外部中转控制当抛出异常时是否走 onFail 回调，当返回 true 时则回调，否则不回调
+     * 同时在这里将网络请求过程中发生的异常反馈给外部，以便外部上报异常
      * @param httpException
      */
     protected open fun exceptionHandle(httpException: BaseHttpException): Boolean {
         return true
-    }
-
-    /**
-     * 用于将网络请求过程中的异常反馈给外部，以便记录
-     * @param throwable
-     */
-    protected open fun exceptionRecord(throwable: Throwable) {
-
     }
 
     /**

@@ -23,23 +23,11 @@ abstract class RemoteExtendDataSource<Api : Any>(
     apiServiceClass: Class<Api>
 ) : RemoteDataSource<Api>(iActionEvent, apiServiceClass) {
 
-    fun <DataA, DataB> enqueueLoading(
-        apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
-        apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
-        callbackFun: (RequestPairCallback<DataA, DataB>.() -> Unit)? = null
-    ): Job {
-        return enqueue(
-            apiFunA = apiFunA,
-            apiFunB = apiFunB,
-            showLoading = true,
-            callbackFun = callbackFun
-        )
-    }
-
     fun <DataA, DataB> enqueue(
         apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
         apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
         showLoading: Boolean = false,
+        baseUrl: String = "",
         callbackFun: (RequestPairCallback<DataA, DataB>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -55,21 +43,17 @@ abstract class RemoteExtendDataSource<Api : Any>(
                     showLoading(coroutineContext[Job])
                 }
                 callback?.onStart?.invoke()
-                val responseList: List<IHttpWrapBean<out Any?>>
-                try {
-                    responseList = listOf(
-                        lifecycleSupportedScope.async { apiFunA.invoke(getApiService()) },
-                        lifecycleSupportedScope.async { apiFunB.invoke(getApiService()) }
+                val responseList =
+                    listOf(lifecycleSupportedScope.async { apiFunA.invoke(getApiService(baseUrl)) },
+                        lifecycleSupportedScope.async { apiFunB.invoke(getApiService(baseUrl)) }
                     ).awaitAll()
-                    val failed = responseList.find { it.httpIsFailed }
-                    if (failed != null) {
-                        throw ServerCodeBadException(failed)
-                    }
-                } catch (throwable: Throwable) {
-                    handleException(throwable, callback)
-                    return@launchMain
+                val failed = responseList.find { it.httpIsFailed }
+                if (failed != null) {
+                    throw ServerCodeBadException(failed)
                 }
                 onGetResponse(callback, responseList)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
             } finally {
                 try {
                     callback?.onFinally?.invoke()
@@ -84,45 +68,27 @@ abstract class RemoteExtendDataSource<Api : Any>(
 
     private suspend fun <DataA, DataB> onGetResponse(
         callback: RequestPairCallback<DataA, DataB>?,
-        responseList: List<IHttpWrapBean<out Any?>>
+        responseList: List<IHttpWrapBean<out Any?>>,
     ) {
-        callback?.let {
-            withNonCancellable {
-                callback.onSuccess?.let {
-                    withMain {
-                        it.invoke(
-                            responseList[0].httpData as DataA,
-                            responseList[1].httpData as DataB
-                        )
-                    }
+        callback ?: return
+        withNonCancellable {
+            callback.onSuccess?.let {
+                withMain {
+                    it.invoke(
+                        responseList[0].httpData as DataA,
+                        responseList[1].httpData as DataB
+                    )
                 }
-                callback.onSuccessIO?.let {
-                    withIO {
-                        it.invoke(
-                            responseList[0].httpData as DataA,
-                            responseList[1].httpData as DataB
-                        )
-                    }
+            }
+            callback.onSuccessIO?.let {
+                withIO {
+                    it.invoke(
+                        responseList[0].httpData as DataA,
+                        responseList[1].httpData as DataB
+                    )
                 }
             }
         }
-    }
-
-    fun <DataA, DataB, DataC> enqueueLoading(
-        apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
-        apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
-        apiFunC: suspend Api.() -> IHttpWrapBean<DataC>,
-        baseUrl: String = "",
-        callbackFun: (RequestTripleCallback<DataA, DataB, DataC>.() -> Unit)? = null
-    ): Job {
-        return enqueue(
-            apiFunA = apiFunA,
-            apiFunB = apiFunB,
-            apiFunC = apiFunC,
-            showLoading = true,
-            baseUrl = baseUrl,
-            callbackFun = callbackFun
-        )
     }
 
     fun <DataA, DataB, DataC> enqueue(
@@ -145,22 +111,19 @@ abstract class RemoteExtendDataSource<Api : Any>(
                 if (showLoading) {
                     showLoading(coroutineContext[Job])
                 }
-                val responseList: List<IHttpWrapBean<out Any?>>
-                try {
-                    responseList = listOf(
-                        lifecycleSupportedScope.async { apiFunA.invoke(getApiService(baseUrl)) },
-                        lifecycleSupportedScope.async { apiFunB.invoke(getApiService(baseUrl)) },
-                        lifecycleSupportedScope.async { apiFunC.invoke(getApiService(baseUrl)) }
-                    ).awaitAll()
-                    val failed = responseList.find { it.httpIsFailed }
-                    if (failed != null) {
-                        throw ServerCodeBadException(failed)
-                    }
-                } catch (throwable: Throwable) {
-                    handleException(throwable, callback)
-                    return@launchMain
+                val responseList = listOf(
+                    lifecycleSupportedScope.async { apiFunA.invoke(getApiService(baseUrl)) },
+                    lifecycleSupportedScope.async { apiFunB.invoke(getApiService(baseUrl)) },
+                    lifecycleSupportedScope.async { apiFunC.invoke(getApiService(baseUrl)) }
+                ).awaitAll()
+                val failed = responseList.find { it.httpIsFailed }
+                if (failed != null) {
+                    throw ServerCodeBadException(failed)
                 }
                 onGetResponse(callback, responseList)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
+                return@launchMain
             } finally {
                 try {
                     callback?.onFinally?.invoke()
@@ -177,25 +140,24 @@ abstract class RemoteExtendDataSource<Api : Any>(
         callback: RequestTripleCallback<DataA, DataB, DataC>?,
         responseList: List<IHttpWrapBean<out Any?>>
     ) {
-        callback?.let {
-            withNonCancellable {
-                callback.onSuccess?.let {
-                    withMain {
-                        it.invoke(
-                            responseList[0].httpData as DataA,
-                            responseList[1].httpData as DataB,
-                            responseList[2].httpData as DataC
-                        )
-                    }
+        callback ?: return
+        withNonCancellable {
+            callback.onSuccess?.let {
+                withMain {
+                    it.invoke(
+                        responseList[0].httpData as DataA,
+                        responseList[1].httpData as DataB,
+                        responseList[2].httpData as DataC
+                    )
                 }
-                callback.onSuccessIO?.let {
-                    withIO {
-                        it.invoke(
-                            responseList[0].httpData as DataA,
-                            responseList[1].httpData as DataB,
-                            responseList[2].httpData as DataC
-                        )
-                    }
+            }
+            callback.onSuccessIO?.let {
+                withIO {
+                    it.invoke(
+                        responseList[0].httpData as DataA,
+                        responseList[1].httpData as DataB,
+                        responseList[2].httpData as DataC
+                    )
                 }
             }
         }

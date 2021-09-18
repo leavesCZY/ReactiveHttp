@@ -34,7 +34,7 @@ class SingleRequestViewModel : BaseViewModel() {
                 log("onCancelled")
             }
             onFailed {
-                log("onFailed")
+                log("onFailed：$it")
             }
             onFailToast {
                 true
