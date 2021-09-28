@@ -20,7 +20,11 @@ class SingleRequestViewModel : BaseViewModel() {
 
     fun execute() {
         cancelExecuteJob()
-        executeReqJob = remoteDataSource.enqueue({ getProvince() }) {
+        executeReqJob = remoteDataSource.enqueue({
+            //主动延迟三秒，以便来得及取消网络请求
+            delay(3000)
+            getProvince()
+        }) {
             onStart {
                 log("onStart")
             }

@@ -21,7 +21,7 @@ abstract class RemoteDataSource<Api : Any>(
 
     fun <Data> enqueueLoading(
         apiFun: suspend Api.() -> IHttpWrapBean<Data>,
-        baseUrl: String = "",
+        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return enqueue(
@@ -35,7 +35,7 @@ abstract class RemoteDataSource<Api : Any>(
     fun <Data> enqueue(
         apiFun: suspend Api.() -> IHttpWrapBean<Data>,
         showLoading: Boolean = false,
-        baseUrl: String = "",
+        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -72,7 +72,7 @@ abstract class RemoteDataSource<Api : Any>(
 
     fun <Data> enqueueOriginLoading(
         apiFun: suspend Api.() -> Data,
-        baseUrl: String = "",
+        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return enqueueOrigin(
@@ -86,7 +86,7 @@ abstract class RemoteDataSource<Api : Any>(
     fun <Data> enqueueOrigin(
         apiFun: suspend Api.() -> Data,
         showLoading: Boolean = false,
-        baseUrl: String = "",
+        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -141,7 +141,7 @@ abstract class RemoteDataSource<Api : Any>(
     @Throws(BaseHttpException::class)
     fun <Data> execute(
         apiFun: suspend Api.() -> IHttpWrapBean<Data>,
-        baseUrl: String = ""
+        baseUrl: String = httpBaseUrl
     ): Data {
         return runBlocking {
             try {

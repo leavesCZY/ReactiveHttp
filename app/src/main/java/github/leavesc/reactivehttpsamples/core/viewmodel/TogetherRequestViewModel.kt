@@ -20,7 +20,11 @@ class TogetherRequestViewModel : BaseViewModel() {
 
     fun togetherSuccess() {
         cancelTogetherSuccessJob()
-        togetherSuccessJob = remoteDataSource.enqueue({ getProvince() }, {
+        togetherSuccessJob = remoteDataSource.enqueue({
+            //主动延迟三秒，以便来得及取消网络请求
+            delay(3000)
+            getProvince()
+        }, {
             getCity("广东")
         }) {
             onStart {

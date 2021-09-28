@@ -27,7 +27,7 @@ abstract class RemoteExtendDataSource<Api : Any>(
         apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
         apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
         showLoading: Boolean = false,
-        baseUrl: String = "",
+        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestPairCallback<DataA, DataB>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -96,7 +96,7 @@ abstract class RemoteExtendDataSource<Api : Any>(
         apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
         apiFunC: suspend Api.() -> IHttpWrapBean<DataC>,
         showLoading: Boolean = false,
-        baseUrl: String = "",
+        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestTripleCallback<DataA, DataB, DataC>.() -> Unit)? = null
     ): Job {
         return launchMain {

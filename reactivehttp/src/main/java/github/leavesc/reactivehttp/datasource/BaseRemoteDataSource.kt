@@ -91,8 +91,8 @@ abstract class BaseRemoteDataSource<Api : Any>(
         return httpBaseUrl
     }
 
-    protected open fun getApiService(
-        baseUrl: String
+    fun getApiService(
+        baseUrl: String = httpBaseUrl
     ): Api {
         val realBaseUrl = generateBaseUrl(baseUrl)
         val key = realBaseUrl + apiServiceClass.canonicalName

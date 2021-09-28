@@ -32,9 +32,6 @@ class TogetherRequestActivity : BaseActivity() {
         bind.btnTogetherFailed.setOnClickListener {
             togetherRequestViewModel.togetherFailed()
         }
-        bind.btnCancelTogetherFailedJob.setOnClickListener {
-            togetherRequestViewModel.cancelTogetherFailedJob()
-        }
         bind.btnCleanLog.setOnClickListener {
             togetherRequestViewModel.clearLog()
         }
