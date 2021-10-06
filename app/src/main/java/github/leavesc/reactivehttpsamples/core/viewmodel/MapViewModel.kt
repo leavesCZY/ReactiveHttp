@@ -3,7 +3,7 @@ package github.leavesc.reactivehttpsamples.core.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import github.leavesc.reactivehttpsamples.base.BaseViewModel
-import github.leavesc.reactivehttpsamples.core.bean.DistrictBean
+import github.leavesc.reactivehttpsamples.core.mode.DistrictMode
 import kotlinx.coroutines.delay
 
 /**
@@ -30,11 +30,11 @@ class MapViewModel : BaseViewModel() {
         stateLiveData.value = TYPE_PROVINCE
     }
 
-    private val provinceLiveData = MutableLiveData<List<DistrictBean>>()
+    private val provinceLiveData = MutableLiveData<List<DistrictMode>>()
 
-    private val cityLiveData = MutableLiveData<List<DistrictBean>>()
+    private val cityLiveData = MutableLiveData<List<DistrictMode>>()
 
-    val realLiveData = MutableLiveData<List<DistrictBean>>()
+    val realLiveData = MutableLiveData<List<DistrictMode>>()
 
     val adCodeSelectedLiveData = MutableLiveData<String>()
 

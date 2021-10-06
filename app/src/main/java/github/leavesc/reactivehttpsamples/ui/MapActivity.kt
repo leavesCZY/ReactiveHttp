@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesc.reactivehttpsamples.adapter.PlaceAdapter
 import github.leavesc.reactivehttpsamples.base.BaseActivity
-import github.leavesc.reactivehttpsamples.core.bean.DistrictBean
+import github.leavesc.reactivehttpsamples.core.mode.DistrictMode
 import github.leavesc.reactivehttpsamples.core.viewmodel.MapViewModel
 import github.leavesc.reactivehttpsamples.databinding.ActivityMapBinding
 
@@ -19,7 +19,7 @@ class MapActivity : BaseActivity() {
 
     override val bind by getBind<ActivityMapBinding>()
 
-    private val dataList = mutableListOf<DistrictBean>()
+    private val dataList = mutableListOf<DistrictMode>()
 
     private val mapViewModel by getViewModel<MapViewModel> {
         stateLiveData.observe(this@MapActivity, {

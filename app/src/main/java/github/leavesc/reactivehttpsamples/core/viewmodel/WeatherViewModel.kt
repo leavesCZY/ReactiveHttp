@@ -2,7 +2,7 @@ package github.leavesc.reactivehttpsamples.core.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import github.leavesc.reactivehttpsamples.base.BaseViewModel
-import github.leavesc.reactivehttpsamples.core.bean.ForecastsBean
+import github.leavesc.reactivehttpsamples.core.mode.ForecastsMode
 
 /**
  * @Author: leavesC
@@ -12,7 +12,7 @@ import github.leavesc.reactivehttpsamples.core.bean.ForecastsBean
  */
 class WeatherViewModel : BaseViewModel() {
 
-    val forecastsBeanLiveData = MutableLiveData<ForecastsBean>()
+    val forecastsModeLiveData = MutableLiveData<ForecastsMode>()
 
     fun getWeather(city: String) {
         remoteDataSource.enqueue({
@@ -20,7 +20,7 @@ class WeatherViewModel : BaseViewModel() {
         }) {
             onSuccess {
                 if (it.isNotEmpty()) {
-                    forecastsBeanLiveData.value = it[0]
+                    forecastsModeLiveData.value = it[0]
                 }
             }
         }

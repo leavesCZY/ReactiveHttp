@@ -21,9 +21,10 @@ class TogetherRequestViewModel : BaseViewModel() {
     fun togetherSuccess() {
         cancelTogetherSuccessJob()
         togetherSuccessJob = remoteDataSource.enqueue({
-            //主动延迟三秒，以便来得及取消网络请求
-            delay(3000)
-            getProvince()
+            val result = getProvince()
+            //主动延迟一点时间，以便来得及取消网络请求
+            delay(1500)
+            result
         }, {
             getCity("广东")
         }) {
@@ -99,7 +100,7 @@ class TogetherRequestViewModel : BaseViewModel() {
         }
     }
 
-    fun cancelTogetherFailedJob() {
+    private fun cancelTogetherFailedJob() {
         if (togetherFailedJob?.isActive == true) {
             togetherFailedJob?.cancel()
         }

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import github.leavesc.reactivehttpsamples.R
-import github.leavesc.reactivehttpsamples.core.bean.CastsBean
+import github.leavesc.reactivehttpsamples.core.mode.CastsMode
 
 /**
  * @Author: leavesC
@@ -14,7 +14,7 @@ import github.leavesc.reactivehttpsamples.core.bean.CastsBean
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-class WeatherAdapter(private val districtsBeanList: List<CastsBean>) :
+class WeatherAdapter(private val districtsModeList: List<CastsMode>) :
     RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
@@ -28,11 +28,11 @@ class WeatherAdapter(private val districtsBeanList: List<CastsBean>) :
     }
 
     override fun getItemCount(): Int {
-        return districtsBeanList.size
+        return districtsModeList.size
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        val bean = districtsBeanList[position]
+        val bean = districtsModeList[position]
         holder.tvDate.text = bean.date
         holder.tvDayWeather.text = "白天天气：${bean.daytemp} ℃ ${bean.dayweather}"
         holder.tvNightWeather.text = "夜晚天气：${bean.nighttemp} ℃ ${bean.nightweather}"

@@ -1,6 +1,6 @@
 package github.leavesc.reactivehttp.datasource
 
-import github.leavesc.reactivehttp.bean.IHttpWrapBean
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.callback.RequestPairCallback
 import github.leavesc.reactivehttp.callback.RequestTripleCallback
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
@@ -24,8 +24,8 @@ abstract class RemoteExtendDataSource<Api : Any>(
 ) : RemoteDataSource<Api>(iActionEvent, apiServiceClass) {
 
     fun <DataA, DataB> enqueue(
-        apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
-        apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
+        apiFunA: suspend Api.() -> IHttpWrapMode<DataA>,
+        apiFunB: suspend Api.() -> IHttpWrapMode<DataB>,
         showLoading: Boolean = false,
         baseUrl: String = httpBaseUrl,
         callbackFun: (RequestPairCallback<DataA, DataB>.() -> Unit)? = null
@@ -68,7 +68,7 @@ abstract class RemoteExtendDataSource<Api : Any>(
 
     private suspend fun <DataA, DataB> onGetResponse(
         callback: RequestPairCallback<DataA, DataB>?,
-        responseList: List<IHttpWrapBean<out Any?>>,
+        responseList: List<IHttpWrapMode<out Any?>>,
     ) {
         callback ?: return
         withNonCancellable {
@@ -92,9 +92,9 @@ abstract class RemoteExtendDataSource<Api : Any>(
     }
 
     fun <DataA, DataB, DataC> enqueue(
-        apiFunA: suspend Api.() -> IHttpWrapBean<DataA>,
-        apiFunB: suspend Api.() -> IHttpWrapBean<DataB>,
-        apiFunC: suspend Api.() -> IHttpWrapBean<DataC>,
+        apiFunA: suspend Api.() -> IHttpWrapMode<DataA>,
+        apiFunB: suspend Api.() -> IHttpWrapMode<DataB>,
+        apiFunC: suspend Api.() -> IHttpWrapMode<DataC>,
         showLoading: Boolean = false,
         baseUrl: String = httpBaseUrl,
         callbackFun: (RequestTripleCallback<DataA, DataB, DataC>.() -> Unit)? = null
@@ -138,7 +138,7 @@ abstract class RemoteExtendDataSource<Api : Any>(
 
     private suspend fun <DataA, DataB, DataC> onGetResponse(
         callback: RequestTripleCallback<DataA, DataB, DataC>?,
-        responseList: List<IHttpWrapBean<out Any?>>
+        responseList: List<IHttpWrapMode<out Any?>>
     ) {
         callback ?: return
         withNonCancellable {

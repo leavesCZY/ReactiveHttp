@@ -1,6 +1,6 @@
 package github.leavesc.reactivehttp.exception
 
-import github.leavesc.reactivehttp.bean.IHttpWrapBean
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 
 /**
  * @Author: leavesC
@@ -50,7 +50,7 @@ open class BaseHttpException(
 class ServerCodeBadException(errorCode: Int, errorMessage: String) :
     BaseHttpException(errorCode, errorMessage, null) {
 
-    constructor(bean: IHttpWrapBean<*>) : this(bean.httpCode, bean.httpMsg)
+    constructor(mode: IHttpWrapMode<*>) : this(mode.httpCode, mode.httpMsg)
 
 }
 

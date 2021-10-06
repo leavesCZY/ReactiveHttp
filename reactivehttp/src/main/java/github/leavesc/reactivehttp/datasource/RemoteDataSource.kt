@@ -1,6 +1,6 @@
 package github.leavesc.reactivehttp.datasource
 
-import github.leavesc.reactivehttp.bean.IHttpWrapBean
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.callback.RequestCallback
 import github.leavesc.reactivehttp.exception.BaseHttpException
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
@@ -20,7 +20,7 @@ abstract class RemoteDataSource<Api : Any>(
 ) : BaseRemoteDataSource<Api>(iUiActionEvent, apiServiceClass) {
 
     fun <Data> enqueueLoading(
-        apiFun: suspend Api.() -> IHttpWrapBean<Data>,
+        apiFun: suspend Api.() -> IHttpWrapMode<Data>,
         baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
@@ -33,7 +33,7 @@ abstract class RemoteDataSource<Api : Any>(
     }
 
     fun <Data> enqueue(
-        apiFun: suspend Api.() -> IHttpWrapBean<Data>,
+        apiFun: suspend Api.() -> IHttpWrapMode<Data>,
         showLoading: Boolean = false,
         baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
@@ -140,7 +140,7 @@ abstract class RemoteDataSource<Api : Any>(
      */
     @Throws(BaseHttpException::class)
     fun <Data> execute(
-        apiFun: suspend Api.() -> IHttpWrapBean<Data>,
+        apiFun: suspend Api.() -> IHttpWrapMode<Data>,
         baseUrl: String = httpBaseUrl
     ): Data {
         return runBlocking {

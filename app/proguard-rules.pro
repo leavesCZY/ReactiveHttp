@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class github.leavesc.reactivehttpsamples.core.bean.** {*;}
+-keep class github.leavesc.reactivehttpsamples.core.mode.** {*;}

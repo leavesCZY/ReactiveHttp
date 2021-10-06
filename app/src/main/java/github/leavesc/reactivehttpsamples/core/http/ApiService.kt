@@ -1,8 +1,8 @@
 package github.leavesc.reactivehttpsamples.core.http
 
-import github.leavesc.reactivehttpsamples.core.bean.DistrictBean
-import github.leavesc.reactivehttpsamples.core.bean.ForecastsBean
-import github.leavesc.reactivehttpsamples.core.bean.HttpWrapBean
+import github.leavesc.reactivehttpsamples.core.mode.DistrictMode
+import github.leavesc.reactivehttpsamples.core.mode.ForecastsMode
+import github.leavesc.reactivehttpsamples.core.mode.HttpWrapMode
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,18 +15,18 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("config/district")
-    suspend fun getProvince(): HttpWrapBean<List<DistrictBean>>
+    suspend fun getProvince(): HttpWrapMode<List<DistrictMode>>
 
     @GET("config/district")
-    suspend fun getCity(@Query("keywords") keywords: String): HttpWrapBean<List<DistrictBean>>
+    suspend fun getCity(@Query("keywords") keywords: String): HttpWrapMode<List<DistrictMode>>
 
     @GET("config/district")
-    suspend fun getCounty(@Query("keywords") keywords: String): HttpWrapBean<List<DistrictBean>>
+    suspend fun getCounty(@Query("keywords") keywords: String): HttpWrapMode<List<DistrictMode>>
 
     @GET("weather/weatherInfo?extensions=all")
-    suspend fun getWeather(@Query("city") city: String): HttpWrapBean<List<ForecastsBean>>
+    suspend fun getWeather(@Query("city") city: String): HttpWrapMode<List<ForecastsMode>>
 
     @GET("weather/mustFailed")
-    suspend fun mustFailed(): HttpWrapBean<List<ForecastsBean>>
+    suspend fun mustFailed(): HttpWrapMode<List<ForecastsMode>>
 
 }

@@ -1,4 +1,4 @@
-package github.leavesc.reactivehttpsamples.core.bean
+package github.leavesc.reactivehttpsamples.core.mode
 
 /**
  * @Author: leavesC
@@ -6,12 +6,12 @@ package github.leavesc.reactivehttpsamples.core.bean
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-data class ForecastsBean(
+data class ForecastsMode(
     val city: String, val adcode: String, val province: String,
-    val reporttime: String, val casts: List<CastsBean>
+    val reporttime: String, val casts: List<CastsMode>
 )
 
-data class CastsBean(
+data class CastsMode(
     val date: String,
     val week: String,
     val dayweather: String,
@@ -24,10 +24,10 @@ data class CastsBean(
     val nightpower: String
 )
 
-data class DistrictBean(
+data class DistrictMode(
     val adcode: String,
     val center: String,
     val level: String,
     val name: String,
-    val districts: List<DistrictBean>
+    val districts: List<DistrictMode>
 )

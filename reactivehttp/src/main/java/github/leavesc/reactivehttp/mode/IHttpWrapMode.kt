@@ -1,4 +1,4 @@
-package github.leavesc.reactivehttp.bean
+package github.leavesc.reactivehttp.mode
 
 /**
  * @Author: leavesC
@@ -6,7 +6,7 @@ package github.leavesc.reactivehttp.bean
  * @Desc: 规范网络请求返回结果必须包含的几种参数类型
  * @GitHub：https://github.com/leavesC
  */
-interface IHttpWrapBean<Data> {
+interface IHttpWrapMode<Data> {
 
     /**
      * 服务器返回的数据中，用来标识当前是否请求成功的标识符

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import github.leavesc.reactivehttpsamples.R
-import github.leavesc.reactivehttpsamples.core.bean.DistrictBean
+import github.leavesc.reactivehttpsamples.core.mode.DistrictMode
 
 /**
  * @Author: leavesC
@@ -15,7 +15,7 @@ import github.leavesc.reactivehttpsamples.core.bean.DistrictBean
  * @GitHub：https://github.com/leavesC
  */
 class PlaceAdapter(
-    private val dataList: List<DistrictBean>,
+    private val dataList: List<DistrictMode>,
     private val onClickListener: OnClickListener
 ) :
     RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {

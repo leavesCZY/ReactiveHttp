@@ -1,7 +1,6 @@
 package github.leavesc.reactivehttpsamples
 
 import android.app.Application
-import android.content.Context
 
 /**
  * @Author: leavesC
@@ -13,7 +12,7 @@ class MainApplication : Application() {
 
     companion object {
 
-        lateinit var context: Context
+        lateinit var context: Application
 
     }
 

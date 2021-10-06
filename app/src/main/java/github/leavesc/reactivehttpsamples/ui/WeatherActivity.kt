@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesc.reactivehttpsamples.adapter.WeatherAdapter
 import github.leavesc.reactivehttpsamples.base.BaseActivity
-import github.leavesc.reactivehttpsamples.core.bean.CastsBean
-import github.leavesc.reactivehttpsamples.core.bean.ForecastsBean
+import github.leavesc.reactivehttpsamples.core.mode.CastsMode
+import github.leavesc.reactivehttpsamples.core.mode.ForecastsMode
 import github.leavesc.reactivehttpsamples.core.viewmodel.WeatherViewModel
 import github.leavesc.reactivehttpsamples.databinding.ActivityWeatherBinding
 
@@ -20,12 +20,12 @@ class WeatherActivity : BaseActivity() {
     override val bind by getBind<ActivityWeatherBinding>()
 
     private val weatherViewModel by getViewModel<WeatherViewModel> {
-        forecastsBeanLiveData.observe(this@WeatherActivity, {
+        forecastsModeLiveData.observe(this@WeatherActivity, {
             showWeather(it)
         })
     }
 
-    private val castsBeanList = mutableListOf<CastsBean>()
+    private val castsBeanList = mutableListOf<CastsMode>()
 
     private val weatherAdapter = WeatherAdapter(castsBeanList)
 
@@ -47,10 +47,10 @@ class WeatherActivity : BaseActivity() {
         weatherViewModel.getWeather(adCode)
     }
 
-    private fun showWeather(forecastsBean: ForecastsBean) {
-        bind.tvCity.text = forecastsBean.city
+    private fun showWeather(forecastsMode: ForecastsMode) {
+        bind.tvCity.text = forecastsMode.city
         castsBeanList.clear()
-        castsBeanList.addAll(forecastsBean.casts)
+        castsBeanList.addAll(forecastsMode.casts)
         weatherAdapter.notifyDataSetChanged()
         bind.swipeRefreshLayout.isRefreshing = false
     }
