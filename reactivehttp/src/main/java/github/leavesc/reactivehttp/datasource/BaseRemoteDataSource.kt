@@ -73,7 +73,7 @@ abstract class BaseRemoteDataSource<Api : Any>(
     /**
      * 构建 ApiService
      */
-    protected val apiService: Api by lazy {
+    val apiService: Api by lazy {
         val key = httpBaseUrl + apiServiceClass.name
         val service = apiServiceCache.get(key) as? Api
         if (service != null) {
