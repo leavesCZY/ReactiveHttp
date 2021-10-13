@@ -16,8 +16,11 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) :
-    RemoteExtendDataSource<ApiService>(iActionEvent, ApiService::class.java) {
+class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSource<ApiService>(
+    iActionEvent,
+    HttpConfig.BASE_URL_MAP,
+    ApiService::class.java
+) {
 
     companion object {
 
@@ -37,12 +40,6 @@ class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) :
         }
 
     }
-
-    /**
-     * 由子类实现此字段以便获取 baseUrl
-     */
-    override val httpBaseUrl: String
-        get() = HttpConfig.BASE_URL_MAP
 
     /**
      * 允许子类自己来实现创建 Retrofit 的逻辑

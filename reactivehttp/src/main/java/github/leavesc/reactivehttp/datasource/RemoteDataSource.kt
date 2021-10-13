@@ -1,9 +1,9 @@
 package github.leavesc.reactivehttp.datasource
 
-import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.callback.RequestCallback
 import github.leavesc.reactivehttp.exception.BaseHttpException
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
@@ -16,18 +16,17 @@ import kotlinx.coroutines.runBlocking
  */
 abstract class RemoteDataSource<Api : Any>(
     iUiActionEvent: IUIActionEvent?,
+    httpBaseUrl: String,
     apiServiceClass: Class<Api>
-) : BaseRemoteDataSource<Api>(iUiActionEvent, apiServiceClass) {
+) : BaseRemoteDataSource<Api>(iUiActionEvent, httpBaseUrl, apiServiceClass) {
 
     fun <Data> enqueueLoading(
         apiFun: suspend Api.() -> IHttpWrapMode<Data>,
-        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return enqueue(
             apiFun = apiFun,
             showLoading = true,
-            baseUrl = baseUrl,
             callbackFun = callbackFun
         )
     }
@@ -35,7 +34,6 @@ abstract class RemoteDataSource<Api : Any>(
     fun <Data> enqueue(
         apiFun: suspend Api.() -> IHttpWrapMode<Data>,
         showLoading: Boolean = false,
-        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -51,7 +49,7 @@ abstract class RemoteDataSource<Api : Any>(
                     showLoading(coroutineContext[Job])
                 }
                 callback?.onStart?.invoke()
-                val response = apiFun.invoke(getApiService(baseUrl))
+                val response = apiFun.invoke(apiService)
                 if (!response.httpIsSuccess) {
                     throw ServerCodeBadException(response)
                 }
@@ -72,13 +70,11 @@ abstract class RemoteDataSource<Api : Any>(
 
     fun <Data> enqueueOriginLoading(
         apiFun: suspend Api.() -> Data,
-        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return enqueueOrigin(
             apiFun = apiFun,
             showLoading = true,
-            baseUrl = baseUrl,
             callbackFun = callbackFun
         )
     }
@@ -86,7 +82,6 @@ abstract class RemoteDataSource<Api : Any>(
     fun <Data> enqueueOrigin(
         apiFun: suspend Api.() -> Data,
         showLoading: Boolean = false,
-        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -102,7 +97,7 @@ abstract class RemoteDataSource<Api : Any>(
                     showLoading(coroutineContext[Job])
                 }
                 callback?.onStart?.invoke()
-                val response = apiFun.invoke(getApiService(baseUrl))
+                val response = apiFun.invoke(apiService)
                 onGetResponse(callback, response)
             } catch (throwable: Throwable) {
                 handleException(throwable, callback)
@@ -140,13 +135,12 @@ abstract class RemoteDataSource<Api : Any>(
      */
     @Throws(BaseHttpException::class)
     fun <Data> execute(
-        apiFun: suspend Api.() -> IHttpWrapMode<Data>,
-        baseUrl: String = httpBaseUrl
+        apiFun: suspend Api.() -> IHttpWrapMode<Data>
     ): Data {
         return runBlocking {
             try {
                 val asyncIO = asyncIO {
-                    apiFun.invoke(getApiService(baseUrl))
+                    apiFun.invoke(apiService)
                 }
                 val response = asyncIO.await()
                 if (response.httpIsSuccess) {

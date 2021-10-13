@@ -25,20 +25,21 @@ import java.util.concurrent.TimeUnit
  */
 abstract class BaseRemoteDataSource<Api : Any>(
     protected val iUiActionEvent: IUIActionEvent?,
-    protected val apiServiceClass: Class<Api>
+    protected val httpBaseUrl: String,
+    protected val apiServiceClass: Class<Api>,
 ) : ICoroutineEvent {
 
     companion object {
 
         /**
-         * ApiService 缓存
-         */
-        private val apiServiceCache = LruCache<String, Any>(30)
-
-        /**
          * Retrofit 缓存
          */
         private val retrofitCache = LruCache<String, Retrofit>(3)
+
+        /**
+         * ApiService 缓存
+         */
+        private val apiServiceCache = LruCache<String, Any>(10)
 
         /**
          * 默认的 OKHttpClient
@@ -70,9 +71,22 @@ abstract class BaseRemoteDataSource<Api : Any>(
     override val lifecycleSupportedScope = iUiActionEvent?.lifecycleSupportedScope ?: GlobalScope
 
     /**
-     * 由子类实现此字段以便获取 baseUrl
+     * 构建 ApiService
      */
-    protected abstract val httpBaseUrl: String
+    protected val apiService: Api by lazy {
+        val key = httpBaseUrl + apiServiceClass.name
+        val service = apiServiceCache.get(key) as? Api
+        if (service != null) {
+            service
+        } else {
+            val retrofit = retrofitCache.get(httpBaseUrl) ?: (createRetrofit(httpBaseUrl).apply {
+                retrofitCache.put(httpBaseUrl, this)
+            })
+            val apiService = retrofit.create(apiServiceClass)
+            apiServiceCache.put(key, apiService)
+            apiService
+        }
+    }
 
     /**
      * 允许子类自己来实现创建 Retrofit 的逻辑
@@ -82,32 +96,6 @@ abstract class BaseRemoteDataSource<Api : Any>(
      */
     protected open fun createRetrofit(baseUrl: String): Retrofit {
         return createDefaultRetrofit(baseUrl)
-    }
-
-    protected open fun generateBaseUrl(baseUrl: String): String {
-        if (baseUrl.isNotBlank()) {
-            return baseUrl
-        }
-        return httpBaseUrl
-    }
-
-    fun getApiService(
-        baseUrl: String = httpBaseUrl
-    ): Api {
-        val realBaseUrl = generateBaseUrl(baseUrl)
-        val key = realBaseUrl + apiServiceClass.canonicalName
-        val get = apiServiceCache.get(key)?.let {
-            it as? Api
-        }
-        if (get != null) {
-            return get
-        }
-        val retrofit = retrofitCache.get(realBaseUrl) ?: (createRetrofit(realBaseUrl).apply {
-            retrofitCache.put(realBaseUrl, this)
-        })
-        val apiService = retrofit.create(apiServiceClass)
-        apiServiceCache.put(key, apiService)
-        return apiService
     }
 
     protected fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {

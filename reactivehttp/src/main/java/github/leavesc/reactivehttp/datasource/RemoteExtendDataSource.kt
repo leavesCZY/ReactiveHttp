@@ -1,9 +1,9 @@
 package github.leavesc.reactivehttp.datasource
 
-import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.callback.RequestPairCallback
 import github.leavesc.reactivehttp.callback.RequestTripleCallback
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -20,14 +20,14 @@ import kotlinx.coroutines.awaitAll
  */
 abstract class RemoteExtendDataSource<Api : Any>(
     iActionEvent: IUIActionEvent?,
+    httpBaseUrl: String,
     apiServiceClass: Class<Api>
-) : RemoteDataSource<Api>(iActionEvent, apiServiceClass) {
+) : RemoteDataSource<Api>(iActionEvent, httpBaseUrl, apiServiceClass) {
 
     fun <DataA, DataB> enqueue(
         apiFunA: suspend Api.() -> IHttpWrapMode<DataA>,
         apiFunB: suspend Api.() -> IHttpWrapMode<DataB>,
         showLoading: Boolean = false,
-        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestPairCallback<DataA, DataB>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -44,8 +44,8 @@ abstract class RemoteExtendDataSource<Api : Any>(
                 }
                 callback?.onStart?.invoke()
                 val responseList =
-                    listOf(lifecycleSupportedScope.async { apiFunA.invoke(getApiService(baseUrl)) },
-                        lifecycleSupportedScope.async { apiFunB.invoke(getApiService(baseUrl)) }
+                    listOf(lifecycleSupportedScope.async { apiFunA.invoke(apiService) },
+                        lifecycleSupportedScope.async { apiFunB.invoke(apiService) }
                     ).awaitAll()
                 val failed = responseList.find { it.httpIsFailed }
                 if (failed != null) {
@@ -96,7 +96,6 @@ abstract class RemoteExtendDataSource<Api : Any>(
         apiFunB: suspend Api.() -> IHttpWrapMode<DataB>,
         apiFunC: suspend Api.() -> IHttpWrapMode<DataC>,
         showLoading: Boolean = false,
-        baseUrl: String = httpBaseUrl,
         callbackFun: (RequestTripleCallback<DataA, DataB, DataC>.() -> Unit)? = null
     ): Job {
         return launchMain {
@@ -112,9 +111,9 @@ abstract class RemoteExtendDataSource<Api : Any>(
                     showLoading(coroutineContext[Job])
                 }
                 val responseList = listOf(
-                    lifecycleSupportedScope.async { apiFunA.invoke(getApiService(baseUrl)) },
-                    lifecycleSupportedScope.async { apiFunB.invoke(getApiService(baseUrl)) },
-                    lifecycleSupportedScope.async { apiFunC.invoke(getApiService(baseUrl)) }
+                    lifecycleSupportedScope.async { apiFunA.invoke(apiService) },
+                    lifecycleSupportedScope.async { apiFunB.invoke(apiService) },
+                    lifecycleSupportedScope.async { apiFunC.invoke(apiService) }
                 ).awaitAll()
                 val failed = responseList.find { it.httpIsFailed }
                 if (failed != null) {
