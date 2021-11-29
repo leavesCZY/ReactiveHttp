@@ -22,7 +22,7 @@ open class ReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
         factory: ViewModelProvider.Factory? = null,
         noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel {
-        return getViewModel(VM::class.java, factory, initializer)
+        return getViewModel(this, VM::class.java, factory, initializer)
     }
 
     override val lifecycleSupportedScope: CoroutineScope

@@ -56,13 +56,14 @@ interface IUIActionEventObserver {
 
     fun finishView()
 
-    fun <VM> LifecycleOwner.getViewModel(
+    fun <VM> getViewModel(
+        lifecycleOwner: LifecycleOwner,
         viewModelClass: Class<VM>,
         factory: ViewModelProvider.Factory? = null,
         initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel {
         return lazy {
-            getViewModelFast(this, viewModelClass, factory, initializer)
+            getViewModelFast(lifecycleOwner, viewModelClass, factory, initializer)
         }
     }
 
@@ -84,12 +85,20 @@ interface IUIActionEventObserver {
                 factory?.create(viewModelClass) ?: viewModelClass.newInstance()
             }
         }.apply {
+            applyExtraAction(this)
             collectUiActionIfNeed(this)
             initializer?.invoke(this, lifecycleOwner)
         }
     }
 
-    private fun <VM> collectUiActionIfNeed(
+    /**
+     * 外部可以通过此方法来为 ViewModel 增加一些额外操作
+     */
+    fun applyExtraAction(viewModel: ViewModel) {
+
+    }
+
+    fun <VM> collectUiActionIfNeed(
         viewModel: VM
     ) where VM : ViewModel {
         val uiActionEventFlow = (viewModel as? IUIAction)?.uiActionEventFlow
