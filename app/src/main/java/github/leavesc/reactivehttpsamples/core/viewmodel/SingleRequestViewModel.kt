@@ -59,7 +59,11 @@ class SingleRequestViewModel : BaseViewModel() {
     }
 
     fun request() {
-        val res = remoteDataSource.execute({ getProvince() })
+        val res = try {
+            remoteDataSource.execute { getProvince() }
+        } catch (e: Throwable) {
+            e
+        }
         log(res)
     }
 

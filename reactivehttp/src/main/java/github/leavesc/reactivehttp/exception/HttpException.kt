@@ -13,7 +13,7 @@ import github.leavesc.reactivehttp.mode.IHttpWrapMode
  * @param errorMessage     服务器返回的异常信息 或者是 请求过程中抛出的信息，是最原始的异常信息
  * @param realException    用于当 code 是本地错误码时，存储真实的运行时异常
  */
-open class BaseHttpException(
+open class ReactiveHttpException(
     val errorCode: Int,
     val errorMessage: String,
     val realException: Throwable?
@@ -43,12 +43,12 @@ open class BaseHttpException(
 }
 
 /**
- * API 请求成功了，但 code != successCode
+ * 网络请求成功了，但 code != successCode
  * @param errorCode
  * @param errorMessage
  */
 class ServerCodeBadException(errorCode: Int, errorMessage: String) :
-    BaseHttpException(errorCode, errorMessage, null) {
+    ReactiveHttpException(errorCode, errorMessage, null) {
 
     constructor(mode: IHttpWrapMode<*>) : this(mode.httpCode, mode.httpMsg)
 
@@ -58,7 +58,7 @@ class ServerCodeBadException(errorCode: Int, errorMessage: String) :
  * 请求过程抛出异常
  * @param throwable
  */
-class LocalBadException(throwable: Throwable) : BaseHttpException(
+class LocalBadException(throwable: Throwable) : ReactiveHttpException(
     CODE_ERROR_LOCAL_UNKNOWN, throwable.message
         ?: "", throwable
 )

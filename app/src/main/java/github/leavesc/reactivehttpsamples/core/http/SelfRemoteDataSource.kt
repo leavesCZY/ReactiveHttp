@@ -3,7 +3,7 @@ package github.leavesc.reactivehttpsamples.core.http
 import android.widget.Toast
 import github.leavesc.monitor.MonitorInterceptor
 import github.leavesc.reactivehttp.datasource.RemoteExtendDataSource
-import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
+import github.leavesc.reactivehttp.viewmodel.IUIAction
 import github.leavesc.reactivehttpsamples.MainApplication
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSource<ApiService>(
-    iActionEvent,
+class SelfRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiService>(
+    iuiAction,
     HttpConfig.BASE_URL_MAP,
     ApiService::class.java
 ) {
@@ -45,12 +45,12 @@ class SelfRemoteDataSource(iActionEvent: IUIActionEvent?) : RemoteExtendDataSour
      * 允许子类自己来实现创建 Retrofit 的逻辑
      * 外部无需缓存 Retrofit 实例，ReactiveHttp 内部已做好缓存处理
      * 但外部需要自己判断是否需要对 OKHttpClient 进行缓存
-     * @param baseUrl
+     * @param baseHttpUrl
      */
-    override fun createRetrofit(baseUrl: String): Retrofit {
+    override fun createRetrofit(baseHttpUrl: String): Retrofit {
         return Retrofit.Builder()
             .client(httpClient)
-            .baseUrl(baseUrl)
+            .baseUrl(baseHttpUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

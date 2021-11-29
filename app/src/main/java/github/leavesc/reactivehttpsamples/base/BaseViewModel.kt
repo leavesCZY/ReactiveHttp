@@ -1,6 +1,6 @@
 package github.leavesc.reactivehttpsamples.base
 
-import github.leavesc.reactivehttp.base.BaseReactiveViewModel
+import github.leavesc.reactivehttp.base.ReactiveViewModel
 import github.leavesc.reactivehttpsamples.core.http.SelfRemoteDataSource
 
 /**
@@ -9,7 +9,7 @@ import github.leavesc.reactivehttpsamples.core.http.SelfRemoteDataSource
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-open class BaseViewModel : BaseReactiveViewModel() {
+open class BaseViewModel : ReactiveViewModel() {
 
     /**
      * 正常来说单个项目中应该只有一个 RemoteDataSource 实现类，即全局使用同一份配置

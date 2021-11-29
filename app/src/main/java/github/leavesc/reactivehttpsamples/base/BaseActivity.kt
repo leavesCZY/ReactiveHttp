@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.viewbinding.ViewBinding
-import github.leavesc.reactivehttp.base.BaseReactiveActivity
+import github.leavesc.reactivehttp.base.ReactiveActivity
 
 /**
  * @Author: leavesC
@@ -13,7 +13,7 @@ import github.leavesc.reactivehttp.base.BaseReactiveActivity
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-abstract class BaseActivity : BaseReactiveActivity() {
+abstract class BaseActivity : ReactiveActivity() {
 
     abstract val bind: ViewBinding?
 
@@ -33,9 +33,7 @@ abstract class BaseActivity : BaseReactiveActivity() {
     }
 
     protected inline fun <reified T : Activity> startActivity() {
-        lContext?.apply {
-            startActivity(Intent(this, T::class.java))
-        }
+        startActivity(Intent(this, T::class.java))
     }
 
 }

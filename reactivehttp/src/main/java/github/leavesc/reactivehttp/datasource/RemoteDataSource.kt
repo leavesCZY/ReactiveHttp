@@ -1,12 +1,11 @@
 package github.leavesc.reactivehttp.datasource
 
 import github.leavesc.reactivehttp.callback.RequestCallback
-import github.leavesc.reactivehttp.exception.BaseHttpException
+import github.leavesc.reactivehttp.exception.ReactiveHttpException
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
 import github.leavesc.reactivehttp.mode.IHttpWrapMode
-import github.leavesc.reactivehttp.viewmodel.IUIActionEvent
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.runBlocking
+import github.leavesc.reactivehttp.viewmodel.IUIAction
+import kotlinx.coroutines.*
 
 /**
  * @Author: leavesC
@@ -15,10 +14,10 @@ import kotlinx.coroutines.runBlocking
  * @GitHub：https://github.com/leavesC
  */
 abstract class RemoteDataSource<Api : Any>(
-    iUiActionEvent: IUIActionEvent?,
-    httpBaseUrl: String,
+    iUIAction: IUIAction?,
+    baseHttpUrl: String,
     apiServiceClass: Class<Api>
-) : BaseRemoteDataSource<Api>(iUiActionEvent, httpBaseUrl, apiServiceClass) {
+) : BaseRemoteDataSource<Api>(iUIAction, baseHttpUrl, apiServiceClass) {
 
     fun <Data> enqueueLoading(
         apiFun: suspend Api.() -> IHttpWrapMode<Data>,
@@ -36,7 +35,7 @@ abstract class RemoteDataSource<Api : Any>(
         showLoading: Boolean = false,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
-        return launchMain {
+        return lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
             val callback = if (callbackFun == null) {
                 null
             } else {
@@ -46,7 +45,7 @@ abstract class RemoteDataSource<Api : Any>(
             }
             try {
                 if (showLoading) {
-                    showLoading(coroutineContext[Job])
+                    showLoading()
                 }
                 callback?.onStart?.invoke()
                 val response = apiFun.invoke(apiService)
@@ -84,7 +83,7 @@ abstract class RemoteDataSource<Api : Any>(
         showLoading: Boolean = false,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
     ): Job {
-        return launchMain {
+        return lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
             val callback = if (callbackFun == null) {
                 null
             } else {
@@ -94,7 +93,7 @@ abstract class RemoteDataSource<Api : Any>(
             }
             try {
                 if (showLoading) {
-                    showLoading(coroutineContext[Job])
+                    showLoading()
                 }
                 callback?.onStart?.invoke()
                 val response = apiFun.invoke(apiService)
@@ -115,14 +114,14 @@ abstract class RemoteDataSource<Api : Any>(
 
     private suspend fun <Data> onGetResponse(callback: RequestCallback<Data>?, httpData: Data) {
         callback ?: return
-        withNonCancellable {
+        withContext(NonCancellable) {
             callback.onSuccess?.let {
-                withMain {
+                withContext(Dispatchers.Main.immediate) {
                     it.invoke(httpData)
                 }
             }
             callback.onSuccessIO?.let {
-                withIO {
+                withContext(Dispatchers.IO) {
                     it.invoke(httpData)
                 }
             }
@@ -133,22 +132,19 @@ abstract class RemoteDataSource<Api : Any>(
      * 同步请求，可能会抛出异常，外部需做好捕获异常的准备
      * @param apiFun
      */
-    @Throws(BaseHttpException::class)
+    @Throws(ReactiveHttpException::class)
     fun <Data> execute(
         apiFun: suspend Api.() -> IHttpWrapMode<Data>
     ): Data {
         return runBlocking {
             try {
-                val asyncIO = asyncIO {
-                    apiFun.invoke(apiService)
-                }
-                val response = asyncIO.await()
+                val response = apiFun.invoke(apiService)
                 if (response.httpIsSuccess) {
                     return@runBlocking response.httpData
                 }
                 throw ServerCodeBadException(response)
             } catch (throwable: Throwable) {
-                throw generateBaseException(throwable)
+                throw generateException(throwable)
             }
         }
     }

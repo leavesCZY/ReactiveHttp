@@ -26,7 +26,7 @@ interface ApiService {
     @GET("weather/weatherInfo?extensions=all")
     suspend fun getWeather(@Query("city") city: String): HttpWrapMode<List<ForecastsMode>>
 
-    @GET("weather/mustFailed")
-    suspend fun mustFailed(): HttpWrapMode<List<ForecastsMode>>
+    @GET("config/district")
+    suspend fun mustFailed(): HttpWrapMode<List<String>>
 
 }
