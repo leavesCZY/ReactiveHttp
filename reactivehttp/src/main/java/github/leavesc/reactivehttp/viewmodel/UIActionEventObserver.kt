@@ -56,17 +56,6 @@ interface IUIActionEventObserver {
 
     fun finishView()
 
-    fun <VM> getViewModel(
-        lifecycleOwner: LifecycleOwner,
-        viewModelClass: Class<VM>,
-        factory: ViewModelProvider.Factory? = null,
-        initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
-    ): Lazy<VM> where VM : ViewModel {
-        return lazy {
-            getViewModelFast(lifecycleOwner, viewModelClass, factory, initializer)
-        }
-    }
-
     fun <VM> getViewModelFast(
         lifecycleOwner: LifecycleOwner,
         viewModelClass: Class<VM>,
