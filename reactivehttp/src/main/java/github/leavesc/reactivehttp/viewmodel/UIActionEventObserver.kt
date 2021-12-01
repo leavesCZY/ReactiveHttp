@@ -74,8 +74,8 @@ interface IUIActionEventObserver {
                 factory?.create(viewModelClass) ?: viewModelClass.newInstance()
             }
         }.apply {
-            applyExtraAction(this)
-            collectUiActionIfNeed(this)
+            applyExtraAction(lifecycleOwner = lifecycleOwner, viewModel = this)
+            collectUiActionIfNeed(lifecycleOwner = lifecycleOwner, viewModel = this)
             initializer?.invoke(this, lifecycleOwner)
         }
     }
@@ -83,11 +83,12 @@ interface IUIActionEventObserver {
     /**
      * 外部可以通过此方法来为 ViewModel 增加一些额外操作
      */
-    fun applyExtraAction(viewModel: ViewModel) {
+    fun applyExtraAction(lifecycleOwner: LifecycleOwner, viewModel: ViewModel) {
 
     }
 
     fun <VM> collectUiActionIfNeed(
+        lifecycleOwner: LifecycleOwner,
         viewModel: VM
     ) where VM : ViewModel {
         val uiActionEventFlow = (viewModel as? IUIAction)?.uiActionEventFlow
