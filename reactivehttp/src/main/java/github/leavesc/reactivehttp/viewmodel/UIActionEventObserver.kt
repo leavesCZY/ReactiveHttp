@@ -56,42 +56,37 @@ interface IUIActionEventObserver {
 
     fun finishView()
 
+    /**
+     * 用于方便获取 ViewModel 实例
+     * 重点在于调用了 collectUiActionIfNeed 方法
+     * 启动了协程对 uiActionEventFlow 进行监听
+     */
     fun <VM> getViewModelFast(
+        viewModelStoreOwner: ViewModelStoreOwner,
         lifecycleOwner: LifecycleOwner,
         viewModelClass: Class<VM>,
         factory: ViewModelProvider.Factory? = null,
         initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
-    ): VM where VM : ViewModel {
-        return when (lifecycleOwner) {
-            is ViewModelStoreOwner -> {
-                if (factory == null) {
-                    ViewModelProvider(lifecycleOwner).get(viewModelClass)
-                } else {
-                    ViewModelProvider(lifecycleOwner, factory).get(viewModelClass)
-                }
-            }
-            else -> {
-                factory?.create(viewModelClass) ?: viewModelClass.newInstance()
-            }
+    ): VM where VM : ViewModel, VM : IUIAction {
+        return if (factory == null) {
+            ViewModelProvider(viewModelStoreOwner).get(viewModelClass)
+        } else {
+            ViewModelProvider(viewModelStoreOwner, factory).get(viewModelClass)
         }.apply {
-            applyExtraAction(lifecycleOwner = lifecycleOwner, viewModel = this)
-            collectUiActionIfNeed(lifecycleOwner = lifecycleOwner, viewModel = this)
             initializer?.invoke(this, lifecycleOwner)
+            collectUiActionIfNeed(viewModel = this)
         }
     }
 
     /**
-     * 外部可以通过此方法来为 ViewModel 增加一些额外操作
+     * 如果外部不通过 getViewModelFast 方法来获取 ViewModel 实例的话
+     * 则必须在自己构建 ViewModel 实例后调用 collectUiActionIfNeed 方法
+     * 以便能够启动协程对 uiActionEventFlow 进行监听
      */
-    fun applyExtraAction(lifecycleOwner: LifecycleOwner, viewModel: ViewModel) {
-
-    }
-
     fun <VM> collectUiActionIfNeed(
-        lifecycleOwner: LifecycleOwner,
         viewModel: VM
-    ) where VM : ViewModel {
-        val uiActionEventFlow = (viewModel as? IUIAction)?.uiActionEventFlow
+    ) where VM : ViewModel, VM : IUIAction {
+        val uiActionEventFlow = viewModel.uiActionEventFlow
         if (uiActionEventFlow != null) {
             lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
                 uiActionEventFlow.collect {

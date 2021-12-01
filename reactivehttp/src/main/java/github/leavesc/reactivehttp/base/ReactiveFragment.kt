@@ -2,7 +2,7 @@ package github.leavesc.reactivehttp.base
 
 import android.app.ProgressDialog
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,20 +13,21 @@ import kotlinx.coroutines.CoroutineScope
 
 /**
  * @Author: leavesC
- * @Date: 2020/10/22 10:27
- * @Desc: BaseActivity
- * @GitHub：https://github.com/leavesC
+ * @Date: 2021/12/1 23:16
+ * @Desc:
+ * @Github：https://github.com/leavesC
  */
-open class ReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
+class ReactiveFragment : Fragment(), IUIActionEventObserver {
 
     protected inline fun <reified VM> getViewModel(
+        lifecycleOwner: LifecycleOwner = viewLifecycleOwner,
         factory: ViewModelProvider.Factory? = null,
         noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel, VM : IUIAction {
         return lazy {
             getViewModelFast(
                 viewModelStoreOwner = this,
-                lifecycleOwner = this,
+                lifecycleOwner = lifecycleOwner,
                 viewModelClass = VM::class.java,
                 factory = factory,
                 initializer = initializer
@@ -35,13 +36,14 @@ open class ReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
     }
 
     protected inline fun <reified VM> getViewModelInstance(
+        lifecycleOwner: LifecycleOwner = viewLifecycleOwner,
         crossinline create: () -> VM,
         noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel, VM : IUIAction {
         return lazy {
             getViewModelFast(
                 viewModelStoreOwner = this,
-                lifecycleOwner = this,
+                lifecycleOwner = lifecycleOwner,
                 viewModelClass = VM::class.java,
                 factory = object : ViewModelProvider.NewInstanceFactory() {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -54,16 +56,18 @@ open class ReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
     }
 
     override val lifecycleSupportedScope: CoroutineScope
-        get() = lifecycleScope
+        get() = viewLifecycleOwner.lifecycleScope
 
     private var loadDialog: ProgressDialog? = null
 
     override fun showLoading() {
         dismissLoading()
-        loadDialog = ProgressDialog(this).apply {
-            setCancelable(true)
-            setCanceledOnTouchOutside(false)
-            show()
+        activity?.let { act ->
+            loadDialog = ProgressDialog(act).apply {
+                setCancelable(true)
+                setCanceledOnTouchOutside(false)
+                show()
+            }
         }
     }
 
@@ -73,17 +77,19 @@ open class ReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
     }
 
     override fun showToast(msg: String) {
-        if (msg.isNotBlank()) {
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        activity?.let { act ->
+            if (msg.isNotBlank()) {
+                Toast.makeText(act, msg, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun finishView() {
-        finish()
+        activity?.finish()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         dismissLoading()
     }
 
