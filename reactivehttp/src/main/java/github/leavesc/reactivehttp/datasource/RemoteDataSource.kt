@@ -2,7 +2,6 @@ package github.leavesc.reactivehttp.datasource
 
 import github.leavesc.reactivehttp.callback.RequestCallback
 import github.leavesc.reactivehttp.exception.ReactiveHttpException
-import github.leavesc.reactivehttp.exception.ServerCodeBadException
 import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIAction
 import kotlinx.coroutines.*
@@ -14,11 +13,19 @@ import kotlinx.coroutines.*
  * @GitHub：https://github.com/leavesC
  */
 abstract class RemoteDataSource<Api : Any>(
-    iUIAction: IUIAction?,
+    uiAction: IUIAction?,
     baseHttpUrl: String,
     apiServiceClass: Class<Api>
-) : BaseRemoteDataSource<Api>(iUIAction, baseHttpUrl, apiServiceClass) {
+) : BaseRemoteDataSource<Api>(
+    uiAction = uiAction,
+    baseHttpUrl = baseHttpUrl,
+    apiServiceClass = apiServiceClass
+) {
 
+    /**
+     * 异步请求
+     * 在 onSuccess 回调中直接拿到 IHttpWrapMode 中的 Data
+     */
     fun <Data> enqueueLoading(
         apiFun: suspend Api.() -> IHttpWrapMode<Data>,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
@@ -43,30 +50,34 @@ abstract class RemoteDataSource<Api : Any>(
                     callbackFun.invoke(this)
                 }
             }
+            if (showLoading) {
+                showLoading()
+            }
+            callback?.onStart?.invoke()
             try {
-                if (showLoading) {
-                    showLoading()
-                }
-                callback?.onStart?.invoke()
-                val response = apiFun.invoke(apiService)
-                if (!response.httpIsSuccess) {
-                    throw ServerCodeBadException(response)
-                }
-                onGetResponse(callback, response.httpData)
-            } catch (throwable: Throwable) {
-                handleException(throwable, callback)
-            } finally {
-                try {
-                    callback?.onFinally?.invoke()
+                val data = try {
+                    ensureActive()
+                    executeApi(apiFun)
                 } finally {
                     if (showLoading) {
                         dismissLoading()
                     }
                 }
+                ensureActive()
+                callback?.onSuccess?.invoke(data)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
+            } finally {
+                callback?.onFinally?.invoke()
             }
         }
     }
 
+    /**
+     * 异步请求
+     * 不限定 Api 的返回值类型
+     * 在 onSuccess 回调中拿到网络请求的整个返回值
+     */
     fun <Data> enqueueOriginLoading(
         apiFun: suspend Api.() -> Data,
         callbackFun: (RequestCallback<Data>.() -> Unit)? = null
@@ -91,39 +102,27 @@ abstract class RemoteDataSource<Api : Any>(
                     callbackFun.invoke(this)
                 }
             }
+            if (showLoading) {
+                showLoading()
+            }
+            callback?.onStart?.invoke()
             try {
-                if (showLoading) {
-                    showLoading()
-                }
-                callback?.onStart?.invoke()
-                val response = apiFun.invoke(apiService)
-                onGetResponse(callback, response)
-            } catch (throwable: Throwable) {
-                handleException(throwable, callback)
-            } finally {
-                try {
-                    callback?.onFinally?.invoke()
+                val data = try {
+                    ensureActive()
+                    apiFun.invoke(apiService)
+                } catch (throwable: Throwable) {
+                    throw generateException(throwable)
                 } finally {
                     if (showLoading) {
                         dismissLoading()
                     }
                 }
-            }
-        }
-    }
-
-    private suspend fun <Data> onGetResponse(callback: RequestCallback<Data>?, httpData: Data) {
-        callback ?: return
-        withContext(NonCancellable) {
-            callback.onSuccess?.let {
-                withContext(Dispatchers.Main.immediate) {
-                    it.invoke(httpData)
-                }
-            }
-            callback.onSuccessIO?.let {
-                withContext(Dispatchers.IO) {
-                    it.invoke(httpData)
-                }
+                ensureActive()
+                callback?.onSuccess?.invoke(data)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
+            } finally {
+                callback?.onFinally?.invoke()
             }
         }
     }
@@ -137,15 +136,7 @@ abstract class RemoteDataSource<Api : Any>(
         apiFun: suspend Api.() -> IHttpWrapMode<Data>
     ): Data {
         return runBlocking {
-            try {
-                val response = apiFun.invoke(apiService)
-                if (response.httpIsSuccess) {
-                    return@runBlocking response.httpData
-                }
-                throw ServerCodeBadException(response)
-            } catch (throwable: Throwable) {
-                throw generateException(throwable)
-            }
+            return@runBlocking executeApi(apiFun = apiFun)
         }
     }
 

@@ -22,7 +22,7 @@ open class ReactiveHttpException(
     companion object {
 
         /**
-         * 此变量用于表示在网络请求过程过程中抛出了异常
+         * 此变量用于表示在网络请求过程过程中抛出了异常，例如：服务器返回的 Json 解析失败、网络请求被取消
          */
         const val CODE_ERROR_LOCAL_UNKNOWN = -1024520
 
@@ -35,7 +35,7 @@ open class ReactiveHttpException(
         get() = this is ServerCodeBadException
 
     /**
-     * 是否是由于网络请求过程中抛出的异常（例如：服务器返回的 Json 解析失败）
+     * 是否是由于网络请求过程中抛出的异常
      */
     val isLocalBadException: Boolean
         get() = this is LocalBadException
@@ -58,7 +58,5 @@ class ServerCodeBadException(errorCode: Int, errorMessage: String) :
  * 请求过程抛出异常
  * @param throwable
  */
-class LocalBadException(throwable: Throwable) : ReactiveHttpException(
-    CODE_ERROR_LOCAL_UNKNOWN, throwable.message
-        ?: "", throwable
-)
+class LocalBadException(throwable: Throwable) :
+    ReactiveHttpException(CODE_ERROR_LOCAL_UNKNOWN, throwable.message ?: "", throwable)

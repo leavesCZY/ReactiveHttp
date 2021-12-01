@@ -23,14 +23,17 @@ class SingleRequestActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bind.btnEnqueue.setOnClickListener {
+            singleRequestViewModel.enqueue()
+        }
+        bind.btnCancelEnqueueJob.setOnClickListener {
+            singleRequestViewModel.cancelEnqueueJob()
+        }
+        bind.btnExecuteOrigin.setOnClickListener {
+            singleRequestViewModel.enqueueOrigin()
+        }
         bind.btnExecute.setOnClickListener {
             singleRequestViewModel.execute()
-        }
-        bind.btnCancelExecuteJob.setOnClickListener {
-            singleRequestViewModel.cancelExecuteJob()
-        }
-        bind.btnRequest.setOnClickListener {
-            singleRequestViewModel.request()
         }
         bind.btnCleanLog.setOnClickListener {
             singleRequestViewModel.clearLog()

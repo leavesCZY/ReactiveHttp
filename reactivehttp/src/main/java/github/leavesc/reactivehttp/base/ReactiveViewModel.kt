@@ -26,7 +26,7 @@ open class ReactiveViewModel : ViewModel(), IUIAction {
 
     private val _uiActionEventFlow = MutableSharedFlow<UIActionEvent>(
         replay = 0,
-        extraBufferCapacity = 1,
+        extraBufferCapacity = 4,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
@@ -51,7 +51,7 @@ open class ReactiveAndroidViewModel(application: Application) : AndroidViewModel
 
     private val _uiActionEventFlow = MutableSharedFlow<UIActionEvent>(
         replay = 0,
-        extraBufferCapacity = 1,
+        extraBufferCapacity = 4,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 

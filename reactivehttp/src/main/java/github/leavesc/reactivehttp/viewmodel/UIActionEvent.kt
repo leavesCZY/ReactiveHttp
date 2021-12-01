@@ -6,14 +6,12 @@ package github.leavesc.reactivehttp.viewmodel
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-sealed class UIActionEvent {
+sealed class UIActionEvent
 
-    object ShowLoadingEvent : UIActionEvent()
+object ShowLoadingEvent : UIActionEvent()
 
-    object DismissLoadingEvent : UIActionEvent()
+object DismissLoadingEvent : UIActionEvent()
 
-    object FinishViewEvent : UIActionEvent()
+object FinishViewEvent : UIActionEvent()
 
-    class ShowToastEvent(val message: String) : UIActionEvent()
-
-}
+class ShowToastEvent(val message: String) : UIActionEvent()

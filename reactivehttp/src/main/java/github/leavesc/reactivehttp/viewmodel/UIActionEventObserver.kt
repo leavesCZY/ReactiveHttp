@@ -23,19 +23,19 @@ interface IUIAction {
     val uiActionEventFlow: Flow<UIActionEvent>?
 
     fun showLoading() {
-        dispatchUIActionEvent(UIActionEvent.ShowLoadingEvent)
+        dispatchUIActionEvent(ShowLoadingEvent)
     }
 
     fun dismissLoading() {
-        dispatchUIActionEvent(UIActionEvent.DismissLoadingEvent)
+        dispatchUIActionEvent(DismissLoadingEvent)
     }
 
     fun showToast(msg: String) {
-        dispatchUIActionEvent(UIActionEvent.ShowToastEvent(msg))
+        dispatchUIActionEvent(ShowToastEvent(msg))
     }
 
     fun finishView() {
-        dispatchUIActionEvent(UIActionEvent.FinishViewEvent)
+        dispatchUIActionEvent(FinishViewEvent)
     }
 
     fun dispatchUIActionEvent(actionEvent: UIActionEvent) {
@@ -95,18 +95,18 @@ interface IUIActionEventObserver {
             lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
                 uiActionEventFlow.collect {
                     when (it) {
-                        is UIActionEvent.ShowLoadingEvent -> {
+                        is ShowLoadingEvent -> {
                             showLoading()
                         }
-                        UIActionEvent.DismissLoadingEvent -> {
+                        DismissLoadingEvent -> {
                             dismissLoading()
                         }
-                        is UIActionEvent.ShowToastEvent -> {
+                        is ShowToastEvent -> {
                             if (it.message.isNotBlank()) {
                                 showToast(it.message)
                             }
                         }
-                        UIActionEvent.FinishViewEvent -> {
+                        FinishViewEvent -> {
                             finishView()
                         }
                     }

@@ -2,7 +2,6 @@ package github.leavesc.reactivehttp.datasource
 
 import github.leavesc.reactivehttp.callback.RequestPairCallback
 import github.leavesc.reactivehttp.callback.RequestTripleCallback
-import github.leavesc.reactivehttp.exception.ServerCodeBadException
 import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIAction
 import kotlinx.coroutines.*
@@ -17,10 +16,14 @@ import kotlinx.coroutines.*
  * @GitHub：https://github.com/leavesC
  */
 abstract class RemoteExtendDataSource<Api : Any>(
-    iUIAction: IUIAction?,
+    uiAction: IUIAction?,
     baseHttpUrl: String,
     apiServiceClass: Class<Api>
-) : RemoteDataSource<Api>(iUIAction, baseHttpUrl, apiServiceClass) {
+) : RemoteDataSource<Api>(
+    uiAction = uiAction,
+    baseHttpUrl = baseHttpUrl,
+    apiServiceClass = apiServiceClass
+) {
 
     fun <DataA, DataB> enqueue(
         apiFunA: suspend Api.() -> IHttpWrapMode<DataA>,
@@ -36,56 +39,31 @@ abstract class RemoteExtendDataSource<Api : Any>(
                     callbackFun.invoke(this)
                 }
             }
+            if (showLoading) {
+                showLoading()
+            }
+            callback?.onStart?.invoke()
             try {
-                if (showLoading) {
-                    showLoading()
-                }
-                callback?.onStart?.invoke()
-                val taskList = listOf(
-                    lifecycleSupportedScope.async { apiFunA.invoke(apiService) },
-                    lifecycleSupportedScope.async { apiFunB.invoke(apiService) }
-                )
-                val responseList = taskList.awaitAll()
-                val failed = responseList.find { it.httpIsFailed }
-                if (failed != null) {
-                    throw ServerCodeBadException(failed)
-                }
-                onGetResponse(callback, responseList)
-            } catch (throwable: Throwable) {
-                handleException(throwable, callback)
-            } finally {
-                try {
-                    callback?.onFinally?.invoke()
+                val responseList = try {
+                    ensureActive()
+                    val taskList = coroutineScope {
+                        listOf(
+                            async { executeApi(apiFunA) },
+                            async { executeApi(apiFunB) }
+                        )
+                    }
+                    taskList.awaitAll()
                 } finally {
                     if (showLoading) {
                         dismissLoading()
                     }
                 }
-            }
-        }
-    }
-
-    private suspend fun <DataA, DataB> onGetResponse(
-        callback: RequestPairCallback<DataA, DataB>?,
-        responseList: List<IHttpWrapMode<out Any?>>,
-    ) {
-        callback ?: return
-        withContext(NonCancellable) {
-            callback.onSuccess?.let {
-                withContext(Dispatchers.Main.immediate) {
-                    it.invoke(
-                        responseList[0].httpData as DataA,
-                        responseList[1].httpData as DataB
-                    )
-                }
-            }
-            callback.onSuccessIO?.let {
-                withContext(Dispatchers.IO) {
-                    it.invoke(
-                        responseList[0].httpData as DataA,
-                        responseList[1].httpData as DataB
-                    )
-                }
+                ensureActive()
+                callback?.onSuccess?.invoke(responseList[0] as DataA, responseList[1] as DataB)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
+            } finally {
+                callback?.onFinally?.invoke()
             }
         }
     }
@@ -105,58 +83,36 @@ abstract class RemoteExtendDataSource<Api : Any>(
                     callbackFun.invoke(this)
                 }
             }
+            if (showLoading) {
+                showLoading()
+            }
+            callback?.onStart?.invoke()
             try {
-                if (showLoading) {
-                    showLoading()
-                }
-                val taskList = listOf(
-                    lifecycleSupportedScope.async { apiFunA.invoke(apiService) },
-                    lifecycleSupportedScope.async { apiFunB.invoke(apiService) },
-                    lifecycleSupportedScope.async { apiFunC.invoke(apiService) }
-                )
-                val responseList = taskList.awaitAll()
-                val failed = responseList.find { it.httpIsFailed }
-                if (failed != null) {
-                    throw ServerCodeBadException(failed)
-                }
-                onGetResponse(callback, responseList)
-            } catch (throwable: Throwable) {
-                handleException(throwable, callback)
-            } finally {
-                try {
-                    callback?.onFinally?.invoke()
+                val responseList = try {
+                    ensureActive()
+                    val taskList = coroutineScope {
+                        listOf(
+                            async { executeApi(apiFunA) },
+                            async { executeApi(apiFunB) },
+                            async { executeApi(apiFunC) }
+                        )
+                    }
+                    taskList.awaitAll()
                 } finally {
                     if (showLoading) {
                         dismissLoading()
                     }
                 }
-            }
-        }
-    }
-
-    private suspend fun <DataA, DataB, DataC> onGetResponse(
-        callback: RequestTripleCallback<DataA, DataB, DataC>?,
-        responseList: List<IHttpWrapMode<out Any?>>
-    ) {
-        callback ?: return
-        withContext(NonCancellable) {
-            callback.onSuccess?.let {
-                withContext(Dispatchers.Main.immediate) {
-                    it.invoke(
-                        responseList[0].httpData as DataA,
-                        responseList[1].httpData as DataB,
-                        responseList[2].httpData as DataC
-                    )
-                }
-            }
-            callback.onSuccessIO?.let {
-                withContext(Dispatchers.IO) {
-                    it.invoke(
-                        responseList[0].httpData as DataA,
-                        responseList[1].httpData as DataB,
-                        responseList[2].httpData as DataC
-                    )
-                }
+                ensureActive()
+                callback?.onSuccess?.invoke(
+                    responseList[0] as DataA,
+                    responseList[1] as DataB,
+                    responseList[2] as DataC
+                )
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
+            } finally {
+                callback?.onFinally?.invoke()
             }
         }
     }

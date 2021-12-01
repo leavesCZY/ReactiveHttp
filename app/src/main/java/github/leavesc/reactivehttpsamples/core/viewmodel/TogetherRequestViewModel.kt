@@ -2,6 +2,7 @@ package github.leavesc.reactivehttpsamples.core.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.GsonBuilder
 import github.leavesc.reactivehttpsamples.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -20,14 +21,14 @@ class TogetherRequestViewModel : BaseViewModel() {
 
     fun togetherSuccess() {
         cancelTogetherSuccessJob()
-        togetherSuccessJob = remoteDataSource.enqueue({
+        togetherSuccessJob = remoteDataSource.enqueue(apiFunA = {
             val result = getProvince()
             //主动延迟一点时间，以便来得及取消网络请求
             delay(1500)
             result
-        }, {
-            getCity("广东")
-        }) {
+        }, apiFunB = {
+            getCity("广州")
+        }, showLoading = true) {
             onStart {
                 log("onStart")
             }
@@ -41,16 +42,7 @@ class TogetherRequestViewModel : BaseViewModel() {
                 true
             }
             onSuccess { dataA, dataB ->
-                log("onSuccess：")
-                log("dataA：$dataA")
-                log("dataB：$dataB")
-            }
-            onSuccessIO { _, _ ->
-                log("onSuccessIO：")
-                repeat(5) { time ->
-                    delay(300)
-                    log("$time")
-                }
+                log("onSuccess： \n ${toPrettyJson(dataA)} \n ${toPrettyJson(dataB)}")
             }
             onFinally {
                 log("onFinally")
@@ -59,18 +51,18 @@ class TogetherRequestViewModel : BaseViewModel() {
     }
 
     fun cancelTogetherSuccessJob() {
-        if (togetherSuccessJob?.isActive == true) {
-            togetherSuccessJob?.cancel()
-        }
+        togetherSuccessJob?.cancel()
     }
 
     private var togetherFailedJob: Job? = null
 
     fun togetherFailed() {
         cancelTogetherFailedJob()
-        togetherFailedJob = remoteDataSource.enqueue({ getProvince() }, {
+        togetherFailedJob = remoteDataSource.enqueue(apiFunA = {
+            getProvince()
+        }, apiFunB = {
             mustFailed()
-        }) {
+        }, showLoading = true) {
             onStart {
                 log("onStart")
             }
@@ -85,14 +77,7 @@ class TogetherRequestViewModel : BaseViewModel() {
                 false
             }
             onSuccess { dataA, dataB ->
-                log("onSuccess： $dataA   $dataB")
-            }
-            onSuccessIO { _, _ ->
-                log("onSuccessIO：")
-                repeat(5) { time ->
-                    delay(300)
-                    log("$time")
-                }
+                log("onSuccess： \n ${toPrettyJson(dataA)} \n ${toPrettyJson(dataB)}")
             }
             onFinally {
                 log("onFinally")
@@ -101,9 +86,12 @@ class TogetherRequestViewModel : BaseViewModel() {
     }
 
     private fun cancelTogetherFailedJob() {
-        if (togetherFailedJob?.isActive == true) {
-            togetherFailedJob?.cancel()
-        }
+        togetherFailedJob?.cancel()
+    }
+
+    private fun toPrettyJson(any: Any): String {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        return gson.toJson(any)
     }
 
     private var log = ""

@@ -23,7 +23,30 @@ open class ReactiveActivity : AppCompatActivity(), IUIActionEventObserver {
         noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel {
         return lazy {
-            getViewModelFast(this, VM::class.java, factory, initializer)
+            getViewModelFast(
+                lifecycleOwner = this,
+                viewModelClass = VM::class.java,
+                factory = factory,
+                initializer = initializer
+            )
+        }
+    }
+
+    protected inline fun <reified VM> getViewModelInstance(
+        crossinline create: () -> VM,
+        noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
+    ): Lazy<VM> where VM : ViewModel {
+        return lazy {
+            getViewModelFast(
+                lifecycleOwner = this,
+                viewModelClass = VM::class.java,
+                factory = object : ViewModelProvider.NewInstanceFactory() {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return create() as T
+                    }
+                },
+                initializer = initializer
+            )
         }
     }
 

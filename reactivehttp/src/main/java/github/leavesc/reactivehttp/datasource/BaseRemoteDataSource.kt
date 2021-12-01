@@ -4,6 +4,8 @@ import android.util.LruCache
 import github.leavesc.reactivehttp.callback.BaseRequestCallback
 import github.leavesc.reactivehttp.exception.LocalBadException
 import github.leavesc.reactivehttp.exception.ReactiveHttpException
+import github.leavesc.reactivehttp.exception.ServerCodeBadException
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIAction
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +24,7 @@ import java.util.concurrent.TimeUnit
  * @GitHub：https://github.com/leavesC
  */
 abstract class BaseRemoteDataSource<Api : Any>(
-    protected val iUIAction: IUIAction?,
+    protected val uiAction: IUIAction?,
     protected val baseHttpUrl: String,
     protected val apiServiceClass: Class<Api>,
 ) {
@@ -64,9 +66,9 @@ abstract class BaseRemoteDataSource<Api : Any>(
     }
 
     /**
-     * 获取和生命周期绑定的协程作用域
+     * 和生命周期绑定的协程作用域
      */
-    protected val lifecycleSupportedScope = iUIAction?.lifecycleSupportedScope ?: GlobalScope
+    protected val lifecycleSupportedScope = uiAction?.lifecycleSupportedScope ?: GlobalScope
 
     /**
      * 构建 ApiService
@@ -89,28 +91,23 @@ abstract class BaseRemoteDataSource<Api : Any>(
     /**
      * 允许子类自己来实现创建 Retrofit 的逻辑
      * 外部无需缓存 Retrofit 实例，ReactiveHttp 内部已做好缓存处理
-     * 但外部需要自己判断是否需要对 OKHttpClient 进行缓存
+     * 但外部需要自己判断是否需要对 OkHttpClient 进行缓存
      * @param baseHttpUrl
      */
     protected open fun createRetrofit(baseHttpUrl: String): Retrofit {
         return createDefaultRetrofit(baseHttpUrl)
     }
 
-    protected fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {
-        callback ?: return
-        if (throwable is CancellationException) {
-            callback.onCancelled?.invoke()
-        } else {
-            val exception = generateException(throwable)
-            if (exceptionHandle(exception)) {
-                callback.onFailed?.invoke(exception)
-                if (callback.onFailToast()) {
-                    val error = exceptionFormat(exception)
-                    if (error.isNotBlank()) {
-                        showToast(error)
-                    }
-                }
+    @Throws(ReactiveHttpException::class)
+    internal suspend fun <Data> executeApi(apiFun: suspend Api.() -> IHttpWrapMode<Data>): Data {
+        try {
+            val response = apiFun.invoke(apiService)
+            if (response.httpIsSuccess) {
+                return response.httpData
             }
+            throw ServerCodeBadException(response)
+        } catch (throwable: Throwable) {
+            throw generateException(throwable)
         }
     }
 
@@ -118,18 +115,48 @@ abstract class BaseRemoteDataSource<Api : Any>(
      * 如果外部想要对 Throwable 进行特殊处理，则可以重写此方法，用于改变 Exception 类型
      * 例如，在 token 失效时接口一般是会返回特定一个 httpCode 用于表明移动端需要去更新 token 了
      * 此时外部就可以实现一个 ReactiveHttpException 的子类 TokenInvalidException 并在此处返回
-     * 从而做到接口异常原因强提醒的效果，而不用去纠结 httpCode 到底是多少
+     * 从而做到接口异常原因强提醒的效果
      */
     protected open fun generateException(throwable: Throwable): ReactiveHttpException {
-        return if (throwable is ReactiveHttpException) {
-            throwable
-        } else {
-            LocalBadException(throwable)
+        return when (throwable) {
+            is ReactiveHttpException -> {
+                throwable
+            }
+            is CancellationException -> {
+                LocalBadException(throwable)
+            }
+            else -> {
+                LocalBadException(throwable)
+            }
+        }
+    }
+
+    internal fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {
+        when (throwable) {
+            is ReactiveHttpException -> {
+                if (throwable.realException is CancellationException) {
+                    callback?.onCancelled?.invoke()
+                } else {
+                    if (exceptionHandle(throwable)) {
+                        callback?.onFailed?.invoke(throwable)
+                        if (callback?.onFailToast?.invoke() == true) {
+                            val error = exceptionFormat(throwable)
+                            if (error.isNotBlank()) {
+                                showToast(error)
+                            }
+                        }
+                    }
+                }
+            }
+            else -> {
+                //非网络请求造成的异常需要抛给外部自己处理，不能静默处理
+                throw throwable
+            }
         }
     }
 
     /**
-     * 用于由外部中转控制当抛出异常时是否走 onFail 回调，当返回 true 时则回调，否则不回调
+     * 用于由外部中转控制当抛出异常时是否走 onFailed 回调，当返回 true 时则回调，否则不回调
      * 同时在这里将网络请求过程中发生的异常反馈给外部，以便外部上报异常
      * @param httpException
      */
@@ -156,11 +183,11 @@ abstract class BaseRemoteDataSource<Api : Any>(
     }
 
     protected fun showLoading() {
-        iUIAction?.showLoading()
+        uiAction?.showLoading()
     }
 
     protected fun dismissLoading() {
-        iUIAction?.dismissLoading()
+        uiAction?.dismissLoading()
     }
 
     /**
@@ -168,7 +195,7 @@ abstract class BaseRemoteDataSource<Api : Any>(
      * 外部可以通过重写此方法以便能够 showToast
      */
     protected open fun showToast(msg: String) {
-        iUIAction?.showToast(msg)
+        uiAction?.showToast(msg)
     }
 
 }

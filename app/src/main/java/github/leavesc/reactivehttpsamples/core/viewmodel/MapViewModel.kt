@@ -44,26 +44,11 @@ class MapViewModel : BaseViewModel() {
             delay(1200)
             getProvince()
         }) {
-            onStart {
-                log("onStart")
-            }
             onSuccess {
                 log("onSuccess")
                 stateLiveData.value = TYPE_PROVINCE
                 provinceLiveData.value = it[0].districts
                 realLiveData.value = it[0].districts
-            }
-            onSuccessIO {
-                log("onSuccessIO")
-            }
-            onFailed {
-                log("onFailed")
-            }
-            onCancelled {
-                log("onCancelled")
-            }
-            onFinally {
-                log("onFinally")
             }
         }
     }
