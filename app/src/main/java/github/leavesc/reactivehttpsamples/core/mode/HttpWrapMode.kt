@@ -1,6 +1,5 @@
 package github.leavesc.reactivehttpsamples.core.mode
 
-import com.google.gson.annotations.SerializedName
 import github.leavesc.reactivehttp.mode.IHttpWrapMode
 
 /**
@@ -9,10 +8,10 @@ import github.leavesc.reactivehttp.mode.IHttpWrapMode
  * @Desc:
  * @GitHub：https://github.com/leavesC
  */
-class HttpWrapMode<T>(
-    var infocode: Int = 0,
-    var info: String? = null,
-    @SerializedName("districts", alternate = ["forecasts"]) var data: T
+data class DistrictsWrapMode<T>(
+    val infocode: Int = 0,
+    val info: String? = null,
+    val districts: T
 ) : IHttpWrapMode<T> {
 
     override val httpCode: Int
@@ -22,13 +21,29 @@ class HttpWrapMode<T>(
         get() = info ?: ""
 
     override val httpData: T
-        get() = data
+        get() = districts
 
     override val httpIsSuccess: Boolean
         get() = infocode == 10000
 
-    override fun toString(): String {
-        return "HttpResBean(code=$infocode, message=$info, data=$data)"
-    }
+}
+
+class ForecastsWrapMode<T>(
+    val infocode: Int = 0,
+    val info: String? = null,
+    val forecasts: T
+) : IHttpWrapMode<T> {
+
+    override val httpCode: Int
+        get() = infocode
+
+    override val httpMsg: String
+        get() = info ?: ""
+
+    override val httpData: T
+        get() = forecasts
+
+    override val httpIsSuccess: Boolean
+        get() = infocode == 10000
 
 }

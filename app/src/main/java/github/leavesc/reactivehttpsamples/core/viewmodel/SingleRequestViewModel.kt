@@ -98,6 +98,10 @@ class SingleRequestViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * 同步请求，可能会抛出异常
+     * 在 onSuccess 回调中直接拿到 IHttpWrapMode 中的 Data
+     */
     fun execute() {
         viewModelScope.launch {
             val time = measureTimeMillis {
