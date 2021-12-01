@@ -4,7 +4,9 @@ import github.leavesc.reactivehttp.callback.RequestPairCallback
 import github.leavesc.reactivehttp.callback.RequestTripleCallback
 import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIAction
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 /**
  * @Author: leavesC
@@ -31,41 +33,22 @@ abstract class RemoteExtendDataSource<Api : Any>(
         showLoading: Boolean = false,
         callbackFun: (RequestPairCallback<DataA, DataB>.() -> Unit)? = null
     ): Job {
-        return lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
-            val callback = if (callbackFun == null) {
-                null
-            } else {
-                RequestPairCallback<DataA, DataB>().apply {
-                    callbackFun.invoke(this)
-                }
-            }
-            if (showLoading) {
-                showLoading()
-            }
-            callback?.onStart?.invoke()
-            try {
-                val responseList = try {
-                    ensureActive()
-                    val taskList = coroutineScope {
-                        listOf(
-                            async { executeApi(apiFunA) },
-                            async { executeApi(apiFunB) }
-                        )
-                    }
-                    taskList.awaitAll()
-                } finally {
-                    if (showLoading) {
-                        dismissLoading()
-                    }
-                }
-                ensureActive()
-                callback?.onSuccess?.invoke(responseList[0] as DataA, responseList[1] as DataB)
-            } catch (throwable: Throwable) {
-                handleException(throwable, callback)
-            } finally {
-                callback?.onFinally?.invoke()
+        val callback = if (callbackFun == null) {
+            null
+        } else {
+            RequestPairCallback<DataA, DataB>().apply {
+                callbackFun.invoke(this)
             }
         }
+        return enqueueReal(block = {
+            val taskList = listOf(
+                async { executeApi(apiFunA) },
+                async { executeApi(apiFunB) }
+            )
+            taskList.awaitAll()
+        }, showLoading = showLoading, callback = callback, onSuccess = { responseList ->
+            callback?.onSuccess?.invoke(responseList[0] as DataA, responseList[1] as DataB)
+        })
     }
 
     fun <DataA, DataB, DataC> enqueue(
@@ -75,46 +58,27 @@ abstract class RemoteExtendDataSource<Api : Any>(
         showLoading: Boolean = false,
         callbackFun: (RequestTripleCallback<DataA, DataB, DataC>.() -> Unit)? = null
     ): Job {
-        return lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
-            val callback = if (callbackFun == null) {
-                null
-            } else {
-                RequestTripleCallback<DataA, DataB, DataC>().apply {
-                    callbackFun.invoke(this)
-                }
-            }
-            if (showLoading) {
-                showLoading()
-            }
-            callback?.onStart?.invoke()
-            try {
-                val responseList = try {
-                    ensureActive()
-                    val taskList = coroutineScope {
-                        listOf(
-                            async { executeApi(apiFunA) },
-                            async { executeApi(apiFunB) },
-                            async { executeApi(apiFunC) }
-                        )
-                    }
-                    taskList.awaitAll()
-                } finally {
-                    if (showLoading) {
-                        dismissLoading()
-                    }
-                }
-                ensureActive()
-                callback?.onSuccess?.invoke(
-                    responseList[0] as DataA,
-                    responseList[1] as DataB,
-                    responseList[2] as DataC
-                )
-            } catch (throwable: Throwable) {
-                handleException(throwable, callback)
-            } finally {
-                callback?.onFinally?.invoke()
+        val callback = if (callbackFun == null) {
+            null
+        } else {
+            RequestTripleCallback<DataA, DataB, DataC>().apply {
+                callbackFun.invoke(this)
             }
         }
+        return enqueueReal(block = {
+            val taskList = listOf(
+                async { executeApi(apiFunA) },
+                async { executeApi(apiFunB) },
+                async { executeApi(apiFunC) }
+            )
+            taskList.awaitAll()
+        }, showLoading = showLoading, callback = callback, onSuccess = { responseList ->
+            callback?.onSuccess?.invoke(
+                responseList[0] as DataA,
+                responseList[1] as DataB,
+                responseList[2] as DataC
+            )
+        })
     }
 
 }

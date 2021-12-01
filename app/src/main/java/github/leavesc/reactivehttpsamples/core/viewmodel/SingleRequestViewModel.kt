@@ -2,12 +2,10 @@ package github.leavesc.reactivehttpsamples.core.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import github.leavesc.reactivehttpsamples.base.BaseViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
 /**
@@ -22,6 +20,10 @@ class SingleRequestViewModel : BaseViewModel() {
 
     private var enqueueJob: Job? = null
 
+    /**
+     * 异步请求
+     * 在 onSuccess 回调中直接拿到 HttpWrapMode 中的 Data
+     */
     fun enqueue() {
         cancelEnqueueJob()
         enqueueJob = remoteDataSource.enqueue({
@@ -81,10 +83,15 @@ class SingleRequestViewModel : BaseViewModel() {
         enqueueJob?.cancel()
     }
 
+    /**
+     * 异步请求
+     * 不限定 Api 的返回值类型
+     * 在 onSuccess 回调中直接返回在 ApiService 中定义的整个返回值类型
+     */
     fun enqueueOrigin() {
-        remoteDataSource.enqueueOriginLoading({
+        remoteDataSource.enqueueOrigin(apiFun = {
             getCity(keywords = "广州")
-        }) {
+        }, showLoading = true) {
             onSuccess { response ->
                 log("onSuccess response: ${toPrettyJson(response)}")
             }
@@ -92,17 +99,19 @@ class SingleRequestViewModel : BaseViewModel() {
     }
 
     fun execute() {
-        val time = measureTimeMillis {
-            try {
-                val res = remoteDataSource.execute {
-                    getProvince()
+        viewModelScope.launch {
+            val time = measureTimeMillis {
+                try {
+                    val res = remoteDataSource.execute {
+                        getProvince()
+                    }
+                    log(toPrettyJson(res))
+                } catch (e: Throwable) {
+                    log(e.message)
                 }
-                log(toPrettyJson(res))
-            } catch (e: Throwable) {
-                log(e.message)
             }
+            log("耗时：" + time + "毫秒")
         }
-        log("耗时：" + time + "毫秒")
     }
 
     private fun toPrettyJson(any: Any): String {

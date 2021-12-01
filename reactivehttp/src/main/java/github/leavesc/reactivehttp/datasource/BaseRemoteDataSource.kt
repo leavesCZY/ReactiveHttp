@@ -7,8 +7,7 @@ import github.leavesc.reactivehttp.exception.ReactiveHttpException
 import github.leavesc.reactivehttp.exception.ServerCodeBadException
 import github.leavesc.reactivehttp.mode.IHttpWrapMode
 import github.leavesc.reactivehttp.viewmodel.IUIAction
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -98,6 +97,38 @@ abstract class BaseRemoteDataSource<Api : Any>(
         return createDefaultRetrofit(baseHttpUrl)
     }
 
+    internal fun <Data> enqueueReal(
+        block: suspend CoroutineScope.() -> Data,
+        showLoading: Boolean = false,
+        callback: BaseRequestCallback? = null,
+        onSuccess: (suspend (Data) -> Unit)
+    ): Job {
+        return lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
+            if (showLoading) {
+                showLoading()
+            }
+            callback?.onStart?.invoke()
+            try {
+                val data = try {
+                    ensureActive()
+                    coroutineScope {
+                        block()
+                    }
+                } finally {
+                    if (showLoading) {
+                        dismissLoading()
+                    }
+                }
+                ensureActive()
+                onSuccess(data)
+            } catch (throwable: Throwable) {
+                handleException(throwable, callback)
+            } finally {
+                callback?.onFinally?.invoke()
+            }
+        }
+    }
+
     @Throws(ReactiveHttpException::class)
     internal suspend fun <Data> executeApi(apiFun: suspend Api.() -> IHttpWrapMode<Data>): Data {
         try {
@@ -131,7 +162,7 @@ abstract class BaseRemoteDataSource<Api : Any>(
         }
     }
 
-    internal fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {
+    private fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {
         when (throwable) {
             is ReactiveHttpException -> {
                 if (throwable.realException is CancellationException) {

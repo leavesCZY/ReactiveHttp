@@ -1,6 +1,7 @@
 package github.leavesc.reactivehttp.callback
 
 import github.leavesc.reactivehttp.exception.ReactiveHttpException
+import github.leavesc.reactivehttp.mode.IHttpWrapMode
 
 /**
  * @Author: leavesC
@@ -66,8 +67,17 @@ class RequestCallback<Data> : BaseRequestCallback() {
      */
     internal var onSuccess: (suspend (Data) -> Unit)? = null
 
+    /**
+     * 当网络请求成功时会调用此 suspend 方法，可用于执行 suspend 函数
+     */
+    internal var onSuccessOrigin: (suspend (IHttpWrapMode<Data>) -> Unit)? = null
+
     fun onSuccess(block: suspend (data: Data) -> Unit) {
         this.onSuccess = block
+    }
+
+    fun onSuccessOrigin(block: suspend (data: IHttpWrapMode<Data>) -> Unit) {
+        this.onSuccessOrigin = block
     }
 
 }

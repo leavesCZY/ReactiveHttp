@@ -28,7 +28,7 @@ class TogetherRequestViewModel : BaseViewModel() {
             result
         }, apiFunB = {
             getCity("广州")
-        }, showLoading = true) {
+        }, showLoading = false) {
             onStart {
                 log("onStart")
             }
@@ -42,7 +42,7 @@ class TogetherRequestViewModel : BaseViewModel() {
                 true
             }
             onSuccess { dataA, dataB ->
-                log("onSuccess： \n ${toPrettyJson(dataA)} \n ${toPrettyJson(dataB)}")
+                log("onSuccess： \ndataA:\n ${toPrettyJson(dataA)} \ndataB:\n ${toPrettyJson(dataB)}")
             }
             onFinally {
                 log("onFinally")
@@ -59,8 +59,10 @@ class TogetherRequestViewModel : BaseViewModel() {
     fun togetherFailed() {
         cancelTogetherFailedJob()
         togetherFailedJob = remoteDataSource.enqueue(apiFunA = {
+            delay(600)
             getProvince()
         }, apiFunB = {
+            delay(400)
             mustFailed()
         }, showLoading = true) {
             onStart {
@@ -77,7 +79,7 @@ class TogetherRequestViewModel : BaseViewModel() {
                 false
             }
             onSuccess { dataA, dataB ->
-                log("onSuccess： \n ${toPrettyJson(dataA)} \n ${toPrettyJson(dataB)}")
+                log("onSuccess： \ndataA:\n ${toPrettyJson(dataA)} \ndataA:\n ${toPrettyJson(dataB)}")
             }
             onFinally {
                 log("onFinally")

@@ -32,3 +32,15 @@ interface IHttpWrapMode<Data> {
         get() = !httpIsSuccess
 
 }
+
+internal class AlwaysSuccessHttpWrap<T>(data: T) : IHttpWrapMode<T> {
+
+    override val httpCode = 200
+
+    override val httpMsg = ""
+
+    override val httpData = data
+
+    override val httpIsSuccess = true
+
+}
