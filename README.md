@@ -12,8 +12,8 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.leavesC:ReactiveHttp:1.0.3'
+    implementation 'com.github.leavesC:ReactiveHttp:1.1.0'
 }
 ```
 
-更多介绍请看这里：[一步步封装实现自己的网络请求框架 3.0](https://juejin.cn/post/6932650811642085389)
+更多介绍请看这里：[wiki](https://github.com/leavesC/ReactiveHttp/wiki)
