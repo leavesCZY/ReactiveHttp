@@ -28,7 +28,7 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.github.leavesC'
+                groupId = 'com.github.leavesCZY'
                 artifactId = 'ReactiveHttp'
             }
         }
