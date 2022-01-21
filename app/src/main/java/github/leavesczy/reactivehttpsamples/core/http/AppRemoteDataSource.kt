@@ -1,6 +1,6 @@
 package github.leavesczy.reactivehttpsamples.core.http
 
-import github.leavesc.monitor.MonitorInterceptor
+import github.leavesczy.monitor.MonitorInterceptor
 import github.leavesczy.reactivehttp.datasource.RemoteExtendDataSource
 import github.leavesczy.reactivehttp.viewmodel.IUIAction
 import github.leavesczy.reactivehttpsamples.MainApplication
@@ -34,7 +34,7 @@ class AppRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiSer
                 .connectTimeout(1000L, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(FilterInterceptor())
-                .addInterceptor(MonitorInterceptor(MainApplication.context))
+                .addInterceptor(MonitorInterceptor(context = MainApplication.context))
             return builder.build()
         }
 
