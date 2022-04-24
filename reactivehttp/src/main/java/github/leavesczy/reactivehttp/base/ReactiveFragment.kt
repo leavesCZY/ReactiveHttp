@@ -17,10 +17,10 @@ import kotlinx.coroutines.CoroutineScope
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class ReactiveFragment : Fragment(), IUIActionEventObserver {
+open class ReactiveFragment : Fragment(), IUIActionEventObserver {
 
     protected inline fun <reified VM> getViewModel(
-        lifecycleOwner: LifecycleOwner = viewLifecycleOwner,
+        lifecycleOwner: LifecycleOwner = this,
         factory: ViewModelProvider.Factory? = null,
         noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel, VM : IUIAction {
@@ -36,7 +36,7 @@ class ReactiveFragment : Fragment(), IUIActionEventObserver {
     }
 
     protected inline fun <reified VM> getViewModelInstance(
-        lifecycleOwner: LifecycleOwner = viewLifecycleOwner,
+        lifecycleOwner: LifecycleOwner = this,
         crossinline create: () -> VM,
         noinline initializer: (VM.(lifecycleOwner: LifecycleOwner) -> Unit)? = null
     ): Lazy<VM> where VM : ViewModel, VM : IUIAction {

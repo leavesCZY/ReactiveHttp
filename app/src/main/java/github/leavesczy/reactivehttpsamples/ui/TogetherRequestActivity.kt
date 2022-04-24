@@ -16,9 +16,9 @@ class TogetherRequestActivity : BaseActivity() {
     override val bind by getBind<ActivityTogetherRequestBinding>()
 
     private val togetherRequestViewModel by getViewModel<TogetherRequestViewModel> {
-        logLiveData.observe(this@TogetherRequestActivity, {
+        logLiveData.observe(this@TogetherRequestActivity) {
             bind.tvLog.text = it
-        })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

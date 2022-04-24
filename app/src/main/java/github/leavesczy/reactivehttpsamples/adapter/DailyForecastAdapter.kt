@@ -1,5 +1,6 @@
 package github.leavesczy.reactivehttpsamples.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class WeatherAdapter(private val districtsModeList: List<CastsMode>) :
         return districtsModeList.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val bean = districtsModeList[position]
         holder.tvDate.text = bean.date

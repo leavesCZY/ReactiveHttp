@@ -15,9 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/ReactiveHttpAppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="m">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,18 +28,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MapActivity"
+            android:name=".ui.weather.AreaActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.WeatherActivity"
+            android:name=".ui.weather.WeatherActivity"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SingleRequestActivity"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.TogetherRequestActivity"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
     </application>

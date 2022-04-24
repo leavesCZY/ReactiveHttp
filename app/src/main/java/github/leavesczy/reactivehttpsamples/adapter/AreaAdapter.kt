@@ -14,11 +14,11 @@ import github.leavesczy.reactivehttpsamples.core.mode.DistrictMode
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class PlaceAdapter(
+class AreaAdapter(
     private val dataList: List<DistrictMode>,
     private val onClickListener: OnClickListener
 ) :
-    RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() {
+    RecyclerView.Adapter<AreaAdapter.PlaceViewHolder>() {
 
     interface OnClickListener {
         fun onClick(position: Int)
@@ -26,7 +26,7 @@ class PlaceAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         return PlaceViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_place, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_area, parent, false)
         )
     }
 
@@ -35,13 +35,13 @@ class PlaceAdapter(
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.tvPlaceName.text = dataList[position].name
         holder.tvPlaceName.setOnClickListener {
-            onClickListener.onClick(holder.adapterPosition)
+            onClickListener.onClick(holder.bindingAdapterPosition)
         }
     }
 
     class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var tvPlaceName: TextView = itemView.findViewById(R.id.tvPlaceName)
+        var tvPlaceName: TextView = itemView.findViewById(R.id.tvAreaName)
 
     }
 

@@ -29,9 +29,9 @@ class AppRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiSer
 
         private fun createOkHttpClient(): OkHttpClient {
             val builder = OkHttpClient.Builder()
-                .readTimeout(1000L, TimeUnit.MILLISECONDS)
-                .writeTimeout(1000L, TimeUnit.MILLISECONDS)
-                .connectTimeout(1000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .writeTimeout(10000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(FilterInterceptor())
                 .addInterceptor(MonitorInterceptor(context = MainApplication.context))
@@ -41,7 +41,7 @@ class AppRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiSer
     }
 
     /**
-     * 外部在这里来实现构建 Retrofit 的逻辑
+     * 在这里来实现构建 Retrofit 的逻辑
      * @param baseHttpUrl
      */
     override fun createRetrofit(baseHttpUrl: String): Retrofit {

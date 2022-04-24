@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
-            android:textColor="#FF5722"
+            android:textColor="@android:color/black"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@id/rvDailyForecast"
             app:layout_constraintEnd_toEndOf="parent"
@@ -23,21 +23,12 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="深圳" />
 
-        <ImageView
-            android:id="@+id/ivPlace"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="12dp"
-            android:contentDescription="@string/app_name"
-            android:src="@android:drawable/ic_menu_help"
-            app:layout_constraintBottom_toBottomOf="@id/tvCity"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvCity" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvDailyForecast"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingBottom="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

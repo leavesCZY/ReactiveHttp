@@ -16,9 +16,9 @@ class SingleRequestActivity : BaseActivity() {
     override val bind by getBind<ActivitySingleRequestBinding>()
 
     private val singleRequestViewModel by getViewModel<SingleRequestViewModel> {
-        logLiveData.observe(this@SingleRequestActivity, {
+        logLiveData.observe(this@SingleRequestActivity) {
             bind.tvLog.text = it
-        })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

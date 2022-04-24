@@ -1,4 +1,4 @@
-package github.leavesczy.reactivehttpsamples.core.viewmodel
+package github.leavesczy.reactivehttpsamples.core.viewmodel.weather
 
 import androidx.lifecycle.MutableLiveData
 import github.leavesczy.reactivehttpsamples.base.BaseViewModel
