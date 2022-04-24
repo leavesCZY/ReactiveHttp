@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.leavesCZY:ReactiveHttp:1.1.2'
+    implementation 'com.github.leavesCZY:ReactiveHttp:1.1.3'
 }
 ```
 
