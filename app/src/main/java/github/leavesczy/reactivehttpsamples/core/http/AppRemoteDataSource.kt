@@ -1,6 +1,7 @@
 package github.leavesczy.reactivehttpsamples.core.http
 
-import github.leavesczy.monitor.MonitorInterceptor
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import github.leavesczy.reactivehttp.datasource.RemoteExtendDataSource
 import github.leavesczy.reactivehttp.viewmodel.IUIAction
 import github.leavesczy.reactivehttpsamples.MainApplication
@@ -34,7 +35,12 @@ class AppRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiSer
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(FilterInterceptor())
-                .addInterceptor(MonitorInterceptor(context = MainApplication.context))
+                .addInterceptor(
+                    ChuckerInterceptor.Builder(MainApplication.context)
+                        .collector(ChuckerCollector(MainApplication.context))
+                        .maxContentLength(250000L)
+                        .build()
+                )
             return builder.build()
         }
 

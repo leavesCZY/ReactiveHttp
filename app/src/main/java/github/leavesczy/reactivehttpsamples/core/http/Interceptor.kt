@@ -15,7 +15,7 @@ class FilterInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val httpBuilder = originalRequest.url.newBuilder()
+        val httpBuilder = originalRequest.url().newBuilder()
         httpBuilder.addEncodedQueryParameter(HttpConfig.KEY, HttpConfig.KEY_MAP)
         val requestBuilder = originalRequest.newBuilder()
             .url(httpBuilder.build())
