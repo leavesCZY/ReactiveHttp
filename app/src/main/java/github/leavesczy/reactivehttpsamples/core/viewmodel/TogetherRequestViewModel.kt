@@ -28,7 +28,7 @@ class TogetherRequestViewModel : BaseViewModel() {
             result
         }, apiFunB = {
             getCity("广州")
-        }, showLoading = false) {
+        }) {
             onStart {
                 log("onStart")
             }
@@ -64,7 +64,7 @@ class TogetherRequestViewModel : BaseViewModel() {
         }, apiFunB = {
             delay(400)
             mustFailed()
-        }, showLoading = true) {
+        }) {
             onStart {
                 log("onStart")
             }

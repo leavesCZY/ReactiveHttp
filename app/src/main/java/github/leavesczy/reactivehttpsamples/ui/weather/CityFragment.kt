@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesczy.reactivehttpsamples.adapter.AreaAdapter
 import github.leavesczy.reactivehttpsamples.base.BaseFragment
@@ -42,23 +45,13 @@ class CityFragment : BaseFragment() {
         requireArguments().getString(keyRequestParameter) ?: throw IllegalArgumentException()
     }
 
-    private val cityViewModel by getViewModelInstance(
-        create = {
-            CityViewModel(province)
+    private val cityViewModel by viewModels<CityViewModel>(factoryProducer = {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return CityViewModel(province) as T
+            }
         }
-    ) {
-        cityLiveData.observe(viewLifecycleOwner) {
-            val list = it
-            val placeAdapter = AreaAdapter(list, object : AreaAdapter.OnClickListener {
-                override fun onClick(position: Int) {
-                    val bundle = Bundle()
-                    bundle.putString(AreaActivity.parameterKey, list[position].adcode)
-                    parentFragmentManager.setFragmentResult(AreaActivity.onClickCityKey, bundle)
-                }
-            })
-            mBind.rvPlaceList.adapter = placeAdapter
-        }
-    }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +64,17 @@ class CityFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cityViewModel.cityLiveData.observe(viewLifecycleOwner) {
+            val list = it
+            val placeAdapter = AreaAdapter(list, object : AreaAdapter.OnClickListener {
+                override fun onClick(position: Int) {
+                    val bundle = Bundle()
+                    bundle.putString(AreaActivity.parameterKey, list[position].adcode)
+                    parentFragmentManager.setFragmentResult(AreaActivity.onClickCityKey, bundle)
+                }
+            })
+            mBind.rvPlaceList.adapter = placeAdapter
+        }
         mBind.rvPlaceList.layoutManager = LinearLayoutManager(requireActivity())
         mBind.tvTopBarTitle.text = "城市"
         cityViewModel.getCity()

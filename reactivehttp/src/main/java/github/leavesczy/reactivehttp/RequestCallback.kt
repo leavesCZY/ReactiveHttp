@@ -1,6 +1,4 @@
-package github.leavesczy.reactivehttp.callback
-
-import github.leavesczy.reactivehttp.exception.ReactiveHttpException
+package github.leavesczy.reactivehttp
 
 /**
  * @Author: leavesCZY

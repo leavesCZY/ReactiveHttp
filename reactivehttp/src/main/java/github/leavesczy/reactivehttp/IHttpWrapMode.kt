@@ -1,4 +1,4 @@
-package github.leavesczy.reactivehttp.mode
+package github.leavesczy.reactivehttp
 
 /**
  * @Author: leavesCZY

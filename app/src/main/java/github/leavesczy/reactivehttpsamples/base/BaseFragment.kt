@@ -1,6 +1,6 @@
 package github.leavesczy.reactivehttpsamples.base
 
-import github.leavesczy.reactivehttp.base.ReactiveFragment
+import androidx.fragment.app.Fragment
 
 /**
  * @Author: leavesCZY
@@ -8,4 +8,4 @@ import github.leavesczy.reactivehttp.base.ReactiveFragment
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-open class BaseFragment : ReactiveFragment()
+open class BaseFragment : Fragment()

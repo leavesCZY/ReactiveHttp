@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import github.leavesczy.reactivehttp.base.ReactiveActivity
 
 /**
  * @Author: leavesCZY
@@ -13,7 +13,7 @@ import github.leavesczy.reactivehttp.base.ReactiveActivity
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-abstract class BaseActivity : ReactiveActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     abstract val bind: ViewBinding?
 

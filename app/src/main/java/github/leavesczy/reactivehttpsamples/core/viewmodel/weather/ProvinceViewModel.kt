@@ -16,8 +16,7 @@ class ProvinceViewModel : BaseViewModel() {
     val provinceLiveData = MutableLiveData<List<DistrictMode>>()
 
     fun getProvince() {
-        remoteDataSource.enqueueLoading({
-            //主动延迟一段时间，避免弹窗太快消失
+        remoteDataSource.enqueue({
             delay(1200)
             getProvince()
         }) {

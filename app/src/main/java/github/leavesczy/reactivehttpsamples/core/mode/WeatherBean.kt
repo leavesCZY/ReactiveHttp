@@ -7,8 +7,11 @@ package github.leavesczy.reactivehttpsamples.core.mode
  * @Github：https://github.com/leavesCZY
  */
 data class ForecastsMode(
-    val city: String, val adcode: String, val province: String,
-    val reporttime: String, val casts: List<CastsMode>
+    val city: String,
+    val adcode: String,
+    val province: String,
+    val reporttime: String,
+    val casts: List<CastsMode>
 )
 
 data class CastsMode(

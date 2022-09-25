@@ -5,7 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import github.leavesczy.reactivehttpsamples.base.BaseViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.system.measureTimeMillis
 
 /**
@@ -91,7 +95,7 @@ class SingleRequestViewModel : BaseViewModel() {
     fun enqueueOrigin() {
         remoteDataSource.enqueueOrigin(apiFun = {
             getCity(keywords = "广州")
-        }, showLoading = true) {
+        }) {
             onSuccess { response ->
                 log("onSuccess response: ${toPrettyJson(response)}")
             }

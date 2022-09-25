@@ -3,7 +3,6 @@ package github.leavesczy.reactivehttpsamples.core.viewmodel.weather
 import androidx.lifecycle.MutableLiveData
 import github.leavesczy.reactivehttpsamples.base.BaseViewModel
 import github.leavesczy.reactivehttpsamples.core.mode.DistrictMode
-import kotlinx.coroutines.delay
 
 /**
  * @Author: leavesCZY
@@ -16,9 +15,7 @@ class CountyViewModel(private val city: String) : BaseViewModel() {
     val countyLiveData = MutableLiveData<List<DistrictMode>>()
 
     fun getCounty() {
-        remoteDataSource.enqueueLoading({
-            //主动延迟一段时间，避免弹窗太快消失
-            delay(1200)
+        remoteDataSource.enqueue({
             getCounty(city)
         }) {
             onSuccess {

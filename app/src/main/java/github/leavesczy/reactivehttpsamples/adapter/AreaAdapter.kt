@@ -30,7 +30,7 @@ class AreaAdapter(
         )
     }
 
-    override fun getItemCount() = if (dataList.isNullOrEmpty()) 0 else dataList.size
+    override fun getItemCount() = if (dataList.isEmpty()) 0 else dataList.size
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.tvPlaceName.text = dataList[position].name

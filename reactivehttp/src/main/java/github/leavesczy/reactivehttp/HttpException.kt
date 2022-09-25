@@ -1,6 +1,4 @@
-package github.leavesczy.reactivehttp.exception
-
-import github.leavesczy.reactivehttp.mode.IHttpWrapMode
+package github.leavesczy.reactivehttp
 
 /**
  * @Author: leavesCZY
@@ -9,22 +7,22 @@ import github.leavesczy.reactivehttp.mode.IHttpWrapMode
  * @Github：https://github.com/leavesCZY
  */
 /**
- * @param errorCode        服务器返回的错误码 或者是 HttpConfig 中定义的本地错误码
- * @param errorMessage     服务器返回的异常信息 或者是 请求过程中抛出的信息，是最原始的异常信息
- * @param realException    用于当 code 是本地错误码时，存储真实的运行时异常
+ * @param errorCode 服务器返回的错误码 或者是 HttpConfig 中定义的本地错误码
+ * @param errorMessage 服务器返回的异常信息 或者是 请求过程中抛出的信息，是最原始的异常信息
+ * @param cause 用于当 code 是本地错误码时，存储真实的运行时异常
  */
 open class ReactiveHttpException(
     val errorCode: Int,
     val errorMessage: String,
-    val realException: Throwable?
-) : Exception(errorMessage) {
+    cause: Throwable?
+) : Exception(errorMessage, cause) {
 
     companion object {
 
         /**
          * 此变量用于表示在网络请求过程过程中抛出了异常，例如：服务器返回的 Json 解析失败、网络请求被取消
          */
-        const val CODE_ERROR_LOCAL_UNKNOWN = -1024520
+        const val CODE_ERROR_LOCAL_UNKNOWN = -338751699
 
     }
 
@@ -48,7 +46,7 @@ open class ReactiveHttpException(
  * @param errorMessage
  */
 class ServerCodeBadException(errorCode: Int, errorMessage: String) :
-    ReactiveHttpException(errorCode, errorMessage, null) {
+    ReactiveHttpException(errorCode = errorCode, errorMessage = errorMessage, cause = null) {
 
     constructor(mode: IHttpWrapMode<*>) : this(mode.httpCode, mode.httpMsg)
 
@@ -56,7 +54,11 @@ class ServerCodeBadException(errorCode: Int, errorMessage: String) :
 
 /**
  * 请求过程抛出异常
- * @param throwable
+ * @param cause
  */
-class LocalBadException(throwable: Throwable) :
-    ReactiveHttpException(CODE_ERROR_LOCAL_UNKNOWN, throwable.message ?: "", throwable)
+class LocalBadException(cause: Throwable) :
+    ReactiveHttpException(
+        errorCode = CODE_ERROR_LOCAL_UNKNOWN,
+        errorMessage = cause.message ?: "",
+        cause = cause
+    )

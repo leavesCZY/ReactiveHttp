@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesczy.reactivehttpsamples.adapter.AreaAdapter
 import github.leavesczy.reactivehttpsamples.base.BaseFragment
@@ -23,19 +24,7 @@ class ProvinceFragment : BaseFragment() {
     private val mBind: FragmentAreaBinding
         get() = bind!!
 
-    private val provinceViewModel by getViewModel<ProvinceViewModel> {
-        provinceLiveData.observe(viewLifecycleOwner) {
-            val list = it
-            val placeAdapter = AreaAdapter(list, object : AreaAdapter.OnClickListener {
-                override fun onClick(position: Int) {
-                    val bundle = Bundle()
-                    bundle.putString(AreaActivity.parameterKey, list[position].adcode)
-                    parentFragmentManager.setFragmentResult(AreaActivity.onClickProvinceKey, bundle)
-                }
-            })
-            mBind.rvPlaceList.adapter = placeAdapter
-        }
-    }
+    private val provinceViewModel by viewModels<ProvinceViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +37,17 @@ class ProvinceFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        provinceViewModel.provinceLiveData.observe(viewLifecycleOwner) {
+            val list = it
+            val placeAdapter = AreaAdapter(list, object : AreaAdapter.OnClickListener {
+                override fun onClick(position: Int) {
+                    val bundle = Bundle()
+                    bundle.putString(AreaActivity.parameterKey, list[position].adcode)
+                    parentFragmentManager.setFragmentResult(AreaActivity.onClickProvinceKey, bundle)
+                }
+            })
+            mBind.rvPlaceList.adapter = placeAdapter
+        }
         mBind.rvPlaceList.layoutManager = LinearLayoutManager(requireActivity())
         mBind.tvTopBarTitle.text = "省份"
         provinceViewModel.getProvince()

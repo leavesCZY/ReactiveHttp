@@ -1,6 +1,6 @@
 package github.leavesczy.reactivehttpsamples.core.mode
 
-import github.leavesczy.reactivehttp.mode.IHttpWrapMode
+import github.leavesczy.reactivehttp.IHttpWrapMode
 
 /**
  * @Author: leavesCZY

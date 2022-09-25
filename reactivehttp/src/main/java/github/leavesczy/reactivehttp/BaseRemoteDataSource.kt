@@ -1,29 +1,30 @@
-package github.leavesczy.reactivehttp.datasource
+package github.leavesczy.reactivehttp
 
 import android.util.LruCache
-import github.leavesczy.reactivehttp.callback.BaseRequestCallback
-import github.leavesczy.reactivehttp.exception.LocalBadException
-import github.leavesczy.reactivehttp.exception.ReactiveHttpException
-import github.leavesczy.reactivehttp.exception.ServerCodeBadException
-import github.leavesczy.reactivehttp.mode.IHttpWrapMode
-import github.leavesczy.reactivehttp.viewmodel.IUIAction
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.ConnectException
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLHandshakeException
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * @Author: leavesCZY
- * @Date: 2020/5/4 0:56
+ * @Date: 2022/9/25 15:29
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
 abstract class BaseRemoteDataSource<Api : Any>(
-    protected val uiAction: IUIAction?,
+    protected val coroutineScope: CoroutineScope,
     protected val baseHttpUrl: String,
     protected val apiServiceClass: Class<Api>,
 ) {
@@ -65,11 +66,6 @@ abstract class BaseRemoteDataSource<Api : Any>(
     }
 
     /**
-     * 和生命周期绑定的协程作用域
-     */
-    protected val lifecycleSupportedScope = uiAction?.lifecycleSupportedScope ?: GlobalScope
-
-    /**
      * 构建 ApiService
      */
     val apiService: Api by lazy {
@@ -99,25 +95,15 @@ abstract class BaseRemoteDataSource<Api : Any>(
 
     internal fun <Data> enqueueReal(
         block: suspend CoroutineScope.() -> Data,
-        showLoading: Boolean = false,
         callback: BaseRequestCallback? = null,
         onSuccess: (suspend (Data) -> Unit)
     ): Job {
-        return lifecycleSupportedScope.launch(Dispatchers.Main.immediate) {
-            if (showLoading) {
-                showLoading()
-            }
+        return coroutineScope.launch(Dispatchers.Main.immediate) {
             callback?.onStart?.invoke()
             try {
-                val data = try {
-                    ensureActive()
-                    coroutineScope {
-                        block()
-                    }
-                } finally {
-                    if (showLoading) {
-                        dismissLoading()
-                    }
+                ensureActive()
+                val data = coroutineScope {
+                    block()
                 }
                 ensureActive()
                 onSuccess(data)
@@ -153,11 +139,9 @@ abstract class BaseRemoteDataSource<Api : Any>(
             is ReactiveHttpException -> {
                 throwable
             }
-            is CancellationException -> {
-                LocalBadException(throwable)
-            }
+
             else -> {
-                LocalBadException(throwable)
+                LocalBadException(cause = throwable)
             }
         }
     }
@@ -165,7 +149,7 @@ abstract class BaseRemoteDataSource<Api : Any>(
     private fun handleException(throwable: Throwable, callback: BaseRequestCallback?) {
         when (throwable) {
             is ReactiveHttpException -> {
-                if (throwable.realException is CancellationException) {
+                if (throwable.cause is CancellationException) {
                     callback?.onCancelled?.invoke()
                 } else {
                     if (exceptionHandle(throwable)) {
@@ -179,6 +163,7 @@ abstract class BaseRemoteDataSource<Api : Any>(
                     }
                 }
             }
+
             else -> {
                 //非网络请求造成的异常需要抛给外部自己处理，不能静默处理
                 throw throwable
@@ -200,33 +185,24 @@ abstract class BaseRemoteDataSource<Api : Any>(
      * @param httpException
      */
     protected open fun exceptionFormat(httpException: ReactiveHttpException): String {
-        return when (httpException.realException) {
+        return when (httpException.cause) {
             null -> {
                 httpException.errorMessage
             }
-            is ConnectException, is SocketTimeoutException, is UnknownHostException -> {
+
+            is SocketException, is SocketTimeoutException, is UnknownHostException, is SSLHandshakeException -> {
                 "连接超时，请检查您的网络设置"
             }
+
             else -> {
                 "请求过程抛出异常：" + httpException.errorMessage
             }
         }
     }
 
-    protected fun showLoading() {
-        uiAction?.showLoading()
-    }
-
-    protected fun dismissLoading() {
-        uiAction?.dismissLoading()
-    }
-
     /**
-     * 如果传入的 iUIAction 为 null 的话
-     * 外部可以通过重写此方法以便能够 showToast
+     * 通过重写此方法以便能够 showToast
      */
-    protected open fun showToast(msg: String) {
-        uiAction?.showToast(msg)
-    }
+    abstract fun showToast(msg: String)
 
 }

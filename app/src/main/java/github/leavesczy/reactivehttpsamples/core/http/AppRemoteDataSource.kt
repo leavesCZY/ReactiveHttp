@@ -1,10 +1,11 @@
 package github.leavesczy.reactivehttpsamples.core.http
 
+import android.widget.Toast
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import github.leavesczy.reactivehttp.datasource.RemoteExtendDataSource
-import github.leavesczy.reactivehttp.viewmodel.IUIAction
+import github.leavesczy.reactivehttp.RemoteDataSource
 import github.leavesczy.reactivehttpsamples.MainApplication
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,8 +17,8 @@ import java.util.concurrent.TimeUnit
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class AppRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiService>(
-    uiAction = iuiAction,
+class AppRemoteDataSource(coroutineScope: CoroutineScope) : RemoteDataSource<ApiService>(
+    coroutineScope = coroutineScope,
     baseHttpUrl = HttpConfig.BASE_URL_MAP,
     apiServiceClass = ApiService::class.java
 ) {
@@ -56,6 +57,10 @@ class AppRemoteDataSource(iuiAction: IUIAction?) : RemoteExtendDataSource<ApiSer
             .baseUrl(baseHttpUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    override fun showToast(msg: String) {
+        Toast.makeText(MainApplication.context, msg, Toast.LENGTH_SHORT).show()
     }
 
 }

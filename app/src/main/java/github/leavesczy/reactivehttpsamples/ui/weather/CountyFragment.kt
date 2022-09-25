@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesczy.reactivehttpsamples.adapter.AreaAdapter
 import github.leavesczy.reactivehttpsamples.base.BaseFragment
@@ -42,23 +45,13 @@ class CountyFragment : BaseFragment() {
         requireArguments().getString(keyRequestParameter) ?: throw IllegalArgumentException()
     }
 
-    private val countyViewModel by getViewModelInstance(create = {
-        CountyViewModel(city)
-    }) {
-        countyLiveData.observe(viewLifecycleOwner) {
-            val list = it
-            if (list.isEmpty()) {
-                onClickCounty(city)
-            } else {
-                val placeAdapter = AreaAdapter(it, object : AreaAdapter.OnClickListener {
-                    override fun onClick(position: Int) {
-                        onClickCounty(list[position].adcode)
-                    }
-                })
-                mBind.rvPlaceList.adapter = placeAdapter
+    private val countyViewModel by viewModels<CountyViewModel>(factoryProducer = {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return CountyViewModel(city) as T
             }
         }
-    }
+    })
 
     private fun onClickCounty(adCode: String) {
         val bundle = Bundle()
@@ -77,6 +70,19 @@ class CountyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        countyViewModel.countyLiveData.observe(viewLifecycleOwner) {
+            val list = it
+            if (list.isEmpty()) {
+                onClickCounty(city)
+            } else {
+                val placeAdapter = AreaAdapter(it, object : AreaAdapter.OnClickListener {
+                    override fun onClick(position: Int) {
+                        onClickCounty(list[position].adcode)
+                    }
+                })
+                mBind.rvPlaceList.adapter = placeAdapter
+            }
+        }
         mBind.rvPlaceList.layoutManager = LinearLayoutManager(requireActivity())
         mBind.tvTopBarTitle.text = "区县"
         countyViewModel.getCounty()

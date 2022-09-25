@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.leavesczy.reactivehttpsamples.adapter.WeatherAdapter
 import github.leavesczy.reactivehttpsamples.base.BaseActivity
@@ -34,11 +35,7 @@ class WeatherActivity : BaseActivity() {
 
     override val bind by getBind<ActivityWeatherBinding>()
 
-    private val weatherViewModel by getViewModel<WeatherViewModel> {
-        forecastsModeLiveData.observe(this@WeatherActivity) {
-            showWeather(it)
-        }
-    }
+    private val weatherViewModel by viewModels<WeatherViewModel>()
 
     private val castsBeanList = mutableListOf<CastsMode>()
 
@@ -50,6 +47,9 @@ class WeatherActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        weatherViewModel.forecastsModeLiveData.observe(this@WeatherActivity) {
+            showWeather(it)
+        }
         bind.rvDailyForecast.layoutManager = LinearLayoutManager(this)
         bind.rvDailyForecast.adapter = weatherAdapter
         bind.swipeRefreshLayout.setOnRefreshListener {
